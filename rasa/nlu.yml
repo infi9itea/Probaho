@@ -1,0 +1,7164 @@
+version: "3.1"
+
+nlu:
+  # ========================================
+  # BASIC INTENTS
+  # ========================================
+  
+  - intent: greet
+    examples: |
+      - hey
+      - hello
+      - hi
+      - hello there
+      - good morning
+      - good evening
+      - moin
+      - hey there
+      - lets go
+      - hey dude
+      - good afternoon
+      - yo
+      - hi there
+      - howdy
+      - greetings
+      - whats up
+      - sup
+      - welcome
+      - bonjour
+      - namaste
+      - howdy partner
+      - good day
+      - good to see you
+      - nice to meet you
+      - salaam
+      - assalamualaikum
+      
+  - intent: goodbye
+    examples: |
+      - cu
+      - good by
+      - cee you later
+      - good night
+      - bye
+      - goodbye
+      - have a nice day
+      - see you around
+      - bye bye
+      - see you later
+      - tata
+      - take care
+      - catch you later
+      - gotta go
+      - see ya
+      - goodbye for now
+      - see you soon
+      - au revoir
+      - signing off
+      - until next time
+      - peace
+      - farewell
+      
+  - intent: affirm
+    examples: |
+      - yes
+      - y
+      - indeed
+      - of course
+      - that sounds good
+      - correct
+      - absolutely
+      - sure
+      - definitely
+      - yep
+      - yeah
+      - right
+      - ok
+      - okay
+      - alright
+      - affirmative
+      - that's right
+      - totally
+      - precisely
+      - exactly
+      - perfectly
+      - I agree
+      - thumbs up
+      
+  - intent: deny
+    examples: |
+      - no
+      - n
+      - never
+      - I dont think so
+      - dont like that
+      - no way
+      - not really
+      - nope
+      - nah
+      - not at all
+      - negative
+      - absolutely not
+      - not interested
+      - that's wrong
+      - I disagree
+      - not correct
+      - nada
+      - zilch
+      - thumbs down
+      
+  - intent: mood_great
+    examples: |
+      - perfect
+      - great
+      - amazing
+      - feeling like a king
+      - wonderful
+      - I am feeling very good
+      - I am great
+      - I am amazing
+      - I am going to save the world
+      - super stoked
+      - extremely good
+      - so so perfect
+      - so good
+      - so perfect
+      - fine
+      - happy
+      - fantastic
+      - excellent
+      - brilliant
+      - outstanding
+      - superb
+      - wonderful
+      - on top of the world
+      - couldn't be better
+      - absolutely fantastic
+      - super happy
+      
+  - intent: mood_unhappy
+    examples: |
+      - sad
+      - very sad
+      - unhappy
+      - bad
+      - very bad
+      - terrible
+      - awful
+      - not good
+      - not very good
+      - extremly sad
+      - depressed
+      - down
+      - miserable
+      - horrible
+      - dreadful
+      - fed up
+      - frustrated
+      - annoyed
+      - upset
+      - devastated
+      - struggling
+      
+  - intent: bot_challenge
+    examples: |
+      - are you a bot
+      - are you a human
+      - am I talking to a bot
+      - am I talking to a human
+      - tell me you are a bot
+      - you are a bot right
+      - what are you
+      - who are you
+      - who r u
+      - are you real
+      - bot or human
+      - prove you're not a bot
+      
+  # ========================================
+  # UNIVERSITY INFORMATION
+  # ========================================
+  
+  - intent: location
+    examples: |
+      - Where is East West University located?
+      - where is East West University
+      - location of East West University
+      - address of East West University
+      - where is EWU
+      - EWU location
+      - campus location
+      - where is the campus
+      - how to reach EWU
+      - directions to EWU
+      - where exactly is EWU located
+      - give me the address
+      - what is the campus location
+      - Aftabnagar campus
+      - Jahurul Islam City
+      
+      
+  - intent: facebook
+    examples: |
+      - EWU facebook
+      - facebook page
+      - social media
+      - facebook of EWU
+      - follow EWU
+      - EWU social media
+      - facebook link
+      - social presence
+      
+  - intent: departments
+    examples: |
+      - Can you show me the list of departments offered by the university?
+      - list of departments offered
+      - what departments are there
+      - departments at EWU
+      - available departments
+      - all departments
+      - how many departments
+      - department list
+      - show me departments
+      - CSE, EEE, BBA departments
+      - what faculties are available
+
+  # ========================================
+  # ABOUT EWU (NEW)
+  # ========================================
+
+  - intent: ewu_history
+    examples: |
+      - what is the history of EWU
+      - when was EWU founded
+      - when did EWU start
+      - who founded EWU
+      - EWU founding year
+      - tell me about EWU history
+      - initial faculty and students
+      - first classes at EWU
+      - PFED organization
+      - Private University Act
+
+  - intent: ewu_vision
+    examples: |
+      - what is the vision of EWU
+      - EWU vision statement
+      - vision of East West University
+      - what are the goals of EWU
+      - university vision
+      - EWU vision and goals
+
+  - intent: ewu_mission
+    examples: |
+      - what is the mission of EWU
+      - EWU mission statement
+      - mission of East West University
+      - what is EWU mission
+      - university mission
+      - EWU goals and objectives
+
+  - intent: ewu_board
+    examples: |
+      - board of trustees
+      - who are the board members
+      - EWU board members
+      - board of directors
+      - leadership team
+      - governance board
+
+# ========================================
+# ADMIN STAFF (NEW - STATIC DATA)
+# ========================================
+
+  - intent: admin_staff
+    examples: |
+      - tell me about admin staff
+      - admin staff information
+      - who works in admin
+      - administration staff
+      - admin team
+      - administrative staff
+
+  - intent: vice_chancellor
+    examples: |
+      - who is the vice chancellor
+      - tell me about the vice chancellor
+      - vice chancellor information
+      - VC contact
+
+  - intent: registrar
+    examples: |
+      - who is the registrar
+      - tell me about the registrar
+      - registrar information
+      - registrar contact
+
+  - intent: treasurer
+    examples: |
+      - who is the treasurer
+      - tell me about the treasurer
+      - treasurer information
+      - treasurer contact
+
+  - intent: director_admissions
+    examples: |
+      - who is director of admissions
+      - director admissions contact
+      - tell me about admissions director
+      - admissions office
+
+  - intent: pro_vc_academics
+    examples: |
+      - who is pro vice chancellor academics
+      - pro vc academics contact
+      - tell me about pro vc academics
+      - pro vice chancellor information
+
+
+      
+  # ========================================
+  # PROGRAMS (Enhanced)
+  # ========================================
+  
+  - intent: undergraduate_programs
+    examples: |
+      - undergraduate programs
+      - bachelors programs
+      - UG programs
+      - what programs are available
+      - four year programs
+      - available bachelor programs
+      - list all bachelor degrees
+      - undergraduate options
+      - bachelor of science programs
+      - bachelor of arts programs
+      
+  - intent: postgraduate_programs
+    examples: |
+      - masters programs
+      - graduate programs
+      - PG programs
+      - masters degree programs
+      - available masters programs
+      - list graduate programs
+      - masters options
+      - advanced degree programs
+      
+  - intent: diploma_programs
+    examples: |
+      - diploma programs
+      - post graduate diploma
+      - diploma courses
+      - short term programs
+      - certificate programs
+      - professional diploma
+      
+  # ========================================
+  # TUITION FEES (Enhanced)
+  # ========================================
+  
+  - intent: tuition
+    examples: |
+      - tuition fee
+      - tuition fees
+      - how much is tuition
+      - tuition cost
+      - program fees
+      - how much does it cost
+      - program cost
+      - semester fee
+      - annual cost
+      - fee structure
+      - cost per semester
+      - total cost
+      
+  - intent: application_fee
+    examples: |
+      - application fee
+      - how much is the application fee
+      - application cost
+      - registration fee
+      - enrollment fee
+      - admission charge
+      - application charge
+      - one time fee
+      
+  - intent: tuition_cse
+    examples: |
+      - current tuition fee for Computer Science
+      - per credit fee for CSE courses
+      - CSE tuition
+      - computer science fee
+      - CSE program fee
+      - how much is CSE tuition
+      - CSE cost per semester
+      - computer science engineering fee
+      - cost of CSE program
+      
+  - intent: tuition_bba
+    examples: |
+      - per credit fee for BBA courses
+      - BBA tuition
+      - business administration fee
+      - BBA program fee
+      - how much is BBA
+      - BBA cost
+      - business program fee
+      
+  - intent: tuition_civil
+    examples: |
+      - per credit fee for civil engineering courses
+      - civil engineering tuition
+      - civil program fee
+      - CE tuition
+      - civil engineering cost
+      
+  - intent: tuition_data_science
+    examples: |
+      - per credit fee for data science courses
+      - data science tuition
+      - data science fee
+      - analytics program fee
+      - data science cost
+      - analytics tuition
+      
+  - intent: tuition_economics
+    examples: |
+      - per credit fee for economics courses
+      - economics tuition
+      - economics fee
+      - economics program cost
+      - how much is economics
+      
+  - intent: tuition_eee
+    examples: |
+      - per credit fee for EEE courses
+      - EEE tuition
+      - electrical engineering fee
+      - EEE program fee
+      - electrical engineering cost
+      
+  - intent: tuition_english
+    examples: |
+      - per credit fee for english courses
+      - english tuition
+      - english program fee
+      - BA english fee
+      - english language fee
+      
+  - intent: tuition_geb
+    examples: |
+      - per credit fee for GEB courses
+      - GEB tuition
+      - genetic engineering fee
+      - biotechnology tuition
+      - GEB cost
+      
+  - intent: tuition_law
+    examples: |
+      - per credit fee for law courses
+      - law tuition
+      - law program fee
+      - LLB fee
+      - law school fee
+      
+  - intent: tuition_pharmacy
+    examples: |
+      - per credit fee for pharmacy courses
+      - pharmacy tuition
+      - pharmacy fee
+      - pharmacy program cost
+      - B.Pharm fee
+      - pharmacy education cost
+      
+  - intent: tuition_sociology
+    examples: |
+      - per credit fee for sociology courses
+      - sociology tuition
+      - sociology fee
+      - sociology program cost
+      - how much is sociology
+      
+  - intent: tuition_ice
+    examples: |
+      - per credit fee for ICE courses
+      - ICE tuition
+      - communication engineering fee
+      - ICE program fee
+      - information engineering cost
+      
+  - intent: tuition_information_studies
+    examples: |
+      - per credit fee for information studies courses
+      - information studies tuition
+      - information studies fee
+      - IS program fee
+      - library science fee
+      
+  - intent: tuition_math
+    examples: |
+      - per credit fee for mathematics courses
+      - mathematics tuition
+      - math program fee
+      - mathematics fee
+      - how much is math
+      
+  - intent: tuition_pphs
+    examples: |
+      - per credit fee for PPHS courses
+      - PPHS tuition
+      - public health fee
+      - PPHS program fee
+      - population health cost
+      
+  - intent: tuition_social_relations
+    examples: |
+      - per credit fee for social relations courses
+      - social relations tuition
+      - social relations fee
+      - SR program fee
+      - social relations cost
+      
+  # Graduate Program Fees (Enhanced)
+  - intent: mba_fee
+    examples: |
+      - MBA fee
+      - MBA tuition
+      - MBA program cost
+      - how much is MBA
+      - masters business administration cost
+      - MBA semester fee
+      
+  - intent: emba_fee
+    examples: |
+      - EMBA fee
+      - executive MBA fee
+      - EMBA program cost
+      - how much is EMBA
+      
+  - intent: mds_fee
+    examples: |
+      - MDS fee
+      - development studies fee
+      - masters development studies cost
+      - MDS program fee
+      
+  - intent: mss_economics_fee
+    examples: |
+      - MSS economics fee
+      - masters economics fee
+      - MSS economics cost
+      - how much is MSS economics
+      
+  - intent: ma_english_fee
+    examples: |
+      - MA english fee
+      - masters english fee
+      - MA english cost
+      - english masters tuition
+      
+  - intent: ma_tesol_fee
+    examples: |
+      - TESOL fee
+      - MA TESOL fee
+      - TESOL program cost
+      - how much is TESOL
+      - teaching english fee
+      
+  - intent: llm_fee
+    examples: |
+      - LLM fee
+      - masters law fee
+      - LLM program cost
+      - how much is LLM
+      
+  - intent: mprhgd_fee
+    examples: |
+      - MPRHGD fee
+      - reproductive health fee
+      - masters population health fee
+      - MPRHGD cost
+      
+  - intent: ds_analytics_fee
+    examples: |
+      - data science analytics fee
+      - analytics program cost
+      - how much is data science masters
+      
+  - intent: ms_cse_fee
+    examples: |
+      - MS CSE fee
+      - masters computer science fee
+      - MS CSE cost
+      - how much is MS CSE
+      
+  - intent: mpharm_fee
+    examples: |
+      - M.Pharm fee
+      - masters pharmacy fee
+      - MPharm cost
+      - how much is M.Pharm
+      
+  - intent: pgded_fee
+    examples: |
+      - PGDED fee
+      - entrepreneurship diploma fee
+      - PGDED cost
+      - diploma in entrepreneurship fee
+      
+  - intent: ppdm_fee
+    examples: |
+      - PPDM fee
+      - public health diploma fee
+      - PPDM cost
+      - how much is PPDM
+
+    
+  - intent: ma_english_extended_fee
+    examples: |
+      - MA english extended fee
+      - MA english 45 credits fee
+      - extended MA english cost
+      - how much is extended MA english
+
+  - intent: ma_tesol_40_fee
+    examples: |
+      - MA TESOL 40 credits fee
+      - TESOL 40 credit program cost
+      - how much is TESOL 40 credits
+      - TESOL 40 credit fee
+
+  - intent: ma_tesol_42_fee
+    examples: |
+      - MA TESOL 42 credits fee
+      - TESOL 42 credit program cost
+      - how much is TESOL 42 credits
+      - TESOL 42 credit fee
+
+  - intent: ma_tesol_48_fee
+    examples: |
+      - MA TESOL 48 credits fee
+      - TESOL 48 credit program cost
+      - how much is TESOL 48 credits
+      - TESOL 48 credit fee
+
+  - intent: ms_data_science_fee
+    examples: |
+      - MS data science fee
+      - masters data science cost
+      - how much is MS data science
+      - data science masters fee
+
+  - intent: ppdm_diploma_fee
+    examples: |
+      - PPDM diploma fee
+      - post graduate diploma public health fee
+      - diploma in disaster management cost
+      - how much is PPDM diploma
+
+  
+  # ========================================
+  # ADMISSION DEADLINES (Enhanced)
+  # ========================================
+  
+  - intent: admission_deadline
+    examples: |
+      - when is the admission deadline
+      - What is the current admission deadline for undergraduate programs?
+      - what is the last date to apply
+      - admission application deadline
+      - last date for admission
+      - deadline for admission
+      - when can I apply for admission
+      - application closing date
+      - last date to submit form
+      - registration deadline
+      - application last date
+      - when applications close
+      - deadline approaching
+      - when does deadline end
+      
+  # Undergraduate Deadlines (Enhanced)
+  - intent: admission_deadline_cse
+    examples: |
+      - CSE admission deadline
+      - computer science deadline
+      - CSE application deadline
+      - when to apply for CSE
+      - CSE when to submit
+      - deadline for CSE application
+      
+  - intent: admission_deadline_bba
+    examples: |
+      - BBA admission deadline
+      - business administration deadline
+      - BBA application deadline
+      - when can I apply for BBA
+      
+  - intent: admission_deadline_economics
+    examples: |
+      - economics admission deadline
+      - economics program deadline
+      - when to apply for economics
+      - economics application last date
+      
+  - intent: admission_deadline_english
+    examples: |
+      - english admission deadline
+      - BA english deadline
+      - english program deadline
+      - when to apply for english
+      
+  - intent: admission_deadline_law
+    examples: |
+      - law admission deadline
+      - LLB deadline
+      - when to apply for law
+      - law program deadline
+      
+  - intent: admission_deadline_sociology
+    examples: |
+      - sociology admission deadline
+      - sociology program deadline
+      - when to apply for sociology
+      
+  - intent: admission_deadline_information_studies
+    examples: |
+      - information studies deadline
+      - IS program deadline
+      - when to apply for IS
+      
+  - intent: admission_deadline_pphs
+    examples: |
+      - PPHS admission deadline
+      - public health deadline
+      - PPHS program deadline
+      - when to apply for PPHS
+      
+  - intent: admission_deadline_ice
+    examples: |
+      - ICE admission deadline
+      - communication engineering deadline
+      - when to apply for ICE
+      
+  - intent: admission_deadline_eee
+    examples: |
+      - EEE admission deadline
+      - electrical engineering deadline
+      - when to apply for EEE
+      
+  - intent: admission_deadline_pharmacy
+    examples: |
+      - pharmacy admission deadline
+      - B.Pharm deadline
+      - pharmacy program deadline
+      - when to apply for pharmacy
+      
+  - intent: admission_deadline_geb
+    examples: |
+      - GEB admission deadline
+      - genetic engineering deadline
+      - biotechnology deadline
+      - when to apply for GEB
+      
+  - intent: admission_deadline_civil
+    examples: |
+      - civil engineering deadline
+      - civil program deadline
+      - when to apply for civil
+      
+  - intent: admission_deadline_math
+    examples: |
+      - mathematics admission deadline
+      - math program deadline
+      - when to apply for math
+      
+  - intent: admission_deadline_data_science
+    examples: |
+      - data science admission deadline
+      - data analytics deadline
+      - when to apply for data science
+      
+  # Graduate Deadlines (Enhanced)
+  - intent: admission_deadline_mba
+    examples: |
+      - MBA admission deadline
+      - when to apply for MBA
+      - MBA application deadline
+      - MBA when can I apply
+      
+  - intent: admission_deadline_emba
+    examples: |
+      - EMBA admission deadline
+      - executive MBA deadline
+      - when to apply for EMBA
+      
+  - intent: admission_deadline_mds
+    examples: |
+      - MDS admission deadline
+      - development studies deadline
+      - when to apply for MDS
+      
+  - intent: admission_deadline_mss_economics
+    examples: |
+      - MSS economics deadline
+      - master of economics deadline
+      - when to apply for MSS economics
+      
+  - intent: admission_deadline_ma_english
+    examples: |
+      - MA English admission deadline
+      - master of english deadline
+      - when to apply for MA english
+      
+  - intent: admission_deadline_ma_tesol
+    examples: |
+      - MA TESOL deadline
+      - TESOL program deadline
+      - when to apply for TESOL
+      
+  - intent: admission_deadline_mprhgd
+    examples: |
+      - MPRHGD admission deadline
+      - when to apply for MPRHGD
+      - MPRHGD program deadline
+      - MPRHGD application last date
+      
+  - intent: admission_deadline_llm
+    examples: |
+      - LLM admission deadline
+      - master of law deadline
+      - when to apply for LLM
+      
+  - intent: admission_deadline_ms_cse
+    examples: |
+      - MS CSE admission deadline
+      - master of CSE deadline
+      - when to apply for MS CSE
+      
+  - intent: admission_deadline_ms_data_science
+    examples: |
+      - MS data science deadline
+      - master of data science deadline
+      - when to apply for MS data science
+      
+  - intent: admission_deadline_mpharm
+    examples: |
+      - M.Pharm admission deadline
+      - master of pharmacy deadline
+      - when to apply for M.Pharm
+      
+  - intent: admission_deadline_ppdm
+    examples: |
+      - PPDM admission deadline
+      - diploma in public health deadline
+      - post graduate diploma deadline
+      - when to apply for PPDM
+      
+  # ========================================
+  # ADMISSION TEST DATES (Enhanced)
+  # ========================================
+  
+  - intent: admission_test_date
+    examples: |
+      - when is the admission test
+      - admission test date
+      - when is the entrance exam
+      - test schedule
+      - exam date
+      - when to take the test
+      - test timing
+      - exam schedule
+      - when is entrance exam
+      
+  - intent: admission_test_date_cse
+    examples: |
+      - when is CSE admission test
+      - CSE test date
+      - computer science entrance exam
+      - when to take CSE test
+      
+  - intent: admission_test_date_bba
+    examples: |
+      - when is BBA admission test
+      - BBA test date
+      - business administration exam date
+      - when to take BBA test
+      
+  - intent: admission_test_date_mba
+    examples: |
+      - when is MBA admission test
+      - MBA test date
+      - MBA entrance exam
+      - when to take MBA test
+      
+  # ========================================
+  # ADMISSION REQUIREMENTS (Enhanced)
+  # ========================================
+  
+  - intent: admission_requirements
+    examples: |
+      - what are the admission requirements
+      - admission requirements for undergraduate
+      - requirements for admission
+      - what do I need to get admitted
+      - eligibility criteria
+      - admission eligibility
+      - how to qualify for admission
+      - admission qualification
+      - what qualifications are needed
+      - requirements to apply
+      - minimum requirements
+      - am I eligible
+      - can I apply
+      
+  - intent: admission_requirements_undergraduate
+    examples: |
+      - undergraduate admission requirements
+      - bachelor program requirements
+      - UG admission requirements
+      - BSc admission requirements
+      - what do I need for bachelor degree
+      
+  - intent: admission_requirements_graduate
+    examples: |
+      - graduate admission requirements
+      - masters admission requirements
+      - postgraduate requirements
+      - MS admission requirements
+      - what do I need for masters
+      
+  - intent: admission_requirements_cse
+    examples: |
+      - CSE admission requirements
+      - computer science requirements
+      - eligibility for CSE
+      - CSE subject requirements
+      - what subjects needed for CSE
+      - CSE prerequisites
+
+
+  - intent: ask_total_program_credits_cse
+    examples: |
+      - total credits cse
+      - cse program total credits
+      - cse total credit
+      
+  - intent: admission_requirements_eee
+    examples: |
+      - EEE admission requirements
+      - electrical engineering requirements
+      - what subjects for EEE
+      - EEE eligibility
+      
+  - intent: admission_requirements_pharmacy
+    examples: |
+      - pharmacy admission requirements
+      - B.Pharm eligibility
+      - pharmacy subject requirements
+      - prerequisites for pharmacy
+      - pharmacy qualifications needed
+      
+  - intent: admission_requirements_mba
+    examples: |
+      - MBA admission requirements
+      - MBA eligibility
+      - requirements for MBA
+      - MBA work experience
+      - what qualifications for MBA
+      
+  - intent: admission_requirements_emba
+    examples: |
+      - EMBA admission requirements
+      - executive MBA requirements
+      - EMBA eligibility criteria
+      
+  - intent: gpa_requirements
+    examples: |
+      - what GPA is required
+      - minimum GPA for admission
+      - GPA requirements
+      - SSC HSC GPA requirements
+      - what is passing GPA
+      - minimum GPA score
+      
+  - intent: oalevel_requirements
+    examples: |
+      - O level A level requirements
+      - requirements for O A level students
+      - GCE requirements
+      - British curriculum requirements
+      - international qualifications
+      
+  - intent: diploma_requirements
+    examples: |
+      - diploma admission requirements
+      - can diploma students apply
+      - diploma engineering requirements
+      - requirements for diploma holders
+      
+  - intent: freedom_fighter_quota
+    examples: |
+      - freedom fighter quota
+      - quota for freedom fighter children
+      - special quota admission
+      - freedom fighter benefits
+
+     # ============================================================================
+# ADMISSION PROCESS INTENTS (NEW - ADD TO nlu.yml)
+# ============================================================================
+
+  - intent: admission_process
+    examples: |
+      - tell me the admission process
+      - what's the admission process?
+      - admission steps
+      - process for admission
+      - admission procedures
+      - how does admission work?
+      - admission workflow
+      - complete admission guide
+      - full admission process
+      - admission requirements
+      - what do I need?
+      - how to apply for admission
+      - admission process
+      - steps for admission
+      - how can I apply
+      - admission procedure
+      - how do I apply
+      - tell me the admission process
+      - what are the admission steps
+      - explain admission process
+      - step by step admission
+      - admission workflow
+
+  - intent: admission_overview
+    examples: |
+      - give me overview of admission
+      - admission overview
+      - admission summary
+      - high level overview
+      - quick overview of admission
+      - brief overview
+      - admission summary
+
+  - intent: admission_application_steps
+    examples: |
+      - show me the application steps
+      - application steps
+      - tell me the steps
+      - 11 steps
+      - application process
+      - how to apply step by step
+      - detailed application steps
+      - all application steps
+      - step by step application
+
+  - intent: admission_contact
+    examples: |
+      - contact information
+      - admission office contact
+      - phone number
+      - email address
+      - how to contact admissions
+      - contact admissions
+      - admission office address
+      - admission office details
+
+  - intent: admission_help
+    examples: |
+      - I need help
+      - can you help?
+      - help me with admission
+      - what can you help with?
+      - admission help
+      - I need assistance
+      - how can you help?
+      - need guidance
+      - assist me
+
+  - intent: email_setup
+    examples: |
+      - how to setup email?
+      - email setup
+      - activate email
+      - email activation
+      - setup my email account
+      - email configuration
+      - my email account setup
+      - email account activation
+
+  - intent: g_suite
+    examples: |
+      - G Suite activation
+      - google suite
+      - G suite email
+      - activate google account
+      - google account setup
+      - gmail setup
+      - google email
+
+  - intent: admission_documents
+    examples: |
+      - What documents are needed for the admission process?
+      - what documents do I need?
+      - required documents for admission
+      - admission documents
+      - list of documents for admission
+      - documents for application
+      - necessary documents
+      - documents checklist
+      - documents needed
+      - document requirements
+      - which documents?
+      - what papers do I need?
+      - document list
+      - what to upload?
+
+  - intent: document_upload
+    examples: |
+      - how to upload documents?
+      - document upload
+      - upload documents
+      - document uploading process
+      - where to upload?
+      - uploading requirements
+      - upload my documents
+      - document submission
+
+  - intent: advising_slip
+    examples: |
+      - advising slip
+      - how to get advising slip?
+      - access advising slip
+      - view advising slip
+      - where is my advising slip?
+      - advising slip information
+      - my course assignment
+
+  - intent: course_assignment
+    examples: |
+      - course assignment
+      - assigned courses
+      - my courses
+      - what courses am I taking?
+      - course information
+      - my course list
+      - assigned courses
+
+  - intent: tuition_payment
+    examples: |
+      - tuition payment
+      - how to pay tuition?
+      - payment process
+      - pay fees
+      - tuition payment process
+      - when to pay tuition?
+      - pay my tuition
+      - tuition payment method
+
+  - intent: payment_methods
+    examples: |
+      - payment methods
+      - how to pay?
+      - payment options
+      - which banks?
+      - payment bank
+      - payment channels
+      - where to pay?
+
+  - intent: important_notes
+    examples: |
+      - important notes
+      - important information
+      - critical information
+      - things I should know
+      - important policies
+      - key information
+
+  - intent: admission_policy
+    examples: |
+      - admission policy
+      - policies
+      - rules
+      - admission rules
+      - admission terms
+      - terms and conditions
+      - policy information
+
+      
+  # ========================================
+  # ADMISSION PROCESS (Enhanced)
+  # ========================================
+      
+  - intent: application_form
+    examples: |
+      - how to get application form
+      - where is the application form
+      - application form download
+      - online application
+      - how to apply online
+      - fill application form
+      - application link
+      
+  - intent: admission_test_preparation
+    examples: |
+      - how to prepare for admission test
+      - admission test syllabus
+      - what to study for admission test
+      - test preparation tips
+      - test preparation materials
+      - how to prepare
+      - study tips
+      
+  - intent: admission_result
+    examples: |
+      - when will admission results come
+      - how to check admission result
+      - admission result date
+      - when do I get results
+      - result announcement date
+      - check my results
+ 
+      
+  # ========================================
+  # FACILITIES (Enhanced)
+  # ========================================
+  
+  - intent: facilities
+    examples: |
+      - what facilities are available
+      - tell me about facilities
+      - university facilities
+      - campus facilities
+      - what does the campus have
+      - available facilities
+      - what amenities
+      - campus amenities
+      - student facilities
+      
+  - intent: library_facilities
+    examples: |
+      - library facilities
+      - does EWU have a library
+      - library access
+      - online library
+      - digital library
+      - library resources
+      - book collection
+      
+  - intent: lab_facilities
+    examples: |
+      - lab facilities
+      - engineering labs
+      - computer labs
+      - what labs are available
+      - laboratory facilities
+      - science labs
+      - experimental facilities
+      - lab equipment
+      
+  - intent: computer_lab
+    examples: |
+      - computer lab facilities
+      - IT labs
+      - software labs
+      - programming labs
+      - computer resources
+      
+  - intent: engineering_lab
+    examples: |
+      - engineering laboratory
+      - circuit lab
+      - electronics lab
+      - mechanical lab
+      - specialized labs
+      
+  - intent: cafeteria_facilities
+    examples: |
+      - cafeteria facilities
+      - food facilities
+      - canteen
+      - dining facilities
+      - where can I eat
+      - food on campus
+      - dining options
+      - food services
+      
+  - intent: wifi_internet
+    examples: |
+      - wifi facilities
+      - internet facilities
+      - is there wifi on campus
+      - internet access
+      - online connectivity
+      - broadband
+      - network services
+      - WiFi coverage
+      
+  - intent: parking_facilities
+    examples: |
+      - parking facilities
+      - car parking
+      - vehicle parking
+      - where to park
+      - parking availability
+      
+  - intent: sports_facilities
+    examples: |
+      - sports facilities
+      - games facilities
+      - indoor games
+      - outdoor games
+      - recreational facilities
+      - gym
+      - fitness center
+      
+  - intent: hostel_facilities
+    examples: |
+      - hostel facilities
+      - dormitory
+      - accommodation
+      - student housing
+      - residential facilities
+      - on campus housing
+      
+  - intent: transportation_facilities
+    examples: |
+      - transportation facilities
+      - bus service
+      - does EWU provide transport
+      - university transport
+      - shuttle service
+      - transportation options
+      
+  - intent: medical_facilities
+    examples: |
+      - medical facilities
+      - health center
+      - medical services
+      - first aid
+      - Is there any medical center in the university?
+      - healthcare services
+      
+  - intent: prayer_room
+    examples: |
+      - prayer room facilities
+      - mosque
+      - religious facilities
+      - prayer space
+      
+  - intent: common_room
+    examples: |
+      - common room
+      - student lounge
+      - recreation room
+      - relaxation areas
+      
+  - intent: career_counseling
+    examples: |
+      - career counseling
+      - career guidance
+      - career center
+      - career advice
+      - career support
+      - job guidance
+      
+  - intent: ics_services
+    examples: |
+      - ICS services
+      - IT services
+      - technical support
+      - computer services
+      - information technology
+      - tech help
+      
+  # ========================================
+  # EVENTS AND WORKSHOPS (Enhanced)
+  # ========================================
+  
+  - intent: events_workshops
+    examples: |
+      - what events are held
+      - upcoming events
+      - workshops at EWU
+      - university events
+      - tell me about events
+      - what programs are organized
+      - seminars and events
+      - workshop schedule
+      - event calendar
+      - upcoming programs
+      
+  - intent: recent_events
+    examples: |
+      - recent events
+      - latest events
+      - what events happened recently
+      - past events
+      - previous events
+      - event history
+      
+  - intent: orientation_program
+    examples: |
+      - orientation program
+      - freshers orientation
+      - new student orientation
+      - when is orientation
+      - orientation schedule
+      
+  - intent: seminar_workshop
+    examples: |
+      - academic seminars
+      - technical workshops
+      - training programs
+      - skill development
+      
+  - intent: cultural_events
+    examples: |
+      - cultural programs
+      - festivals
+      - celebrations
+      - cultural shows
+      
+  - intent: sports_events
+    examples: |
+      - sports events
+      - inter university sports
+      - sports competition
+      - athletic events
+      - sports day
+      
+  - intent: world_pharmacists_day
+    examples: |
+      - world pharmacists day
+      - pharmacy day celebration
+      - pharmacist events
+      
+  - intent: freshers_welcome
+    examples: |
+      - freshers welcome program
+      - new student welcome
+      - welcome ceremony
+      - new student program
+      
+  - intent: events
+    examples: |
+      - what events are held at East West University
+      - what events are organized at East West University
+      - what events does East West University organize
+      - recent news
+      - EWU news
+      - campus events
+      - events at EWU
+      - happening at EWU
+      
+  # ========================================
+  # FACULTY INFORMATION (Enhanced)
+  # ========================================
+  
+  - intent: faculty_info
+    examples: |
+      - faculty information
+      - tell me about faculty
+      - who are the teachers
+      - faculty members
+      - teaching staff
+      - professors at EWU
+      - faculty list
+      - instructor information
+      
+  - intent: faculty_cse
+    examples: |
+      - CSE faculty
+      - computer science teachers
+      - CSE department faculty
+      - CSE professors
+      - who teaches CSE
+      - CSE instructors
+      
+  - intent: faculty_eee
+    examples: |
+      - EEE faculty
+      - electrical engineering faculty
+      - EEE professors
+      - EEE instructors
+      
+  - intent: faculty_ice
+    examples: |
+      - ICE faculty
+      - information engineering faculty
+      - communication engineering teachers
+      - ICE instructors
+      
+  - intent: faculty_pharmacy
+    examples: |
+      - pharmacy faculty
+      - pharmacy teachers
+      - pharmacy professors
+      - pharmacy instructors
+      
+  - intent: faculty_civil
+    examples: |
+      - civil engineering faculty
+      - civil department teachers
+      - civil instructors
+      
+  - intent: faculty_geb
+    examples: |
+      - GEB faculty
+      - genetic engineering faculty
+      - biotechnology teachers
+      - GEB instructors
+      
+  - intent: faculty_bba
+    examples: |
+      - BBA faculty
+      - business faculty
+      - BBA department teachers
+      - business administration professors
+      - BBA instructors
+      
+  - intent: faculty_economics
+    examples: |
+      - economics faculty
+      - economics professors
+      - economics teachers
+      - economics instructors
+      
+  - intent: faculty_english
+    examples: |
+      - english faculty
+      - english department teachers
+      - english professors
+      - english instructors
+      
+  - intent: faculty_law
+    examples: |
+      - law faculty
+      - law department teachers
+      - law professors
+      - law instructors
+      
+  - intent: faculty_math
+    examples: |
+      - mathematics faculty
+      - math teachers
+      - math professors
+      - math instructors
+      
+  - intent: faculty_sociology
+    examples: |
+      - sociology faculty
+      - sociology teachers
+      - sociology instructors
+      
+  - intent: chairperson_info
+    examples: |
+      - who is the chairperson
+      - department head
+      - chairperson of CSE
+      - head of department
+      - department chair
+      - chair person
+      
+
+  - intent: faculty_information_studies
+    examples: |
+      - information studies faculty
+      - IS department faculty
+      - information studies professors
+      - IS faculty members
+
+  - intent: faculty_pphs
+    examples: |
+      - PPHS faculty
+      - public health faculty
+      - PPHS professors
+      - PPHS instructors
+
+  - intent: faculty_data_science
+    examples: |
+      - data science faculty
+      - analytics department faculty
+      - data science professors
+      - analytics faculty
+
+  - intent: faculty_social_relations
+    examples: |
+      - social relations faculty
+      - SR faculty
+      - social relations professors
+      - SR instructors
+      
+
+      
+  # ========================================
+  # SCHOLARSHIP AND FINANCIAL AID (Enhanced)
+  # ========================================
+  
+      
+  - intent: scholarship_eligibility
+    examples: |
+      - scholarship eligibility
+      - how to get scholarship
+      - scholarship requirements
+      - who can apply for scholarship
+      - am I eligible for scholarship
+      
+  - intent: waiver_information
+    examples: |
+      - tuition waiver
+      - fee waiver
+      - waiver information
+      - tuition reduction
+      - fee reduction
+
+# ========================================
+# UNIVERSITY RULES & CONDUCT (NEW - STATIC)
+# ========================================
+
+  - intent: general_conduct_rules
+    examples: |
+      - what are the general conduct rules
+      - university conduct expectations
+      - student behavior rules
+      - general rules and conduct
+      - moral character requirements
+      - id card requirement
+
+  - intent: academic_misconduct
+    examples: |
+      - what is academic misconduct
+      - academic misconduct examples
+      - cheating rules
+      - plagiarism policy
+      - exam cheating
+      - fabrication falsification
+      - attendance requirements
+
+  - intent: social_misconduct
+    examples: |
+      - what is social misconduct
+      - social misconduct examples
+      - harassment policy
+      - abusive conduct
+      - disorderly conduct
+      - physical assault
+
+  - intent: health_safety_violations
+    examples: |
+      - health and safety violations
+      - smoking policy
+      - drug policy
+      - weapon possession
+      - alcohol policy
+      - banned items
+
+  - intent: disciplinary_action
+    examples: |
+      - disciplinary action
+      - student penalties
+      - probation policy
+      - dismissal policy
+      - expulsion policy
+      - discipline procedure
+      - academic probation
+
+# ========================================
+# SCHOLARSHIP & FINANCIAL AID (NEW - STATIC)
+# ========================================
+
+  - intent: scholarships_overview
+    examples: |
+      - scholarship overview
+      - scholarship details
+      - scholarship programs
+      - types of scholarships
+      - scholarship options
+      - scholarship opportunities
+      - tell me about scholarships
+      - scholarship information
+      - what scholarships are available
+      - EWU scholarships
+      - how much scholarship budget
+      - student scholarship coverage
+
+  - intent: merit_scholarships
+    examples: |
+      - what are merit scholarships
+      - merit scholarship requirements
+      - how to get merit scholarship
+      - admission test top scorer scholarship
+      - perfect grades scholarship
+      - terms and conditions for merit scholarships
+
+  - intent: financial_assistance
+    examples: |
+      - financial assistance
+      - need-based aid
+      - financial help for students
+      - financial support
+
+  - intent: family_concession
+    examples: |
+      - family concession
+      - sibling scholarship
+      - two siblings studying together
+      - husband wife studying
+      - family benefit
+
+  - intent: freedom_fighters_scholarship
+    examples: |
+      - freedom fighters scholarship
+      - wards of freedom fighters
+      - freedom fighter benefit
+
+  - intent: medha_lalon_scholarship
+    examples: |
+      - Medha Lalon scholarship
+      - named scholarships
+      - deans list scholarship
+      - specific scholarship programs
+
+  - intent: employee_benefits
+    examples: |
+      - EWU employee benefits
+      - children of employees
+      - employee tuition waiver
+      - staff benefits
+
+  - intent: scholarship_continuation
+    examples: |
+      - scholarship continuation
+      - how long scholarship lasts
+      - scholarship renewal
+      - maintaining scholarship
+
+  # ========================================
+  # ACADEMIC INFORMATION (Enhanced)
+  # ========================================
+  
+  - intent: campus_life
+    examples: |
+      - campus life
+      - student life
+      - life at EWU
+      - what is campus life like
+      - daily campus activities
+      - student experience
+      
+  - intent: alumni
+    examples: |
+      - how successful are the alumni of East West University
+      - how successful are EWU alumni
+      - famous alumni
+      - alumni achievements
+      - alumni success stories
+      - where do alumni work
+      
+  - intent: alumni_network
+    examples: |
+      - alumni association
+      - how to connect with alumni
+      - alumni connections
+      
+      
+  - intent: research_opportunities
+    examples: |
+      - research opportunities
+      - research projects
+      - can I do research
+      - research programs
+      - undergraduate research
+      
+  - intent: internship_opportunities
+    examples: |
+      - job placement
+      - career opportunities
+      - internship programs
+      - job opportunities
+      - placement assistance
+      - intern position
+      
+  - intent: code_of_conduct
+    examples: |
+      - code of conduct
+      - student conduct
+      - student code
+      - conduct policy
+      - student behavior
+      
+  - intent: grading
+    examples: |
+      - grading system
+      - how are grades calculated
+      - grade distribution
+      - grading scale
+      - marking system
+      - grade point
+      - GPA
+      - CGPA
+      - what grades are passing
+      - letter grades
+      - grade conversion
+      
+  - intent: semester_system
+    examples: |
+      - semester system
+      - how many semesters
+      - academic calendar
+      - trimester system
+      - when do semesters start
+      - semester schedule
+      
+  - intent: class_schedule
+    examples: |
+      - class schedule
+      - class timings
+      - when are classes
+      - class routine
+      - class timing
+      
+  - intent: credit_system
+    examples: |
+      - credit system
+      - how many credits needed
+      - credit hour system
+      - total credits
+      - credit calculation
+      
+  - intent: examination_system
+    examples: |
+      - examination system
+      - how are exams conducted
+      - examination format
+      - exam pattern
+      
+  - intent: clubs_societies
+    examples: |
+      - student clubs
+      - clubs and societies
+      - what clubs are available
+      - student organizations
+      - student groups
+      
+  - intent: international_students
+    examples: |
+      - international students
+      - foreign student admission
+      - visa requirements
+      - international admission
+      - international student support
+      
+  - intent: transfer_students
+    examples: |
+      - transfer admission
+      - credit transfer
+      - can I transfer from another university
+      - transfer credits
+      - transfer process
+      
+  - intent: university_ranking
+    examples: |
+      - university ranking
+      - EWU ranking
+      - how is EWU ranked
+      - university ratings
+      - ranking position
+      
+  - intent: accreditation
+    examples: |
+      - university accreditation
+      - is EWU accredited
+      - UGC approval
+      - accreditation status
+      - accredited programs
+# ========================================
+# SEXUAL HARASSMENT POLICY (NEW - STATIC)
+# ========================================
+
+  - intent: sexual_harassment_policy
+    examples: |
+      - tell me about sexual harassment policy
+      - what is the sexual harassment policy
+      - sexual harassment policy EWU
+      - anti-harassment policy
+      - zero tolerance policy
+      - sexual harassment rules
+
+  - intent: harassment_definition
+    examples: |
+      - what counts as sexual harassment
+      - examples of sexual harassment
+      - what is considered harassment
+      - harassment examples
+      - prohibited conduct
+
+  - intent: harassment_complaint_process
+    examples: |
+      - how to file a harassment complaint
+      - complaint procedure
+      - sexual harassment complaint steps
+      - who handles complaints
+      - complaint committee
+
+  - intent: harassment_punishments
+    examples: |
+      - what are the punishments for harassment
+      - harassment penalties
+      - consequences of harassment
+      - expulsion harassment
+      - sanctions harassment
+
+
+
+
+
+  - intent: ask_all_faculties
+    examples: |
+      - what faculties exist in EWU?
+      - show me faculties
+      - which faculties are there?
+
+  - intent: ask_parking
+    examples: |
+      - is there parking available?
+      - where can I park?
+      - do you have parking facilities?
+      - parking at EWU
+      - is there a parking lot?
+      - can I park my vehicle?
+
+  - intent: ask_cafeteria
+    examples: |
+      - tell me about the cafeteria
+      - what's in the cafeteria?
+      - when did the cafeteria open?
+      - does EWU have a cafeteria?
+      - what food options are available?
+      - cafeteria capacity
+      - can I get food at EWU?
+      - does the cafeteria have air conditioning?
+
+  - intent: ask_library
+    examples: |
+      - tell me about the library
+      - does EWU have a library?
+      - what's the library name?
+      - how many books in the library?
+      - can I access online resources?
+      - library hours
+      - Dr. S. R. Lasker Library
+      - do you have online archives?
+
+  - intent: ask_common_room
+    examples: |
+      - what's in the common room?
+      - are there common rooms?
+      - what recreational facilities do you have?
+      - when did common rooms reopen?
+      - do you have table tennis?
+      - is there a chess board?
+      - can I play carom?
+      - what's available in common rooms?
+
+  - intent: ask_career_counseling
+    examples: |
+      - tell me about career counseling
+      - does EWU have job placement support?
+      - where can I get career guidance?
+      - what does the career center do?
+      - does EWU help with job opportunities?
+      - career counseling center
+      - can I get help finding a job?
+
+  - intent: ask_indoor_games
+    examples: |
+      - what indoor games are available?
+      - what recreational activities?
+      - are there gaming facilities?
+      - what games can I play?
+      - indoor games facilities
+
+  - intent: ask_prayer_room
+    examples: |
+      - is there a prayer room?
+      - where can I pray?
+      - does EWU have Islamic prayer rooms?
+      - prayer facilities
+      - Islam prayer room
+      - is there a place to worship?
+      - where can I offer prayers?
+
+  - intent: ask_transportation
+    examples: |
+      - does EWU provide transportation?
+      - is there a shuttle service?
+      - how do I get to campus?
+      - what's the transportation system?
+      - can I use public transportation?
+      - do you have a bus?
+      - how should I commute to EWU?
+
+  - intent: ask_facilities
+    examples: |
+      - what facilities are available at EWU?
+      - tell me about campus facilities
+      - what amenities does EWU have?
+      - what can I use on campus?
+      - list all facilities
+      - what's available for students?
+
+
+
+
+  - intent: ask_ccc_mission
+    examples: |
+      - what is the mission of CCC?
+      - what does the Career Counseling Center do?
+      - tell me about CCC
+      - what's the purpose of Career Counseling Center?
+      - mission of Career Counseling Center
+
+  - intent: ask_ccc_objectives
+    examples: |
+      - what are the objectives of CCC?
+      - what are the goals of Career Counseling Center?
+      - what does CCC aim to achieve?
+      - CCC objectives
+
+  - intent: ask_career_counseling_services
+    examples: |
+      - do you provide career counseling?
+      - what career advisory services are available?
+      - tell me about career counseling services
+      - do you have counseling services?
+
+  - intent: ask_cv_writing
+    examples: |
+      - can you help me write a CV?
+      - do you offer CV writing workshops?
+      - where can I learn CV writing?
+      - CV and cover letter writing
+      - help with CV preparation
+
+  - intent: ask_workshops
+    examples: |
+      - what workshops does CCC offer?
+      - are there training sessions?
+      - tell me about professional skills workshops
+      - corporate grooming workshops
+      - etiquette training
+
+  - intent: ask_career_talks
+    examples: |
+      - are there career talk sessions?
+      - what are career talks?
+      - do you organize seminars?
+      - professional behavior training
+
+  - intent: ask_on_campus_recruitment
+    examples: |
+      - does EWU have on-campus recruitments?
+      - how do companies recruit at EWU?
+      - are there recruitment events?
+      - on-campus recruitment process
+
+  - intent: ask_job_fairs
+    examples: |
+      - do you organize job fairs?
+      - when is the career fair?
+      - Fall Career Fair
+      - Winter Career Fair
+      - job fair dates
+
+  - intent: ask_internship_placement
+    examples: |
+      - how to find internships
+      - internship placement help
+      - where do I search for internships
+
+  - intent: ask_job_registration
+    examples: |
+      - how do I register as a job seeker?
+      - where can I register for job opportunities?
+      - job seeker registration
+      - graduates' profile registration
+
+  - intent: ask_mental_wellbeing
+    examples: |
+      - do you offer psychological counseling?
+      - what is Socio-Psyche Counseling Center?
+      - where can I get mental health support?
+      - mental well-being services
+      - psychological counseling services
+
+  - intent: ask_counseling_hours
+    examples: |
+      - what are the counseling center hours?
+      - when is the counseling center open?
+      - operating hours of Socio-Psyche Center
+      - what time does counseling center operate?
+
+  - intent: ask_counseling_location
+    examples: |
+      - where is the counseling center?
+      - what is the venue for counseling?
+      - location of Socio-Psyche Counseling Center
+      - which room is the counseling center?
+
+  - intent: ask_contact_information
+    examples: |
+      - what is the contact email?
+      - how can I contact CCC?
+      - CCC email address
+      - contact details
+      - phone number for CCC
+
+  - intent: ask_website
+    examples: |
+      - what is the CCC website?
+      - where can I find more information?
+      - CCC website URL
+      - official website
+
+  - intent: ask_higher_studies
+    examples: |
+      - can you help with higher study options?
+      - guidance for further education
+      - information about postgraduate programs
+      - higher study opportunities
+
+  - intent: ask_career_development
+    examples: |
+      - how can I develop my career?
+      - career development action plans
+      - how do I reach my career potential?
+      - career growth guidance
+
+
+  - intent: ask_about_clubs
+    examples: |
+      - what clubs does EWU have?
+      - list all clubs
+      - tell me about EWU clubs
+      - how many clubs are there?
+      - what student clubs are available?
+
+  - intent: ask_agro_club
+    examples: |
+      - tell me about Agro-Industrialization Club
+      - what does Agro Club do?
+      - Agro-Industrialization Club events
+      - supply chain challenge
+
+  - intent: ask_business_club
+    examples: |
+      - tell me about Business Club
+      - Business Club events
+      - when did Business Club start?
+      - BriefCase event
+
+  - intent: ask_marketing_club
+    examples: |
+      - Creative Marketing Club
+      - tell me about marketing club
+      - what is CMC?
+      - Communicate to Learn
+
+  - intent: ask_programming_club
+    examples: |
+      - Computer Programming Club
+      - programming competitions
+      - CSE FEST
+      - gaming contest
+
+  - intent: ask_performing_arts_club
+    examples: |
+      - Club for Performing Arts
+      - ECPA
+      - performing arts club
+      - drama and music
+
+  - intent: ask_debate_club
+    examples: |
+      - Debating Club
+      - inter-department debate
+      - debate competition
+      - oratory skills
+
+  - intent: ask_economics_club
+    examples: |
+      - Economics Club
+      - soft skills development
+      - economics events
+      - seminars and workshops
+
+  - intent: ask_electronics_club
+    examples: |
+      - Electronics Club
+      - electronics fest
+      - explore electronics
+      - oldest club
+
+  - intent: ask_english_club
+    examples: |
+      - English Conversation Club
+      - public speaking competition
+      - literary events
+      - INKSPIRATION
+
+  - intent: ask_environmental_club
+    examples: |
+      - Environmental and Social Club
+      - tree plantation
+      - blood donation
+      - save life save earth
+
+  - intent: ask_investment_club
+    examples: |
+      - Investment and Finance Club
+      - finance workshops
+      - FINXCEL
+      - corporate visits
+
+  - intent: ask_ieee
+    examples: |
+      - IEEE Student Branch
+      - IEEE events
+      - blockchain workshop
+      - tech learning
+
+  - intent: ask_mun_club
+    examples: |
+      - Model United Nations Club
+      - MUN events
+      - diplomatic skills
+      - geopolitical conflicts
+
+  - intent: ask_photography_club
+    examples: |
+      - Photography Club
+      - photo fest
+      - visual storytelling
+      - photography competition
+
+  - intent: ask_robotics_club
+    examples: |
+      - Robotics Club
+      - machine learning in robotics
+      - IoT and AI
+      - robo soccer
+
+  - intent: ask_rotaract_club
+    examples: |
+      - Rotaract Club
+      - community service
+      - medical service programs
+
+  - intent: ask_science_club
+    examples: |
+      - Science Club
+      - math olympiad
+      - STEM awareness
+      - IQ test competitions
+
+  - intent: ask_sociology_club
+    examples: |
+      - Sociology Club
+      - cultural events
+      - language and identity
+      - suicide prevention seminar
+
+  - intent: ask_sports_club
+    examples: |
+      - Sports Club
+      - cricket tournament
+      - karate school
+      - badminton tournament
+
+  - intent: ask_telecom_club
+    examples: |
+      - Telecommunication Club
+      - CCNA workshops
+      - IoT and data science
+      - entrepreneurship seminars
+
+  - intent: ask_cybersecurity_club
+    examples: |
+      - Cyber Security Club
+      - ethical hacking
+      - CTF competitions
+      - capturing the flag
+
+  - intent: ask_health_wellness_club
+    examples: |
+      - Health and Well-Being Club
+      - EWU Health Club
+      - mental well-being
+      - physical fitness
+
+  - intent: ask_club_events
+    examples: |
+      - what events do clubs organize?
+      - club activities
+      - club fairs
+      - workshops and seminars
+
+  - intent: ask_how_to_join
+    examples: |
+      - how do I join a club?
+      - how to register for clubs?
+      - club membership
+      - joining process
+
+  - intent: ask_club_contact
+    examples: |
+      - how to contact a club?
+      - club information
+      - club websites
+      - club details
+
+
+  - intent: ask_about_faculties
+    examples: |
+      - what faculties does EWU have?
+      - list all faculties
+      - tell me about EWU faculties
+      - how many faculties are there?
+      - what are the academic faculties?
+
+  - intent: ask_science_engineering_faculty
+    examples: |
+      - tell me about Faculty of Science and Engineering
+      - what departments in science and engineering?
+      - Science and Engineering faculty departments
+      - CSE department
+      - EEE department
+
+  - intent: ask_business_economics_faculty
+    examples: |
+      - Faculty of Business and Economics
+      - business and economics departments
+      - what's in business faculty?
+      - Department of Business Administration
+      - Department of Economics
+
+  - intent: ask_arts_social_sciences_faculty
+    examples: |
+      - Faculty of Arts and Social Sciences
+      - arts and social sciences departments
+      - what departments are in arts faculty?
+      - Department of English
+      - Department of Law
+      - Media and Communication
+
+  - intent: ask_ier
+    examples: |
+      - Institute of Education and Research
+      - IER programs
+      - what does IER offer?
+      - education programs
+      - B.Ed. program
+      - M.Ed. program
+
+  - intent: ask_pharmacy_department
+    examples: |
+      - Department of Pharmacy
+      - pharmacy programs
+      - B.Pharm. program
+      - M.Phil in Pharmacy
+      - pharmacy degrees
+
+  - intent: ask_cse_department
+    examples: |
+      - Computer Science and Engineering department
+      - CSE programs
+      - what does CSE offer?
+      - computer science programs
+
+  - intent: ask_eee_department
+    examples: |
+      - Electrical and Electronic Engineering
+      - EEE programs
+      - electrical engineering department
+
+  - intent: ask_civil_engineering
+    examples: |
+      - Civil Engineering department
+      - civil engineering programs
+
+  - intent: ask_mathematics_sciences
+    examples: |
+      - Mathematics and Physical Sciences
+      - math programs
+      - physics programs
+      - science department
+
+  - intent: ask_business_admin
+    examples: |
+      - Business Administration department
+      - BBA program
+      - MBA program
+      - business department
+
+  - intent: ask_economics_department
+    examples: |
+      - Economics department
+      - economics programs
+      - economic studies
+
+  - intent: ask_english_department
+    examples: |
+      - English department
+      - English programs
+      - BA in English
+      - MA in English
+
+  - intent: ask_law_department
+    examples: |
+      - Law department
+      - LL.B. program
+      - LL.M. program
+      - law degrees
+
+  - intent: ask_media_communication
+    examples: |
+      - Media and Communication department
+      - media programs
+      - communication department
+
+  - intent: ask_sociology_department
+    examples: |
+      - Sociology and Anthropology
+      - sociology programs
+      - sociology department
+
+  - intent: ask_government_politics
+    examples: |
+      - Government and Politics department
+      - politics programs
+      - political science
+
+
+  - intent: ask_undergraduate_programs
+    examples: |
+      - what undergraduate programs does EWU offer?
+      - undergraduate degrees
+      - bachelor programs
+
+  - intent: ask_postgraduate_programs
+    examples: |
+      - postgraduate programs
+      - master's programs
+      - graduate degrees
+      - M.Sc. programs
+      - MBA programs
+
+  - intent: ask_academic_structure
+    examples: |
+      - tell me about EWU academic structure
+      - how is EWU organized?
+      - academic organization
+      - university structure
+
+    
+
+  - intent: ask_notable_alumni
+    examples: |
+      - Can you tell me about some notable EWU alumni
+      - who are notable EWU alumni?
+      - tell me about EWU alumni
+      - list notable alumni
+      - what alumni achievements?
+      - who are successful EWU graduates?
+
+  - intent: ask_alumni_md_abir_hasan
+    examples: |
+      - tell me about Md. Abir Hasan
+      - Prime Minister's Fellowship for Ph.D.
+      - Oxford University PhD
+      - economics graduate achievements
+
+  - intent: ask_alumni_md_nazmul_khan
+    examples: |
+      - Md. Nazmul Khan
+      - Fulbright Scholarship
+      - New York University economics
+      - NYU scholarship
+
+  - intent: ask_alumni_fatima_tasnim
+    examples: |
+      - Fatima Tasnim
+      - Google software engineer
+      - CSE graduate Google job
+      - Google job offer
+
+  - intent: ask_alumni_redoan_rony
+    examples: |
+      - Redoan Rony
+      - film director Chorki
+      - CEO Chorki
+      - Bangladeshi film awards
+      - National Film Award
+
+  - intent: ask_alumni_md_fahim
+    examples: |
+      - MD Fahim
+      - GETSVIEW CEO
+      - business leader alumni
+      - CSE entrepreneur
+
+  - intent: ask_alumni_shafayat_hossain
+    examples: |
+      - Md. Shafayat Hossain
+      - Lead Software Engineer
+      - GETSVIEW engineer
+      - senior technical role
+
+  - intent: ask_alumni_miraj_ahmed
+    examples: |
+      - Miraj Ahmed
+      - Assistant DFT Engineer
+      - Ulkasemi
+      - EEE graduate
+
+  - intent: ask_alumni_sajjad_islam
+    examples: |
+      - Mohammad Sajjad Islam Shejan
+      - finance professional
+      - Accounts and Finance
+      - BOFL
+
+  - intent: ask_alumni_rubana_huq
+    examples: |
+      - Rubana Huq
+      - EWU notable graduate
+
+  - intent: ask_alumni_afran_nisho
+    examples: |
+      - Afran Nisho
+      - notable alumnus
+      - actor alumnus
+
+  - intent: ask_alumni_by_department
+    examples: |
+      - CSE alumni
+      - economics alumni achievements
+      - media communication graduates
+      - engineering alumni
+      - business alumni
+
+  - intent: ask_alumni_by_sector
+    examples: |
+      - tech industry alumni
+      - finance sector graduates
+      - media entertainment alumni
+      - government positions
+      - entrepreneurship alumni
+
+  - intent: ask_alumni_portal
+    examples: |
+      - EWU alumni portal
+      - where to find alumni
+      - alumni network
+      - alumni directory
+      - alumni community
+
+  - intent: ask_alumni_foundation
+    examples: |
+      - EWUIAN Foundation
+      - alumni foundation
+      - alumni support programs
+      - scholarships for alumni
+
+  - intent: ask_alumni_events
+    examples: |
+      - alumni events
+      - alumni networking
+      - alumni get together
+      - Iftaar event
+
+  - intent: ask_alumni_global_network
+    examples: |
+      - alumni worldwide
+      - global alumni network
+      - where are alumni located
+      - international alumni
+
+  - intent: ask_how_to_join_alumni
+    examples: |
+      - how to join alumni?
+      - alumni registration
+      - alumni membership
+      - connect with alumni
+
+  - intent: ask_alumni_support
+    examples: |
+      - alumni mentorship
+      - help current students
+      - alumni volunteering
+      - scholarships for students
+
+
+      
+  # ========================================
+  # FALLBACK
+  # ========================================
+  
+  - intent: fallback
+    examples: |
+      - I dont know
+      - I cant understand
+      - what did you say
+      - repeat that
+      - I don't understand
+      - what
+      - huh
+      - say that again
+      - could you repeat
+
+
+
+
+  # ========================================
+  # DEPARTMENT HELPDESK - GENERAL
+  # ========================================
+
+  - intent: ask_helpdesk_contact
+    examples: |
+      - how can I contact a department?
+      - helpdesk contact information
+      - I need to reach a department
+      - department email addresses
+      - where can I get help?
+      - contact information for departments
+      - how to contact EWU departments
+      - department helpdesk
+      - I need help with my department
+      - contact details for departments
+      - email for department help
+      - department support contact
+
+  # ========================================
+  # ACADEMIC DEPARTMENTS - HELPDESK
+  # ========================================
+
+  - intent: ask_helpdesk_cse
+    examples: |
+      - Give me the email of the CSE department helpdesk.
+      - CSE helpdesk
+      - computer science helpdesk
+      - how to contact CSE department
+      - CSE department email
+      - computer science and engineering helpdesk
+      - contact CSE helpdesk
+      - CSE support email
+      - reach CSE department
+      - computer science contact
+      - CSE department contact information
+
+  - intent: ask_helpdesk_eee
+    examples: |
+      - EEE helpdesk
+      - electrical engineering helpdesk
+      - how to contact EEE department
+      - EEE department email
+      - electrical and electronic engineering helpdesk
+      - contact EEE helpdesk
+      - EEE support email
+      - reach EEE department
+      - electrical engineering contact
+
+  - intent: ask_helpdesk_ce
+    examples: |
+      - civil engineering helpdesk
+      - CE helpdesk
+      - how to contact civil engineering
+      - CE department email
+      - civil engineering department contact
+      - contact CE helpdesk
+      - CE support email
+      - civil engineering contact information
+
+  - intent: ask_helpdesk_bba
+    examples: |
+      - BBA helpdesk
+      - business administration helpdesk
+      - how to contact BBA department
+      - BBA department email
+      - business admin helpdesk
+      - contact BBA helpdesk
+      - business department contact
+      - BBA support email
+
+  - intent: ask_helpdesk_mba
+    examples: |
+      - MBA helpdesk
+      - MBA department email
+      - how to contact MBA office
+      - MBA program helpdesk
+      - contact MBA helpdesk
+      - master of business administration helpdesk
+      - MBA support email
+
+  - intent: ask_helpdesk_economics
+    examples: |
+      - economics helpdesk
+      - ECO helpdesk
+      - economics department email
+      - how to contact economics department
+      - contact economics helpdesk
+      - economics department contact
+      - ECO support email
+
+  - intent: ask_helpdesk_english
+    examples: |
+      - English department helpdesk
+      - ENG helpdesk
+      - English department email
+      - how to contact English department
+      - contact English helpdesk
+      - English department contact
+
+  - intent: ask_helpdesk_law
+    examples: |
+      - law department helpdesk
+      - law helpdesk email
+      - how to contact law department
+      - contact law helpdesk
+      - law department contact information
+      - law support email
+
+  - intent: ask_helpdesk_pharmacy
+    examples: |
+      - pharmacy helpdesk
+      - PHRM helpdesk
+      - pharmacy department email
+      - how to contact pharmacy department
+      - contact pharmacy helpdesk
+      - pharmacy department contact
+      - PHRM support email
+
+  - intent: ask_helpdesk_geb
+    examples: |
+      - GEB helpdesk
+      - genetic engineering helpdesk
+      - biotechnology helpdesk
+      - GEB department email
+      - how to contact GEB department
+      - genetic engineering and biotechnology helpdesk
+      - contact GEB helpdesk
+
+  - intent: ask_helpdesk_sociology
+    examples: |
+      - sociology helpdesk
+      - SOC helpdesk
+      - sociology department email
+      - how to contact sociology department
+      - contact sociology helpdesk
+      - sociology department contact
+
+  - intent: ask_helpdesk_mps
+    examples: |
+      - MPS helpdesk
+      - math and physics helpdesk
+      - mathematical and physical sciences helpdesk
+      - MPS department email
+      - how to contact MPS department
+      - contact math and physics helpdesk
+      - MPS support email
+
+  - intent: ask_helpdesk_dsr
+    examples: |
+      - social relations helpdesk
+      - DSR helpdesk
+      - department of social relations email
+      - how to contact DSR
+      - contact social relations helpdesk
+      - DSR department contact
+
+  - intent: ask_helpdesk_dis
+    examples: |
+      - information studies helpdesk
+      - DIS helpdesk
+      - information studies department email
+      - how to contact DIS
+      - contact information studies helpdesk
+      - DIS support email
+
+  # ========================================
+  # ADMINISTRATIVE OFFICES - HELPDESK
+  # ========================================
+
+  - intent: ask_helpdesk_accounts
+    examples: |
+      - accounts office helpdesk
+      - accounts helpdesk email
+      - tuition payment helpdesk
+      - scholarship helpdesk
+      - financial issues contact
+      - how to contact accounts office
+      - accounts office email
+      - tuition fee helpdesk
+      - payment related helpdesk
+      - financial aid contact
+      - accounts support email
+
+  - intent: ask_helpdesk_registrar
+    examples: |
+      - registrar office helpdesk
+      - registrar helpdesk email
+      - registration helpdesk
+      - administrative issues contact
+      - how to contact registrar office
+      - registrar office email
+      - registration support
+      - registrar contact information
+
+  - intent: ask_helpdesk_ics
+    examples: |
+      - ICS helpdesk
+      - IT helpdesk
+      - technical support contact
+      - IT issues helpdesk
+      - how to contact ICS
+      - ICS email
+      - computer problems helpdesk
+      - technical helpdesk
+      - IT support email
+      - system issues contact
+
+  - intent: ask_helpdesk_coe
+    examples: |
+      - COE helpdesk
+      - certificate helpdesk
+      - transcript helpdesk
+      - grade report helpdesk
+      - how to contact COE
+      - COE email
+      - certificate request contact
+      - transcript request helpdesk
+      - COE support email
+      - document verification helpdesk
+
+  # ========================================
+  # COMBINED QUERIES (DEPARTMENT + ISSUE)
+  # ========================================
+
+  - intent: ask_specific_department_issue
+    examples: |
+      - I have a financial issue, who should I contact?
+      - where do I get my transcript?
+      - who handles registration problems?
+      - IT problem contact
+      - tuition payment issue contact
+      - academic inquiry for CSE
+      - scholarship question contact
+      - certificate request help
+      - grade report issue
+      - technical problem help
+
+  # ========================================
+  # GENERAL HELPDESK INFO
+  # ========================================
+
+  - intent: ask_helpdesk_general_info
+    examples: |
+      - what are the different helpdesks?
+      - list all helpdesk contacts
+      - show me all department emails
+      - helpdesk email format
+      - how do helpdesks work at EWU?
+      - response time for helpdesk
+      - when will helpdesk reply?
+      - helpdesk business hours
+      - what can I ask helpdesk?
+      - helpdesk query types
+
+
+# ========================================
+# MA IN ENGLISH - GENERAL PROGRAM QUERIES
+# ========================================
+
+  - intent: ask_ma_english_overview
+    examples: |
+      - tell me about MA in English at EWU
+      - what is the MA English program?
+      - MA in English program details
+      - information about MA English
+      - master's in English at East West University
+      - MA English program overview
+      - what can I study in MA English?
+      - English master's program
+      - postgraduate English program
+      - graduate English studies at EWU
+
+  - intent: ask_ma_english_core_courses
+    examples: |
+      - what are the core courses in MA English?
+      - core courses for MA in English
+      - mandatory courses in MA English program
+      - required courses MA English
+      - which courses are compulsory in MA English?
+      - core curriculum MA English
+      - must-take courses MA English
+      - core subjects in MA English
+
+  - intent: ask_ma_english_elective_courses
+    examples: |
+      - what are the elective courses in MA English?
+      - electives in MA English program
+      - optional courses MA English
+      - which courses can I choose in MA English?
+      - elective options MA English
+      - list of electives MA English
+      - what are the optional courses?
+
+  # ========================================
+  # CORE COURSES - SPECIFIC QUERIES
+  # ========================================
+
+  - intent: ask_eng_9501
+    examples: |
+      - tell me about ENG 9501
+      - what is ENG 9501?
+      - Professional Communications course
+      - ENG 9501 details
+      - what does ENG 9501 cover?
+      - Professional Communications MA English
+
+  - intent: ask_eng_9506
+    examples: |
+      - tell me about ENG 9506
+      - what is ENG 9506?
+      - Contemporary British Literature course
+      - ENG 9506 details
+      - British literature course
+
+  - intent: ask_eng_9507
+    examples: |
+      - tell me about ENG 9507
+      - what is ENG 9507?
+      - Research Methods in English Literature
+      - ENG 9507 details
+      - research methods course
+      - how to do research in English literature?
+
+  - intent: ask_eng_9508
+    examples: |
+      - tell me about ENG 9508
+      - what is ENG 9508?
+      - South Asian Literature in English
+      - ENG 9508 details
+      - South Asian literature course
+
+  - intent: ask_eng_9509
+    examples: |
+      - tell me about ENG 9509
+      - what is ENG 9509?
+      - Contemporary American Literature
+      - ENG 9509 details
+      - American literature course
+
+  # ========================================
+  # ELECTIVE COURSES - SPECIFIC QUERIES
+  # ========================================
+
+  - intent: ask_eng_9502
+    examples: |
+      - tell me about ENG 9502
+      - what is ENG 9502?
+      - Modernism to Postmodernism
+      - ENG 9502 details
+      - modernism course
+
+  - intent: ask_eng_9503
+    examples: |
+      - tell me about ENG 9503
+      - what is ENG 9503?
+      - Masterpieces of World Literature
+      - ENG 9503 details
+      - world literature course
+
+  - intent: ask_eng_9504
+    examples: |
+      - tell me about ENG 9504
+      - what is ENG 9504?
+      - Translation Theory and Practice
+      - ENG 9504 details
+      - translation course
+      - is there a translation course?
+
+  - intent: ask_eng_9505
+    examples: |
+      - tell me about ENG 9505
+      - what is ENG 9505?
+      - War and Trauma in Literary Studies
+      - ENG 9505 details
+      - war literature course
+      - trauma in literature
+
+  - intent: ask_eng_9510
+    examples: |
+      - tell me about ENG 9510
+      - what is ENG 9510?
+      - Advanced Literary Theory
+      - ENG 9510 details
+      - literary theory course
+
+  - intent: ask_eng_9511
+    examples: |
+      - tell me about ENG 9511
+      - what is ENG 9511?
+      - Partition Literature
+      - ENG 9511 details
+      - partition literature course
+
+  - intent: ask_eng_9512
+    examples: |
+      - tell me about ENG 9512
+      - what is ENG 9512?
+      - Literature and Spirituality
+      - ENG 9512 details
+      - spirituality in literature
+
+  - intent: ask_eng_9513
+    examples: |
+      - tell me about ENG 9513
+      - what is ENG 9513?
+      - Advanced Cultural Studies
+      - ENG 9513 details
+      - cultural studies course in english
+
+  - intent: ask_eng_9514
+    examples: |
+      - tell me about ENG 9514
+      - what is ENG 9514?
+      - Gender and Feminism
+      - ENG 9514 details
+      - feminism course
+      - gender studies in literature
+
+  - intent: ask_eng_9515
+    examples: |
+      - tell me about ENG 9515
+      - what is ENG 9515?
+      - Ecocriticism Theory and Practice
+      - ENG 9515 details
+      - ecocriticism course
+      - environmental literature
+
+  - intent: ask_eng_9516
+    examples: |
+      - tell me about ENG 9516
+      - what is ENG 9516?
+      - Digital Humanities
+      - ENG 9516 details
+      - digital humanities course
+
+  - intent: ask_eng_9517
+    examples: |
+      - tell me about ENG 9517
+      - what is ENG 9517?
+      - Children's Literature
+      - ENG 9517 details
+      - children's lit course
+
+  - intent: ask_eng_9518
+    examples: |
+      - tell me about ENG 9518
+      - what is ENG 9518?
+      - Film Literature and Adaptation
+      - ENG 9518 details
+      - film adaptation course
+
+  - intent: ask_eng_9519
+    examples: |
+      - tell me about ENG 9519
+      - what is ENG 9519?
+      - Sci-fi and Fantasy Literature
+      - ENG 9519 details
+      - science fiction course
+      - fantasy literature course
+
+  - intent: ask_eng_9520
+    examples: |
+      - tell me about ENG 9520
+      - what is ENG 9520?
+      - Graphic Novels
+      - ENG 9520 details
+      - graphic novels course
+
+  - intent: ask_eng_9521
+    examples: |
+      - tell me about ENG 9521
+      - what is ENG 9521?
+      - From Media to New Media
+      - ENG 9521 details
+      - new media course
+
+  - intent: ask_eng_9545
+    examples: |
+      - tell me about ENG 9545
+      - what is ENG 9545?
+      - Practicum
+      - ENG 9545 details
+      - practicum course
+      - practical experience MA English
+
+  - intent: ask_eng_9582
+    examples: |
+      - tell me about ENG 9582
+      - what is ENG 9582?
+      - Curriculum and Materials Design
+      - ENG 9582 details
+      - curriculum design course
+
+  - intent: ask_eng_9599
+    examples: |
+      - tell me about ENG 9599
+      - what is ENG 9599?
+      - Dissertation
+      - ENG 9599 details
+      - thesis MA English
+      - dissertation requirement
+      - do I need to write a dissertation?
+
+
+
+
+
+  # ========================================
+  # MBA/EMBA - GENERAL PROGRAM QUERIES
+  # ========================================
+
+  - intent: ask_mba_overview
+    examples: |
+      - tell me about the MBA program at EWU
+      - what is the MBA program?
+      - MBA program details
+      - information about MBA at East West University
+      - master of business administration
+      - MBA program overview
+      - what can I study in MBA?
+      - business master's program
+      - graduate business program
+
+  - intent: ask_mba_credits
+    examples: |
+      - how many credits for MBA?
+      - MBA total credits
+      - credits required for MBA
+      - MBA credit requirements
+      - total credits to complete MBA
+      - how many credits do I need for mba?
+
+  - intent: ask_mba_structure
+    examples: |
+      - how is the MBA structured?
+      - MBA program structure
+      - what are the sections of MBA?
+      - MBA course structure
+      - how is MBA organized?
+      - MBA program format
+
+  - intent: ask_mba_duration
+    examples: |
+      - how long is the MBA program?
+      - MBA program duration
+      - how many years for MBA?
+      - time to complete MBA
+      - can I do MBA part-time?
+
+  # ========================================
+  # FOUNDATION COURSES
+  # ========================================
+
+  - intent: ask_mba_foundation_courses
+    examples: |
+      - what are foundation courses in MBA?
+      - MBA foundation courses
+      - how many foundation courses in mba?
+      - foundation course requirements
+      - list foundation courses MBA
+
+  - intent: ask_mba_course_waiver
+    examples: |
+      - can I get a waiver for MBA courses?
+      - course waiver MBA
+      - how many courses can be waived?
+      - waiver policy MBA
+      - can I skip foundation courses?
+      - MBA course exemption
+
+  - intent: ask_mba_9501
+    examples: |
+      - what is MBA 9501?
+      - tell me about Financial Accounting course
+      - MBA 9501 details
+      - Financial Accounting MBA
+
+  - intent: ask_mba_9502
+    examples: |
+      - what is MBA 9502?
+      - Managerial Communication course
+      - MBA 9502 details
+
+  - intent: ask_mba_9503
+    examples: |
+      - what is MBA 9503?
+      - Economics course MBA
+      - MBA 9503 details
+
+  - intent: ask_mba_9504
+    examples: |
+      - what is MBA 9504?
+      - Principles of Management mba
+      - MBA 9504 details
+
+  - intent: ask_mba_9505
+    examples: |
+      - what is MBA 9505?
+      - Principles of Marketing
+      - MBA 9505 details
+
+  - intent: ask_mba_9506
+    examples: |
+      - what is MBA 9506?
+      - Quantitative Analysis course
+      - MBA 9506 details
+
+  - intent: ask_mba_9507
+    examples: |
+      - what is MBA 9507?
+      - Financial Management course
+      - MBA 9507 details
+
+  - intent: ask_mba_9508
+    examples: |
+      - what is MBA 9508?
+      - Business Law course
+      - MBA 9508 details
+
+  - intent: ask_mba_9509
+    examples: |
+      - what is MBA 9509?
+      - Organizational Behavior mba
+      - MBA 9509 details
+
+  - intent: ask_mba_9510
+    examples: |
+      - what is MBA 9510?
+      - Management Information Systems
+      - MBA 9510 details
+      - MIS course MBA
+
+  # ========================================
+  # CORE COURSES
+  # ========================================
+
+  - intent: ask_mba_core_courses
+    examples: |
+      - what are MBA core courses?
+      - core courses in MBA
+      - mandatory MBA courses
+      - required MBA core courses
+      - list core courses MBA
+
+  - intent: ask_mba_9601
+    examples: |
+      - what is MBA 9601?
+      - Corporate Finance course
+      - MBA 9601 details
+
+  - intent: ask_mba_9602
+    examples: |
+      - what is MBA 9602?
+      - Marketing Management course
+      - MBA 9602 details
+
+  - intent: ask_mba_9603
+    examples: |
+      - what is MBA 9603?
+      - Human Resource Management course
+      - MBA 9603 HRM
+
+  - intent: ask_mba_9604
+    examples: |
+      - what is MBA 9604?
+      - Operations Management course
+      - MBA 9604 details
+
+  - intent: ask_mba_9605
+    examples: |
+      - what is MBA 9605?
+      - Business Research Methods
+      - MBA 9605 details
+
+  - intent: ask_mba_9606
+    examples: |
+      - what is MBA 9606?
+      - Strategic Management
+      - MBA 9606 capstone
+      - capstone course MBA
+
+  # ========================================
+  # CONCENTRATIONS
+  # ========================================
+
+  - intent: ask_mba_concentrations
+    examples: |
+      - what concentrations are available in MBA?
+      - MBA specializations
+      - what can I specialize in mba?
+      - concentration areas MBA
+      - MBA majors available
+      - specialization options
+
+  - intent: ask_mba_concentration_requirements
+    examples: |
+      - how many concentration courses?
+      - concentration course requirements
+      - how many courses for specialization in mba?
+      - can I mix concentrations?
+
+  - intent: ask_accounting_concentration
+    examples: |
+      - tell me about Accounting concentration
+      - MBA in Accounting
+      - Accounting specialization
+      - what courses in Accounting concentration?
+
+  - intent: ask_finance_concentration
+    examples: |
+      - tell me about Finance concentration
+      - MBA in Finance
+      - Finance specialization
+      - what courses in Finance concentration?
+
+  - intent: ask_hrm_concentration
+    examples: |
+      - tell me about HRM concentration
+      - MBA in Human Resource Management
+      - HRM specialization
+      - what courses in HRM concentration?
+
+  - intent: ask_it_concentration
+    examples: |
+      - tell me about IT concentration
+      - MBA in Information Technology
+      - IT specialization
+      - what courses in IT concentration?
+
+  - intent: ask_bank_management_concentration
+    examples: |
+      - tell me about Bank Management concentration
+      - MBA in Banking
+      - Bank Management specialization
+      - what courses in Bank Management?
+
+  - intent: ask_management_concentration
+    examples: |
+      - tell me about Management concentration
+      - MBA in Management
+      - Management specialization courses
+
+  - intent: ask_marketing_concentration
+    examples: |
+      - tell me about Marketing concentration
+      - MBA in Marketing
+      - Marketing specialization courses
+
+  - intent: ask_operations_management_concentration
+    examples: |
+      - tell me about Operations Management concentration
+      - MBA in Operations
+      - Operations specialization courses
+
+  - intent: ask_risk_management_concentration
+    examples: |
+      - tell me about Risk Management concentration
+      - MBA in Risk Management and Insurance
+      - Insurance specialization
+
+  - intent: ask_textile_concentration
+    examples: |
+      - tell me about Textile and Garments concentration
+      - MBA in Textile Merchandising
+      - RMG specialization
+
+  - intent: ask_entrepreneurship_concentration
+    examples: |
+      - tell me about Entrepreneurship concentration
+      - MBA in Entrepreneurship
+      - start-up business MBA
+
+  - intent: ask_supply_chain_concentration
+    examples: |
+      - tell me about Supply Chain Management concentration
+      - MBA in Supply Chain
+      - Logistics MBA specialization
+
+  # ========================================
+  # SKILLS & SUITABILITY
+  # ========================================
+
+  - intent: ask_mba_skills
+    examples: |
+      - what skills will I gain from MBA?
+      - MBA skills development
+      - what will I learn in MBA?
+      - MBA learning outcomes
+
+  - intent: ask_mba_non_business_background
+    examples: |
+      - can I do MBA without business background?
+      - MBA for non-business students
+      - suitable for engineers?
+      - can science students do MBA?
+
+  - intent: ask_mba_work_experience
+    examples: |
+      - do I need work experience for MBA?
+      - MBA work experience requirement
+      - can fresh graduates join MBA?
+
+
+
+  # ========================================
+  # MDS PROGRAM - GENERAL QUERIES
+  # ========================================
+
+  - intent: ask_mds_overview
+    examples: |
+      - tell me about the Master in Development Studies program
+      - what is the MDS program?
+      - MDS program details
+      - Master in Development Studies
+      - MDS social enterprise program
+      - development studies program
+      - MDS program overview
+      - what can I study in MDS?
+
+  - intent: ask_mds_credits
+    examples: |
+      - how many credits for MDS?
+      - MDS total credits required
+      - credits required for MDS
+      - total credits to complete MDS
+      - how many credits do I need for MDS?
+      - MDS credit requirements
+
+  - intent: ask_mds_structure
+    examples: |
+      - how is the MDS structured?
+      - MDS program structure
+      - what are the sections of MDS?
+      - MDS course structure
+      - how is MDS organized?
+
+  - intent: ask_mds_flexibility
+    examples: |
+      - is the MDS program flexible?
+      - how flexible is MDS course selection?
+      - can I choose my courses in MDS?
+      - flexibility in MDS program
+      - MDS program flexibility
+
+  # ========================================
+  # FOUNDATION COURSES
+  # ========================================
+
+  - intent: ask_mds_foundation_courses
+    examples: |
+      - what are foundation courses in MDS?
+      - MDS foundation courses
+      - how many foundation courses in mds?
+      - foundation course requirements MDS
+      - list foundation courses MDS
+      - which foundation courses are available?
+
+  - intent: ask_mds_foundation_flexibility
+    examples: |
+      - can I choose foundation courses?
+      - can I pick which foundation courses to take?
+      - are foundation courses mandatory?
+      - do I have to take all foundation courses?
+      - flexibility in foundation courses
+
+  - intent: ask_mds_501
+    examples: |
+      - what is MDS 501?
+      - tell me about Economics for Development
+      - MDS 501 details
+      - economics for development course
+
+  - intent: ask_mds_502
+    examples: |
+      - what is MDS 502?
+      - Issues in Development Economics
+      - MDS 502 details
+      - development economics course
+
+  - intent: ask_mds_503
+    examples: |
+      - what is MDS 503?
+      - Sociology and Social Anthropology
+      - MDS 503 details
+      - sociology development course
+
+  - intent: ask_mds_504
+    examples: |
+      - what is MDS 504?
+      - Basic Statistics for Development Research
+      - MDS 504 details
+      - statistics for development course
+
+  # ========================================
+  # CORE COURSES
+  # ========================================
+
+  - intent: ask_mds_core_courses
+    examples: |
+      - what are MDS core courses?
+      - core courses in MDS program
+      - how many core courses in mds?
+      - mandatory core courses MDS
+      - list core courses MDS
+      - which core courses are available?
+
+  - intent: ask_mds_core_flexibility
+    examples: |
+      - do I have to take all core courses?
+      - how many core courses must I complete?
+      - can I choose core courses?
+      - flexibility in core courses MDS
+      - are all core courses mandatory in mds?
+
+  - intent: ask_mds_sustainable_development
+    examples: |
+      - tell me about Sustainable Development course
+      - Sustainable Development Policies and Tools
+      - sustainable development MDS course
+      - sustainability course
+
+  - intent: ask_mds_governance
+    examples: |
+      - tell me about governance course
+      - Philosophy and Forms of Development
+      - development governance course
+      - governance and development
+
+  - intent: ask_mds_development_management
+    examples: |
+      - tell me about Development Organization and Management
+      - MDS development management course
+      - organization and management course
+
+  - intent: ask_mds_program_design
+    examples: |
+      - tell me about Program and Project Analysis
+      - program and project design course
+      - project analysis and design MDS
+
+  - intent: ask_mds_project_management
+    examples: |
+      - tell me about Project Management course
+      - project management and implementation
+      - project implementation MDS course
+
+  - intent: ask_mds_microfinance
+    examples: |
+      - tell me about Microfinance course
+      - Microfinance Theory and Performance
+      - microfinance MDS
+      - microfinance and poverty alleviation
+
+  - intent: ask_mds_social_enterprise
+    examples: |
+      - tell me about Fundamentals of Social Enterprise
+      - social enterprise course
+      - how do social enterprises work?
+
+  - intent: ask_mds_research_development
+    examples: |
+      - tell me about Research and Development course
+      - research in social enterprise
+      - research and development MDS
+
+  - intent: ask_mds_legal_issues
+    examples: |
+      - tell me about Social Enterprise Legal Issues
+      - legal aspects of social enterprise
+      - legal issues social enterprise
+
+  # ========================================
+  # SPECIALIZATIONS
+  # ========================================
+
+  - intent: ask_mds_specializations
+    examples: |
+      - what specializations are available in MDS?
+      - MDS concentration areas
+      - specialization options MDS
+      - what can I specialize in mds?
+      - concentration areas MDS
+
+  - intent: ask_mds_specialization_requirements
+    examples: |
+      - how many specialization courses?
+      - specialization course requirements
+      - how many courses for specialization in mds?
+      - can I mix specializations?
+
+  - intent: ask_enterprise_development
+    examples: |
+      - tell me about Enterprise Development specialization
+      - Enterprise Development concentration
+      - what is enterprise development?
+      - what courses in enterprise development?
+
+  - intent: ask_entrepreneurship_development
+    examples: |
+      - tell me about Entrepreneurship Development specialization
+      - Entrepreneurship Development concentration
+      - entrepreneurship specialization
+      - what courses in entrepreneurship?
+
+  - intent: ask_climate_sustainable_dev
+    examples: |
+      - tell me about Climate Change and Sustainable Development
+      - Climate and Sustainability specialization
+      - environmental specialization MDS
+      - climate change specialization
+      - sustainable development specialization
+
+  # ========================================
+  # ENTERPRISE DEVELOPMENT COURSES
+  # ========================================
+
+  - intent: ask_mds_monitoring_evaluation
+    examples: |
+      - tell me about Monitoring and Evaluation
+      - Monitoring Evaluation Impact Assessment course
+      - M&E course MDS
+
+  - intent: ask_mds_vocational_education
+    examples: |
+      - tell me about Vocational Education
+      - vocational education and management course
+
+  - intent: ask_mds_professional_ethics
+    examples: |
+      - tell me about Professional Ethics
+      - ethics course MDS
+
+  - intent: ask_mds_gerontology
+    examples: |
+      - tell me about Issues in Gerontology
+      - gerontology course
+      - aging and development
+
+  - intent: ask_mds_sustainable_communities
+    examples: |
+      - tell me about Sustainable Communities
+      - sustainable communities course
+      - community development mds
+
+  - intent: ask_mds_women_entrepreneurship
+    examples: |
+      - tell me about Women and Entrepreneurship
+      - women entrepreneurship course
+      - women in business
+
+  - intent: ask_mds_strategic_management
+    examples: |
+      - tell me about Strategic Management
+      - strategic management MDS course
+
+  - intent: ask_mds_leadership_development
+    examples: |
+      - tell me about Leadership Development
+      - leadership course MDS
+
+  - intent: ask_mds_micro_enterprises
+    examples: |
+      - tell me about Management of Micro and Small Enterprises
+      - small enterprise management
+      - micro enterprise course
+
+  # ========================================
+  # ENTREPRENEURSHIP DEVELOPMENT COURSES
+  # ========================================
+
+  - intent: ask_mds_entrepreneurship
+    examples: |
+      - tell me about Entrepreneurship course
+      - entrepreneurship MDS
+      - business entrepreneurship
+
+  - intent: ask_mds_business_planning
+    examples: |
+      - tell me about Business Planning
+      - business planning course
+
+  - intent: ask_mds_sustainable_business
+    examples: |
+      - tell me about Economics for Sustainable Business
+      - sustainable business economics
+
+  - intent: ask_mds_small_credits
+    examples: |
+      - tell me about Management of Small Credits
+      - small credits course
+
+  - intent: ask_mds_banking_small_enterprises
+    examples: |
+      - tell me about Banking for Small Enterprises
+      - banking small business course
+
+  - intent: ask_mds_research_methodology
+    examples: |
+      - tell me about Research Methodology
+      - research methodology and tools course
+
+  # ========================================
+  # CLIMATE & SUSTAINABILITY COURSES
+  # ========================================
+
+  - intent: ask_mds_environmental_impact
+    examples: |
+      - tell me about Environmental Impact Assessment
+      - environmental impact assessment course
+      - EIA course
+
+  - intent: ask_mds_environment_policy
+    examples: |
+      - tell me about Environment Policy
+      - environmental policy course
+
+  - intent: ask_mds_gender_development
+    examples: |
+      - tell me about Gender and Development
+      - gender development course
+      - gender issues in development
+
+  - intent: ask_mds_disaster_management
+    examples: |
+      - tell me about Disaster Management
+      - disaster management course
+      - disaster risk reduction
+
+  - intent: ask_mds_health_services
+    examples: |
+      - tell me about Community-Based Health Service
+      - health services course
+      - community health
+
+  - intent: ask_mds_environmental_management
+    examples: |
+      - tell me about Environmental Management
+      - environmental management in practice
+      - environmental management course
+
+  # ========================================
+  # PROGRAM REQUIREMENTS & OPPORTUNITIES
+  # ========================================
+
+  - intent: ask_mds_additional_requirement
+    examples: |
+      - what is the additional 3-credit requirement?
+      - thesis or internship MDS?
+      - final requirement MDS
+      - does MDS require a thesis?
+      - internship requirement MDS
+
+  - intent: ask_mds_research_components
+    examples: |
+      - does MDS include research?
+      - research in MDS program
+      - are there research components?
+      - research opportunities MDS
+
+  - intent: ask_mds_career_opportunities
+    examples: |
+      - what careers after MDS?
+      - career opportunities after MDS
+      - job prospects MDS
+      - where can I work after MDS?
+      - what jobs can I get after mds?
+
+  - intent: ask_mds_non_background
+    examples: |
+      - can I do MDS without economics background?
+      - suitable for non economics students?
+      - MDS for diverse backgrounds
+      - do I need economics knowledge?
+
+
+  - intent: ask_mds_interdisciplinary
+    examples: |
+      - can I combine development and business?
+      - interdisciplinary approach MDS
+      - can I mix different specializations?
+      - business and environment MDS
+
+
+        
+  # ========================================
+  # MPHIL PHARMACY - GENERAL PROGRAM QUERIES
+  # ========================================
+
+  - intent: ask_mphil_pharmacy_overview
+    examples: |
+      - tell me about the M.Phil in Pharmacy program
+      - what is the M.Phil Pharmacy program?
+      - M.Phil Pharmacy program overview
+      - Master of Philosophy in Pharmacy
+      - MPHIL pharmacy program details
+      - what can I study in M.Phil Pharmacy?
+      - M.Phil in Pharmacy at EWU
+      - how is M.Phil Pharmacy structured?
+
+  - intent: ask_mphil_pharmacy_credits
+    examples: |
+      - how many credits for M.Phil Pharmacy?
+      - total credits M.Phil Pharmacy
+      - credit requirements MPHIL pharmacy
+      - total credits to complete MPHIL pharmacy
+      - how many credits do I need for MPHIL pharmacy?
+
+  - intent: ask_mphil_pharmacy_duration
+    examples: |
+      - how long is M.Phil Pharmacy program?
+      - how many semesters MPHIL pharmacy?
+      - program duration M.Phil Pharmacy
+      - how long to complete MPHIL pharmacy?
+      - time to complete M.Phil Pharmacy
+
+  - intent: ask_mphil_pharmacy_thesis
+    examples: |
+      - does M.Phil Pharmacy require a thesis?
+      - research thesis MPHIL pharmacy
+      - thesis requirement M.Phil Pharmacy
+      - how many credits is the thesis?
+      - thesis credits MPHIL pharmacy
+
+  # ========================================
+  # SEMESTER - GENERAL QUERIES
+  # ========================================
+
+  - intent: ask_mphil_pharmacy_semesters
+    examples: |
+      - what are the semesters in MPHIL pharmacy?
+      - how many semesters in mphil?
+      - semester structure
+      - credits per semester
+      - semester breakdown
+
+  - intent: ask_mphil_pharmacy_prerequisites
+    examples: |
+      - are there prerequisites in MPHIL pharmacy?
+      - course prerequisites
+      - which courses have prerequisites?
+      - prerequisite requirements
+
+  # ========================================
+  # FIRST SEMESTER
+  # ========================================
+
+  - intent: ask_mphil_pharmacy_semester1_overview
+    examples: |
+      - what courses in first semester M.Phil Pharmacy?
+      - first semester courses MPHIL pharmacy
+      - semester 1 MPHIL pharmacy
+      - what do I take in semester 1?
+      - first semester overview
+
+  - intent: ask_mphil_pharmacy_phrm510
+    examples: |
+      - tell me about PHRM 510
+      - what is PHRM 510?
+      - Advanced Clinical Pharmacy course
+      - PHRM 510 details
+      - clinical pharmacy MPHIL
+
+  - intent: ask_mphil_pharmacy_phrm511
+    examples: |
+      - tell me about PHRM 511
+      - what is PHRM 511?
+      - Advanced Pharmacology-I course
+      - PHRM 511 details
+      - pharmacology course
+
+  - intent: ask_mphil_pharmacy_phrm512
+    examples: |
+      - tell me about PHRM 512
+      - what is PHRM 512?
+      - Neuropharmacology course
+      - PHRM 512 details
+      - neuropharmacology
+
+  - intent: ask_mphil_pharmacy_phrm513
+    examples: |
+      - tell me about PHRM 513
+      - what is PHRM 513?
+      - Immunopharmacology course
+      - PHRM 513 details
+      - immunopharmacology
+
+  - intent: ask_mphil_pharmacy_semester1_optional
+    examples: |
+      - what optional courses in semester 1?
+      - choose optional courses first semester
+      - first semester electives
+      - which optional courses available?
+
+  # ========================================
+  # SECOND SEMESTER
+  # ========================================
+
+  - intent: ask_mphil_pharmacy_semester2_overview
+    examples: |
+      - what courses in second semester M.Phil Pharmacy?
+      - second semester courses MPHIL pharmacy
+      - semester 2 MPHIL pharmacy
+      - what do I take in semester 2?
+      - second semester overview
+
+  - intent: ask_mphil_pharmacy_phrm520
+    examples: |
+      - tell me about PHRM 520
+      - what is PHRM 520?
+      - Advanced Pharmacology-II course
+      - PHRM 520 details
+      - pharmacology II
+
+  - intent: ask_mphil_pharmacy_phrm521
+    examples: |
+      - tell me about PHRM 521
+      - what is PHRM 521?
+      - Molecular Biology and Biotechnology
+      - PHRM 521 details
+      - molecular biology course
+
+  - intent: ask_mphil_pharmacy_phrm522
+    examples: |
+      - tell me about PHRM 522
+      - what is PHRM 522?
+      - Bioinformatics course
+      - PHRM 522 details
+      - bioinformatics
+
+  - intent: ask_mphil_pharmacy_phrm523
+    examples: |
+      - tell me about PHRM 523
+      - what is PHRM 523?
+      - Biostatistics course
+      - PHRM 523 details
+      - biostatistics
+
+  - intent: ask_mphil_pharmacy_semester2_optional
+    examples: |
+      - what optional courses in semester 2?
+      - choose optional courses second semester
+      - second semester electives
+      - PHRM 522 or PHRM 523?
+
+  - intent: ask_mphil_pharmacy_semester2_prerequisites
+    examples: |
+      - prerequisites for semester 2 courses?
+      - PHRM 520 prerequisite
+      - PHRM 521 prerequisite
+      - what do I need for semester 2?
+
+  # ========================================
+  # THIRD SEMESTER
+  # ========================================
+
+  - intent: ask_mphil_pharmacy_semester3_overview
+    examples: |
+      - what courses in third semester M.Phil Pharmacy?
+      - third semester courses MPHIL pharmacy
+      - semester 3 MPHIL pharmacy
+      - what do I take in semester 3?
+      - third semester overview
+
+  - intent: ask_mphil_pharmacy_phrm530
+    examples: |
+      - tell me about PHRM 530
+      - what is PHRM 530?
+      - Clinical Toxicology course
+      - PHRM 530 details
+      - toxicology course
+
+  - intent: ask_mphil_pharmacy_phrm531
+    examples: |
+      - tell me about PHRM 531
+      - what is PHRM 531?
+      - Research Thesis MPHIL pharmacy
+      - PHRM 531 details
+      - thesis course
+      - research credits
+
+  - intent: ask_mphil_pharmacy_phrm532
+    examples: |
+      - tell me about PHRM 532
+      - what is PHRM 532?
+      - Pathophysiology and Pharmacotherapy
+      - PHRM 532 details
+      - pathophysiology course
+
+  - intent: ask_mphil_pharmacy_phrm533
+    examples: |
+      - tell me about PHRM 533
+      - what is PHRM 533?
+      - Community Pharmacy course
+      - PHRM 533 details
+      - community pharmacy
+
+  - intent: ask_mphil_pharmacy_phrm534
+    examples: |
+      - tell me about PHRM 534
+      - what is PHRM 534?
+      - Drug Use Management course
+      - PHRM 534 details
+      - drug use management
+
+  - intent: ask_mphil_pharmacy_semester3_optional
+    examples: |
+      - what optional courses in semester 3?
+      - choose optional courses third semester
+      - third semester electives
+      - PHRM 532, 533, or 534?
+
+  - intent: ask_mphil_pharmacy_semester3_prerequisites
+    examples: |
+      - prerequisites for semester 3 courses?
+      - PHRM 530 prerequisite
+      - requirements for clinical toxicology?
+      - what do I need for semester 3?
+
+  # ========================================
+  # PROGRAM REQUIREMENTS & POLICIES
+  # ========================================
+
+  - intent: ask_mphil_pharmacy_core_mandatory
+    examples: |
+      - are core courses mandatory in mphil?
+      - do I have to take core courses?
+      - core course requirements in mphil pharmacy
+      - which courses are compulsory?
+
+  - intent: ask_mphil_pharmacy_optional_selection
+    examples: |
+      - how many optional courses must I take?
+      - do I need to take all optional courses?
+      - optional course selection
+      - can I choose my optional courses?
+
+  - intent: ask_mphil_pharmacy_credit_distribution
+    examples: |
+      - how are credits distributed?
+      - credit breakdown across semesters
+      - credits per semester MPHIL pharmacy
+      - semester wise credit distribution
+
+  - intent: ask_mphil_pharmacy_pharmacology_focus
+    examples: |
+      - which courses focus on pharmacology?
+      - pharmacology courses MPHIL pharmacy
+      - what pharmacology courses available?
+      - pharmacology-related courses
+
+  - intent: ask_mphil_pharmacy_career_opportunities
+    examples: |
+      - what careers after M.Phil Pharmacy?
+      - career opportunities MPHIL pharmacy
+      - job prospects after M.Phil
+      - where can I work after M.Phil?
+
+
+
+
+
+
+
+
+  # ========================================
+  # MS CSE - GENERAL PROGRAM QUERIES
+  # ========================================
+
+  - intent: ask_ms_cse_overview
+    examples: |
+      - tell me about MS in CSE at EWU
+      - what is the MS in CSE program?
+      - master of science in computer science engineering
+      - MS in CSE program details
+      - MS CSE overview
+      - what can I study in MS CSE?
+      - information about MS in CSE
+
+  - intent: ask_ms_cse_credits
+    examples: |
+      - how many credits for MS in CSE?
+      - total credits MS in CSE
+      - credit requirements MS CSE
+      - how many credits do I need for ms in cse?
+
+  - intent: ask_ms_cse_duration
+    examples: |
+      - how long is MS in CSE program?
+      - program duration MS in CSE
+      - how many semesters in ms cse?
+      - time to complete MS in CSE
+      - standard duration
+
+  - intent: ask_ms_cse_cost
+    examples: |
+      - how much does MS in CSE cost?
+      - total program cost
+      - tuition fees MS CSE
+      - cost per credit
+      - program expenses
+
+  - intent: ask_ms_cse_majors
+    examples: |
+      - what majors are available in MS in CSE?
+      - specialization options in ms cse
+      - major areas MS in CSE
+      - what can I specialize in?
+      - concentration areas in ms cse
+
+  - intent: ask_ms_cse_tracks
+    examples: |
+      - what are the different tracks in MS in CSE?
+      - thesis vs project track
+      - study tracks available
+      - difference between thesis and project
+
+  # ========================================
+  # ADMISSION REQUIREMENTS
+  # ========================================
+
+  - intent: ask_ms_cse_admission_requirements
+    examples: |
+      - what are the admission requirements for MS in CSE?
+      - eligibility for MS in CSE
+      - how to apply to MS in CSE
+      - admission criteria
+      - what do I need to apply?
+
+  - intent: ask_ms_cse_cgpa_requirement
+    examples: |
+      - what CGPA do I need for MS in CSE?
+      - minimum CGPA requirement
+      - is 2.5 CGPA enough?
+      - what GPA is required?
+
+  - intent: ask_ms_cse_bachelor_degree
+    examples: |
+      - what bachelor's degree do I need?
+      - bachelor's requirement MS in CSE
+      - which bachelor's degrees are accepted?
+      - do I need a CSE degree?
+
+  - intent: ask_ms_cse_secondary_requirements
+    examples: |
+      - what are the secondary education requirements?
+      - SSC HSC requirements
+      - secondary school requirements
+      - what about O-Levels and A-Levels?
+      - minimum secondary GPA
+
+  - intent: ask_ms_cse_admission_test
+    examples: |
+      - is there an admission test?
+      - do I need to pass an admission test?
+      - admission test requirements
+      - test requirement MS in CSE
+
+  - intent: ask_ms_cse_non_cse_background
+    examples: |
+      - can I apply with non-CSE background?
+      - apply with physics or engineering degree?
+      - engineering students eligible?
+      - science background MS in CSE
+
+  - intent: ask_ms_cse_three_year_degree
+    examples: |
+      - can I apply with 3-year bachelor's degree?
+      - 3-year degree eligibility
+      - non-4-year degree
+
+  - intent: ask_ms_cse_international_students
+    examples: |
+      - can international students apply?
+      - international degree equivalence
+      - foreign degrees MS in CSE
+
+  # ========================================
+  # PROGRAMS & MAJORS
+  # ========================================
+
+  - intent: ask_ms_cse_compulsory_courses
+    examples: |
+      - what are the compulsory courses?
+      - required courses for all students
+      - core courses everyone takes
+      - mandatory courses in ms cse
+
+  - intent: ask_ms_cse_data_science_major
+    examples: |
+      - tell me about Data Science major
+      - what courses in Data Science?
+      - data science specialization
+      - machine learning focus
+
+  - intent: ask_ms_cse_software_engineering_major
+    examples: |
+      - tell me about Software Engineering major
+      - software engineering courses
+      - software development specialization
+      - what's in Software Engineering?
+
+  - intent: ask_ms_cse_networking_major
+    examples: |
+      - tell me about Networking major
+      - networking specialization
+      - network courses
+      - what courses in networking?
+
+  - intent: ask_ms_cse_systems_engineering_major
+    examples: |
+      - tell me about Systems Engineering major
+      - systems engineering specialization
+      - IoT and hardware focus
+      - embedded systems courses
+
+  # ========================================
+  # TRACKS & THESIS/PROJECT
+  # ========================================
+
+  - intent: ask_ms_cse_thesis_track
+    examples: |
+      - what is the thesis track?
+      - thesis track details
+      - research thesis option
+      - tell me about thesis track
+
+  - intent: ask_ms_cse_project_track
+    examples: |
+      - what is the project track?
+      - project track details
+      - master's project
+      - tell me about project track
+
+  - intent: ask_ms_cse_thesis_vs_project
+    examples: |
+      - what's the difference between thesis and project?
+      - thesis or project which is better?
+      - comparing thesis and project
+      - which track should I choose?
+
+  - intent: ask_ms_cse_major_change
+    examples: |
+      - can I change my major?
+      - switching major after enrollment
+      - change specialization
+      - major change policy
+
+  - intent: ask_ms_cse_track_change
+    examples: |
+      - can I change my track?
+      - switching from thesis to project
+      - change study track
+      - track switching policy
+
+  # ========================================
+  # COURSES & CURRICULUM
+  # ========================================
+
+  - intent: ask_ms_cse_electives_available
+    examples: |
+      - what electives are available in ms cse?
+      - elective courses in ms cse
+      - optional courses I can take ms cse
+      - elective options ms cse
+
+  - intent: ask_ms_cse_prerequisites
+    examples: |
+      - are there prerequisites?
+      - prerequisite courses
+      - required prerequisites
+      - what if I don't know AI?
+
+  - intent: ask_ms_cse_thesis_course
+    examples: |
+      - what is the thesis course?
+      - thesis course code
+      - research thesis details
+      - CSE599
+
+  - intent: ask_ms_cse_project_course
+    examples: |
+      - what is the project course?
+      - master's project details
+      - project course code
+      - CSE597
+
+  - intent: ask_ms_cse_course_codes
+    examples: |
+      - what are the course codes?
+      - CSE course list
+      - which courses are required?
+
+  - intent: ask_ms_cse_cross_major_electives
+    examples: |
+      - can I take electives from other majors?
+      - cross-major courses
+      - electives from different specializations
+
+  # ========================================
+  # SPECIFIC COURSES
+  # ========================================
+
+  - intent: ask_cse504_algorithms
+    examples: |
+      - tell me about Algorithms course
+      - CSE504 details
+      - algorithms and computation
+
+  - intent: ask_cse505_database
+    examples: |
+      - tell me about Database Systems
+      - CSE505 details
+      - database course in ms cse
+
+  - intent: ask_cse596_it_project_management
+    examples: |
+      - tell me about IT Project Management
+      - CSE596 details
+      - entrepreneurship course
+
+  - intent: ask_cse520_statistics
+    examples: |
+      - statistics for data science
+      - CSE520 course
+      - statistical methods cse520
+
+  - intent: ask_cse521_machine_learning
+    examples: |
+      - machine learning course
+      - CSE521 details
+      - ML electives
+
+  - intent: ask_cse550_software_engineering
+    examples: |
+      - software engineering course
+      - CSE550 details
+      - SE fundamentals
+
+  - intent: ask_cse551_testing
+    examples: |
+      - software testing course
+      - CSE551 details
+      - QA and testing
+
+  - intent: ask_cse560_distributed_systems
+    examples: |
+      - distributed systems course
+      - CSE560 details
+      - scalable systems
+
+  - intent: ask_cse561_networking
+    examples: |
+      - advanced networking course
+      - CSE561 details
+
+  - intent: ask_cse570_iot
+    examples: |
+      - internet of things
+      - CSE570 course
+      - IoT details
+
+  - intent: ask_cse571_microprocessors
+    examples: |
+      - microprocessors course in ms cse
+      - CSE571 details
+      - embedded systems
+
+  # ========================================
+  # POLICIES & PROCEDURES
+  # ========================================
+
+  - intent: ask_ms_cse_enrollment_declaration
+    examples: |
+      - when do I declare my major?
+      - when to choose specialization?
+      - enrollment declaration timeline
+      - when to declare track?
+
+  - intent: ask_ms_cse_elective_requirements
+    examples: |
+      - how many electives do I need?
+      - elective credit requirements
+      - thesis track electives
+      - project track electives
+
+  - intent: ask_ms_cse_core_requirements
+    examples: |
+      - are core courses mandatory in ms cse?
+      - must I take all compulsory courses?
+      - core course requirements in ms in cse
+
+  - intent: ask_ms_cse_max_duration
+    examples: |
+      - what's the maximum duration?
+      - how long can I take to complete?
+      - maximum time allowed
+
+  - intent: ask_ms_cse_career_opportunities
+    examples: |
+      - what careers after MS in CSE?
+      - job opportunities after MS CSE
+      - career paths MS CSE
+      - where can I work after finishing MS in CSE?
+
+
+
+
+
+  # ========================================
+  # MS DSA - GENERAL PROGRAM QUERIES
+  # ========================================
+
+  - intent: ask_ms_dsa_overview
+    examples: |
+      - tell me about MS in Data Science & Analytics
+      - what is the MS in DSA program?
+      - master of science in data science and analytics
+      - MS DSA program details
+      - data science and analytics program overview
+      - what can I study in MS DSA?
+
+  - intent: ask_ms_dsa_credits
+    examples: |
+      - how many credits for MS in DSA?
+      - total credits MS DSA
+      - credit requirements MS in data science
+      - total credits to complete
+
+  - intent: ask_ms_dsa_core_courses
+    examples: |
+      - what are the core courses?
+      - core courses in MS DSA
+      - how many core courses in ms dsa?
+      - core course list
+      - mandatory courses MS DSA
+
+  - intent: ask_ms_dsa_electives
+    examples: |
+      - what electives are available in ms dsa?
+      - elective courses MS DSA
+      - how many electives do I need in ms dsa?
+      - list of electives in ms dsa
+
+  - intent: ask_ms_dsa_research_project
+    examples: |
+      - tell me about the research project in ms dsa
+      - research project requirement in ms dsa
+      - DSA5099 details
+      - when can I register for research project in ms dsa?
+      - is research project mandatory in ms dsa?
+
+  - intent: ask_ms_dsa_credit_distribution
+    examples: |
+      - credit distribution core vs electives in ms dsa
+      - how are credits distributed in ms dsa?
+      - ms dsa credit 
+
+  # ========================================
+  # CORE COURSES - GENERAL
+  # ========================================
+
+  - intent: ask_ms_dsa_statistical_methods
+    examples: |
+      - Statistical Methods and Probability course
+      - DSA5001 details
+      - statistical methods course
+
+  - intent: ask_ms_dsa_programming
+    examples: |
+      - Programming for Data Science course
+      - DSA5002 details
+      - Python and R course
+      - programming languages taught
+
+  - intent: ask_ms_dsa_database
+    examples: |
+      - Database Management Systems course
+      - DSA5003 details
+      - database course in ms dsa
+
+  - intent: ask_ms_dsa_regression
+    examples: |
+      - Regression Analysis course
+      - DSA5004 details
+      - regression course
+
+  - intent: ask_ms_dsa_multivariate
+    examples: |
+      - Multivariate Statistical Analysis
+      - DSA5005 details
+      - multivariate course
+
+  - intent: ask_ms_dsa_machine_learning
+    examples: |
+      - Machine Learning course
+      - DSA5006 details
+      - ML course DSA
+
+  - intent: ask_ms_dsa_bigdata
+    examples: |
+      - Big Data & Cloud Computing course
+      - DSA5007 details
+      - big data course
+      - cloud computing
+
+  # ========================================
+  # ELECTIVE COURSES - GENERAL
+  # ========================================
+
+  - intent: ask_ms_dsa_ai_deep_learning
+    examples: |
+      - AI & Deep Learning elective
+      - DSA5011 details
+      - artificial intelligence course
+      - deep learning course
+
+  - intent: ask_ms_dsa_time_series
+    examples: |
+      - Time Series Analysis & Forecasting
+      - DSA5021 details
+      - forecasting course
+      - time series course
+
+  - intent: ask_ms_dsa_econometrics
+    examples: |
+      - Applied Econometrics elective
+      - DSA5041 details
+      - econometrics course in ms dsa
+
+  - intent: ask_ms_dsa_business_analytics
+    examples: |
+      - Business Process Analytics
+      - DSA5043 details
+      - business analytics course
+
+  - intent: ask_ms_dsa_machine_learning_finance
+    examples: |
+      - Machine Learning for Finance
+      - DSA5045 details
+      - finance ML course
+
+  - intent: ask_ms_dsa_data_analytics_finance
+    examples: |
+      - Data Analytics for Finance
+      - DSA5047 details
+      - financial analytics course
+
+  - intent: ask_ms_dsa_environmental
+    examples: |
+      - Environmental Data Analysis and Climate Change
+      - DSA5061 details
+      - environmental data course
+      - climate change analytics
+
+  - intent: ask_ms_dsa_bioinformatics
+    examples: |
+      - Bioinformatics elective
+      - DSA5063 details
+      - bioinformatics course
+      - DNA sequencing course
+
+  - intent: ask_ms_dsa_biostatistics
+    examples: |
+      - Biostatistics & Epidemiology
+      - DSA5065 details
+      - biostatistics course
+      - health data course
+
+  - intent: ask_ms_dsa_glm
+    examples: |
+      - Generalized Linear Models
+      - DSA5071 details
+      - GLM course
+
+  - intent: ask_ms_dsa_categorical
+    examples: |
+      - Categorical Data Analysis
+      - DSA5073 details
+      - categorical data course
+
+  - intent: ask_ms_dsa_doe
+    examples: |
+      - Design of Experiment
+      - DSA5075 details
+      - experimental design course
+      - ANOVA course
+
+  - intent: ask_ms_dsa_actuarial
+    examples: |
+      - Actuarial Data Analysis
+      - DSA5077 details
+      - actuarial course
+      - insurance analytics
+
+  # ========================================
+  # PROGRAM REQUIREMENTS & POLICIES
+  # ========================================
+
+  - intent: ask_ms_dsa_project_prerequisites
+    examples: |
+      - when can I register for research project?
+      - research project prerequisites
+      - 22 credits requirement
+      - project eligibility
+
+  - intent: ask_ms_dsa_total_courses
+    examples: |
+      - how many total courses in ms das?
+      - total number of courses in ms dsa
+     
+
+  - intent: ask_ms_dsa_more_electives
+    examples: |
+      - can I take more than 4 electives?
+      - additional elective courses
+      - extra credits
+
+  - intent: ask_ms_dsa_mandatory_core
+    examples: |
+      - are all core courses mandatory in dsa?
+      - core course requirements in ms dsa
+      - must I take all core courses?
+
+  - intent: ask_ms_dsa_finance_specialization
+    examples: |
+      - can I specialize in finance?
+      - finance track MS DSA
+      - financial analytics specialization
+      - finance electives
+
+  - intent: ask_ms_dsa_health_specialization
+    examples: |
+      - are there health courses?
+      - biology related courses
+      - biomedical data
+      - health data analysis
+
+  - intent: ask_ms_dsa_programming_languages
+    examples: |
+      - what programming languages in ms dsa?
+      - Python and R in ms dsa?
+      - programming languages in ms dsa
+
+  - intent: ask_ms_dsa_data_ethics
+    examples: |
+      - is data ethics covered?
+      - ethical considerations
+      - ethics in data science
+
+  - intent: ask_ms_dsa_practical_application
+    examples: |
+      - how practical is the program in ms dsa?
+      - real-world data challenges in ms dsa
+      - hands-on learning in ms dsa
+      - practical focus in ms dsa
+
+  # ========================================
+  # SPECIFIC TOPIC QUERIES
+  # ========================================
+
+  - intent: ask_ms_dsa_survival_analysis
+    examples: |
+      - is survival analysis taught?
+      - time-to-event data
+      - kaplan meier
+      - censoring data
+
+  - intent: ask_ms_dsa_reinforcement_learning
+    examples: |
+      - is reinforcement learning included?
+      - RL course
+      - trading strategies ML
+
+  - intent: ask_ms_dsa_categorical_models
+    examples: |
+      - categorical outcome models
+      - logistic regression
+      - multinomial logit
+
+  - intent: ask_ms_dsa_incomplete_data
+    examples: |
+      - incomplete or sparse data handling
+      - missing data methods
+      - sparse data techniques
+
+  - intent: ask_ms_dsa_climate_prediction
+    examples: |
+      - climate prediction machine learning
+      - weather forecasting ML
+      - climate modeling
+
+  - intent: ask_ms_dsa_nlp
+    examples: |
+      - natural language processing
+      - NLP course
+      - text analysis ML
+
+  - intent: ask_ms_dsa_computer_vision
+    examples: |
+      - computer vision course
+      - image recognition
+      - CNN course
+
+  - intent: ask_ms_dsa_anomaly_detection
+    examples: |
+      - anomaly detection
+      - fraud detection
+      - outlier detection
+
+  - intent: ask_ms_dsa_ensemble_methods
+    examples: |
+      - ensemble learning
+      - random forests
+      - bagging boosting
+
+  - intent: ask_ms_dsa_optimization
+    examples: |
+      - optimization algorithms
+      - gradient descent
+      - hyperparameter tuning
+
+  - intent: ask_ms_dsa_cross_validation
+    examples: |
+      - cross validation techniques
+      - model evaluation
+      - hold-out test sets
+      - ROC curves
+
+  - intent: ask_ms_dsa_multicollinearity
+    examples: |
+      - multicollinearity handling
+      - heteroscedasticity
+      - autocorrelation
+
+  - intent: ask_ms_dsa_panel_data
+    examples: |
+      - panel data analysis
+      - fixed effects random effects
+      - dynamic models
+
+  - intent: ask_ms_dsa_factor_analysis
+    examples: |
+      - factor analysis
+      - PCA principal component analysis
+      - dimensionality reduction
+
+  - intent: ask_ms_dsa_cluster_analysis
+    examples: |
+      - cluster analysis
+      - hierarchical clustering
+      - k-means clustering
+
+  - intent: ask_ms_dsa_manova
+    examples: |
+      - MANOVA multivariate ANOVA
+      - hotelling T test
+      - profile analysis
+
+  - intent: ask_ms_dsa_sql_database
+    examples: |
+      - SQL queries
+      - database design
+      - normalization
+      - B-tree indexing
+
+  - intent: ask_ms_dsa_mapreduce
+    examples: |
+      - MapReduce distributed processing
+      - Hadoop
+      - distributed computing
+
+  - intent: ask_ms_dsa_feature_engineering
+    examples: |
+      - feature engineering techniques
+      - data preprocessing
+      - data cleaning
+
+  - intent: ask_ms_dsa_real_world_applications
+    examples: |
+      - real-world applications
+      - practical projects
+      - case studies
+      - industry examples
+
+
+
+
+
+  # ========================================
+  # MSS ECONOMICS - GENERAL PROGRAM QUERIES
+  # ========================================
+
+  - intent: ask_mss_eco_overview
+    examples: |
+      - tell me about MSS in Economics at EWU
+      - what is the MSS Economics program?
+      - Master of Social Sciences Economics
+      - MSS in Economics program overview
+      - information about MSS in Economics
+
+  - intent: ask_mss_eco_credits
+    examples: |
+      - how many credits for MSS Economics?
+      - total credits MSS in Economics
+      - credit requirements MSS Economics
+
+  - intent: ask_mss_eco_core_courses
+    examples: |
+      - what are the mandatory core courses?
+      - core courses in MSS Economics
+      - required core courses
+      - ECO501, ECO502, ECO511, ECO565
+
+  - intent: ask_mss_eco_elective_core
+    examples: |
+      - what elective core courses are available?
+      - how many elective core courses?
+      - choose from elective cores
+      - elective core requirements
+
+  - intent: ask_mss_eco_tracks
+    examples: |
+      - what tracks are available?
+      - specialization or general track?
+      - can I do general track?
+      - MSS Economics tracks
+
+  - intent: ask_mss_eco_specializations
+    examples: |
+      - what specializations are available in mss eco?
+      - specialization options in mss economics
+      - which specializations exist in mss eco?
+      - list of specializations in mss eco
+
+  - intent: ask_mss_eco_thesis_or_coursework
+    examples: |
+      - do I have to write a thesis in mss eco?
+      - thesis or coursework option mss eco
+      - is thesis mandatory in mss eco?
+      - coursework alternative in mss eco
+
+  - intent: ask_mss_eco_total_courses
+    examples: |
+      - how many total courses?
+      - total number of courses MSS Economics
+      - courses to complete
+
+  - intent: ask_mss_eco_structure
+    examples: |
+      - program structure in mss eco
+      - how is the program organized in mss eco?
+      - program flow mss eco
+      - course sequence in mss eco
+
+  # ========================================
+  # GENERAL TRACK QUERIES
+  # ========================================
+
+  - intent: ask_mss_eco_general_track
+    examples: |
+      - tell me about general track
+      - general track requirements
+      - general track MSS Economics
+      - no specialization path
+
+  # ========================================
+  # CORE COURSES - SPECIFIC
+  # ========================================
+
+  - intent: ask_eco501_microeconomics
+    examples: |
+      - ECO501 Advanced Microeconomics
+      - microeconomics course in ms
+      - advanced micro
+
+  - intent: ask_eco502_macroeconomics
+    examples: |
+      - ECO502 Advanced Macroeconomics
+      - macroeconomics course in mss
+      - advanced macro
+
+  - intent: ask_eco511_mathematical
+    examples: |
+      - ECO511 Mathematical Economics
+      - mathematical economics course
+
+  - intent: ask_eco565_econometrics
+    examples: |
+      - ECO565 Advanced Econometrics
+      - econometrics course
+
+  # ========================================
+  # ELECTIVE CORE COURSES
+  # ========================================
+
+  - intent: ask_mss_eco_elective_core_list
+    examples: |
+      - list of elective core courses
+      - all elective core options
+      - which elective core courses available?
+      - ECO521, ECO529, ECO532...
+
+  - intent: ask_eco521_public
+    examples: |
+      - Public Economics
+      - ECO521 course
+
+  - intent: ask_eco529_international_finance
+    examples: |
+      - International Financial Economics
+      - ECO529 course
+
+  - intent: ask_eco532_development
+    examples: |
+      - Economics of Development
+      - ECO532 course
+      - development economics
+
+  - intent: ask_eco545_monetary
+    examples: |
+      - Monetary Theory
+      - ECO545 course
+
+  - intent: ask_eco575_history_economic
+    examples: |
+      - History of Economic Thought
+      - ECO575 course
+
+  # ========================================
+  # SPECIALIZATION QUERIES
+  # ========================================
+
+  - intent: ask_mss_eco_agricultural_spec
+    examples: |
+      - Agricultural Economics specialization
+      - ECO517 course
+      - agricultural economics
+
+  - intent: ask_mss_eco_environmental_spec
+    examples: |
+      - Environmental and Natural Resource Economics
+      - ECO542 course
+      - environmental economics
+
+  - intent: ask_mss_eco_labor_spec
+    examples: |
+      - Labor Economics specialization
+      - ECO550 course
+      - labor economics
+
+  - intent: ask_mss_eco_energy_spec
+    examples: |
+      - Energy Economics specialization
+      - ECO564 course
+      - energy economics
+
+  - intent: ask_mss_eco_econometrics_spec
+    examples: |
+      - Econometrics specialization
+      - ECO595 Time Series course
+      - time series and forecasting
+
+  # ========================================
+  # SPECIALIZATION SPECIFICS
+  # ========================================
+
+  - intent: ask_mss_eco_agricultural_courses
+    examples: |
+      - Agricultural Economics courses
+      - Agricultural Production Economics
+      - Agricultural Business
+      - Climate Change and Development
+
+  - intent: ask_mss_eco_environmental_courses
+    examples: |
+      - Environmental Economics courses
+      - Valuation of Environmental Resources
+      - Renewable Resources
+      - Non-Renewable Resources
+
+  - intent: ask_mss_eco_labor_courses
+    examples: |
+      - Labor Economics courses
+      - Advanced Labor Economics II
+      - Empirical Microeconomics
+      - labor specialization electives
+
+  - intent: ask_mss_eco_energy_courses
+    examples: |
+      - Energy Economics courses
+      - Electricity Policy
+      - Resources Development Environment
+      - energy specialization
+
+  - intent: ask_mss_eco_econometrics_courses
+    examples: |
+      - Econometrics courses
+      - Applied Econometrics
+      - Special Topics Econometrics
+      - Readings in Econometrics
+
+  # ========================================
+  # THESIS & COURSEWORK OPTIONS
+  # ========================================
+
+  - intent: ask_mss_eco_thesis_details
+    examples: |
+      - thesis details
+      - ECO699 thesis
+      - thesis requirements
+      - 6-credit thesis
+
+  - intent: ask_mss_eco_coursework_alternative
+    examples: |
+      - coursework alternative
+      - instead of thesis
+      - coursework option
+      - no thesis path
+
+  # ========================================
+  # ADVANCED COURSES
+  # ========================================
+
+  - intent: ask_eco590_quantitative
+    examples: |
+      - Quantitative Modeling
+      - ECO590 course
+
+  - intent: ask_eco592_advanced_math
+    examples: |
+      - Advanced Mathematical Economics
+      - ECO592 course
+
+  - intent: ask_eco593_health_economics
+    examples: |
+      - Advanced Health Economics
+      - ECO593 course
+
+  - intent: ask_eco584_project_evaluation
+    examples: |
+      - Project Evaluation and Analysis
+      - ECO584 course
+
+  - intent: ask_eco585_cost_benefit
+    examples: |
+      - Applied Cost Benefit Analysis
+      - ECO585 course
+
+  # ========================================
+  # PROGRAM POLICIES & REQUIREMENTS
+  # ========================================
+
+  - intent: ask_mss_eco_prerequisites
+    examples: |
+      - prerequisites for courses
+      - 600-level prerequisites
+      - course prerequisites mss eco
+      - meeting prerequisites
+
+  - intent: ask_mss_eco_600level_requirement
+    examples: |
+      - 600-level course requirement
+      - how many 600-level courses?
+      - advanced level courses
+
+  - intent: ask_mss_eco_mixing_specializations
+    examples: |
+      - can I mix specializations in mss in eco?
+      - mixing courses from different tracks in mss eco
+      - crossing specializations in mss eco
+
+  - intent: ask_mss_eco_general_vs_specialization
+    examples: |
+      - difference general vs specialization
+      - general track vs specialization track
+      - choosing tracks
+      - which track to choose?
+
+  - intent: ask_mss_eco_cross_listed_courses
+    examples: |
+      - cross-listed courses
+      - MDS501 cross-listing
+      - shared courses
+      - ECO532 as MDS501
+
+  - intent: ask_mss_eco_career_opportunities
+    examples: |
+      - career opportunities after MSS Economics
+      - job prospects
+      - what jobs can I get after mss in economics?
+      - careers with MSS
+
+  - intent: ask_mss_eco_quantitative_skills
+    examples: |
+      - quantitative skills developed
+      - math skills
+      - analytical skills
+      - research skills
+
+  - intent: ask_mss_eco_applied_courses
+    examples: |
+      - applied economics courses
+      - practical application eco
+      - applied focus in eco
+      - hands-on learning in eco
+
+  - intent: ask_mss_eco_policy_courses
+    examples: |
+      - policy-focused courses
+      - policy analysis
+      - policy courses
+      - economic policy
+
+
+
+
+
+  # ========================================
+  # BACHELOR CSE - PROGRAM OVERVIEW
+  # ========================================
+
+  - intent: ask_bachelor_cse_overview
+    examples: |
+      - tell me about Bachelor in CSE at EWU
+      - what is the Bachelor of Science in Computer Science and Engineering?
+      - bachelor CSE program overview
+      - CSE undergraduate program information
+
+  - intent: ask_bachelor_cse_total_credits
+    examples: |
+      - how many credits for Bachelor CSE?
+      - total credits requirement
+      - credit requirements for CSE degree
+
+  - intent: ask_bachelor_cse_program_structure
+    examples: |
+      - how is the program structured?
+      - program organization
+      - curriculum layout
+
+  - intent: ask_bachelor_cse_duration
+    examples: |
+      - how long is the program in cse?
+      - program duration in cse
+      - time to complete degree in cse
+
+  - intent: ask_bachelor_cse_core_courses
+    examples: |
+      - what are core CSE courses?
+      - compulsory core courses in cse
+      - core computer science courses in cse
+
+  - intent: ask_bachelor_cse_electives
+    examples: |
+      - what elective courses are available in cse?
+      - elective options in cse
+      - optional courses in cse
+
+  - intent: ask_bachelor_cse_capstone
+    examples: |
+      - tell me about capstone project in cse
+      - CSE400 capstone
+      - final project requirements in cse
+
+  # ========================================
+  # PROGRAM OBJECTIVES & OUTCOMES
+  # ========================================
+
+  - intent: ask_bachelor_cse_vision
+    examples: |
+      - what is CSE department vision?
+      - department vision statement cse
+      - EWU CSE vision
+
+  - intent: ask_bachelor_cse_mission
+    examples: |
+      - CSE department mission
+      - what is the mission?
+      - mission statement
+
+  - intent: ask_bachelor_cse_peos
+    examples: |
+      - program educational objectives
+      - PEOs
+      - what are the objectives?
+
+  - intent: ask_bachelor_cse_program_outcomes
+    examples: |
+      - program outcomes
+      - what skills will I learn?
+      - graduate outcomes
+
+  - intent: ask_bachelor_cse_knowledge_profiles
+    examples: |
+      - knowledge profiles
+      - K1 to K8 profiles
+      - learning knowledge areas
+
+  - intent: ask_bachelor_cse_engineering_problems
+    examples: |
+      - engineering problems covered
+      - EP1 EP2 problems
+      - problem types in CSE
+
+  - intent: ask_bachelor_cse_engineering_activities
+    examples: |
+      - engineering activities
+      - EA1 EA2 activities
+      - what activities will I do?
+
+  # ========================================
+  # FIRST YEAR COURSES
+  # ========================================
+
+  - intent: ask_bachelor_cse_first_year
+    examples: |
+      - first year CSE courses
+      - 1st year curriculum
+      - freshman year courses
+
+  - intent: ask_bachelor_cse_first_year_semester1
+    examples: |
+      - first year first semester courses
+      - 1st year 1st semester
+      - freshman fall courses
+
+
+
+
+  - intent: ask_cse103_programming
+    examples: |
+      - Structured Programming
+      - CSE103
+      - programming basics
+
+  - intent: ask_bachelor_cse_first_year_semester2
+    examples: |
+      - first year second semester
+      - 1st year 2nd semester
+      - freshman spring courses
+
+
+
+  - intent: ask_cse106_discrete_math
+    examples: |
+      - Discrete Mathematics
+      - CSE106
+      - discrete math course
+
+  - intent: ask_che109_chemistry
+    examples: |
+      - Engineering Chemistry
+      - CHE109
+      - chemistry course
+
+  - intent: ask_bachelor_cse_first_year_semester3
+    examples: |
+      - first year third semester
+      - 1st year 3rd semester
+
+  - intent: ask_phy109_physics
+    examples: |
+      - Engineering Physics-I
+      - PHY109
+      - physics fundamentals
+
+  - intent: ask_mat104_geometry_vector
+    examples: |
+      - Coordinate Geometry and Vector Analysis
+      - MAT104
+      - geometry course
+
+  - intent: ask_cse110_oop
+    examples: |
+      - Object Oriented Programming
+      - CSE110
+      - OOP course
+
+  # ========================================
+  # SECOND YEAR COURSES
+  # ========================================
+
+  - intent: ask_bachelor_cse_second_year
+    examples: |
+      - second year CSE courses
+      - 2nd year curriculum
+      - sophomore year courses
+
+  - intent: ask_bachelor_cse_second_year_semester1
+    examples: |
+      - second year first semester
+      - 2nd year 1st semester
+      - sophomore fall courses
+
+
+  - intent: ask_sta102_statistics
+    examples: |
+      - Statistics and Probability
+      - STA102
+      - statistics course
+
+  - intent: ask_cse200_engineering_drawing
+    examples: |
+      - Computer-Aided Engineering Drawing
+      - CSE200
+      - CAD drawing course
+
+  - intent: ask_cse209_electrical_circuits
+    examples: |
+      - Electrical Circuits
+      - CSE209
+      - electrical fundamentals
+
+  - intent: ask_bachelor_cse_second_year_semester2
+    examples: |
+      - second year second semester
+      - 2nd year 2nd semester
+      - sophomore spring courses
+
+  - intent: ask_mat205_linear_algebra
+    examples: |
+      - Linear Algebra and Complex Variables
+      - MAT205
+      - linear algebra course
+
+  - intent: ask_cse207_data_structures
+    examples: |
+      - Data Structures
+      - CSE207
+      - data structures course
+
+  - intent: ask_cse251_electronic_circuits
+    examples: |
+      - Electronic Circuits
+      - CSE251
+      - electronics course
+
+  - intent: ask_bachelor_cse_second_year_semester3
+    examples: |
+      - second year third semester
+      - 2nd year 3rd semester
+
+  - intent: ask_phy209_physics2
+    examples: |
+      - Engineering Physics-II
+      - PHY209
+      - quantum physics course
+
+  - intent: ask_cse325_operating_systems
+    examples: |
+      - Operating Systems
+      - CSE325
+      - OS course
+
+  # ========================================
+  # THIRD YEAR COURSES
+  # ========================================
+
+  - intent: ask_bachelor_cse_third_year
+    examples: |
+      - third year CSE courses
+      - 3rd year curriculum
+      - junior year courses
+
+
+  - intent: ask_cse246_algorithms
+    examples: |
+      - Algorithms
+      - CSE246
+      - algorithms course
+
+  - intent: ask_cse302_database
+    examples: |
+      - Database Systems
+      - CSE302
+      - database course in cse
+
+  - intent: ask_bachelor_cse_third_year_semester2
+    examples: |
+      - third year second semester
+      - 3rd year 2nd semester
+      - junior spring courses
+
+  - intent: ask_cse345_digital_logic
+    examples: |
+      - Digital Logic Design
+      - CSE345
+      - digital logic course
+
+  - intent: ask_cse347_information_systems
+    examples: |
+      - Information System Analysis and Design
+      - CSE347
+      - IS analysis course
+
+  - intent: ask_bachelor_cse_third_year_semester3
+    examples: |
+      - third year third semester
+      - 3rd year 3rd semester
+
+  - intent: ask_cse360_computer_architecture
+    examples: |
+      - Computer Architecture
+      - CSE360
+      - architecture course
+
+  - intent: ask_cse405_networks
+    examples: |
+      - Computer Networks
+      - CSE405
+      - networking course
+
+  # ========================================
+  # FOURTH YEAR COURSES
+  # ========================================
+
+  - intent: ask_bachelor_cse_fourth_year
+    examples: |
+      - fourth year CSE courses
+      - 4th year curriculum
+      - senior year courses
+
+  - intent: ask_bachelor_cse_fourth_year_semester1
+    examples: |
+      - fourth year first semester
+      - 4th year 1st semester
+      - senior fall courses
+
+  - intent: ask_cse407_green_computing
+    examples: |
+      - Green Computing
+      - CSE407
+      - sustainability in computing
+
+  - intent: ask_bachelor_cse_fourth_year_semester2
+    examples: |
+      - fourth year second semester
+      - 4th year 2nd semester
+      - senior spring courses
+
+  - intent: ask_cse487_cybersecurity
+    examples: |
+      - Cyber Security, Ethics and Law
+      - CSE487
+      - cybersecurity course
+
+  - intent: ask_bachelor_cse_fourth_year_semester3
+    examples: |
+      - fourth year third semester
+      - 4th year 3rd semester
+      - senior summer courses
+
+  - intent: ask_cse495_project_management
+    examples: |
+      - IT Project Management and Entrepreneurship
+      - CSE495
+      - project management course
+
+  # ========================================
+  # SPECIALIZATIONS / MAJORS
+  # ========================================
+
+  - intent: ask_bachelor_cse_specializations
+    examples: |
+      - specializations available
+      - major options
+      - concentration areas in cse
+      - specialization tracks
+
+  - intent: ask_bachelor_cse_data_science_major
+    examples: |
+      - Data Science and Intelligent Systems major
+      - Intelligent Systems specialization
+      - data science focus
+      - machine learning track
+
+  - intent: ask_bachelor_cse_software_engineering_major
+    examples: |
+      - Software Engineering major
+      - Software Engineering specialization
+      - software development track
+
+  - intent: ask_bachelor_cse_networking_major
+    examples: |
+      - Communications and Networking major
+      - Networking specialization
+      - networking track
+
+  - intent: ask_bachelor_cse_hardware_major
+    examples: |
+      - Hardware Engineering major
+      - Hardware specialization
+      - hardware track
+
+  # ========================================
+  # MAJOR-SPECIFIC COURSES
+  # ========================================
+
+  - intent: ask_cse303_data_science_stats
+    examples: |
+      - Statistics for Data Science
+      - CSE303
+      - data science statistics
+
+  - intent: ask_cse366_artificial_intelligence
+    examples: |
+      - Artificial Intelligence
+      - CSE366
+      - AI course
+
+  - intent: ask_cse412_software_engineering
+    examples: |
+      - Software Engineering course
+      - CSE412
+      - software engineering principles
+
+  - intent: ask_cse430_testing_qa
+    examples: |
+      - Software Testing and Quality Assurance
+      - CSE430
+      - QA testing course
+
+  - intent: ask_cse350_data_communications
+    examples: |
+      - Data Communications
+      - CSE350
+      - communications course
+
+  - intent: ask_cse432_signal_processing
+    examples: |
+      - Digital Signal Processing
+      - CSE432
+      - DSP course
+
+  - intent: ask_cse355_digital_systems
+    examples: |
+      - Digital System Design
+      - CSE355
+      - digital systems course
+
+  - intent: ask_cse442_microprocessors
+    examples: |
+      - Microprocessors and Microcontrollers
+      - CSE442
+      - microprocessors course 
+
+  # ========================================
+  # ELECTIVE COURSES
+  # ========================================
+
+  - intent: ask_cse225_numerical_methods
+    examples: |
+      - Numerical Methods
+      - CSE225
+      - numerical analysis
+
+  - intent: ask_cse313_theory_computation
+    examples: |
+      - Theory of Computations
+      - CSE313
+      - computability course
+
+  - intent: ask_cse460_cryptography
+    examples: |
+      - Cryptography
+      - CSE460
+      - cryptography course
+
+  - intent: ask_cse471_compiler_design
+    examples: |
+      - Compiler Design
+      - CSE471
+      - compilers course
+
+  - intent: ask_cse483_graph_theory
+    examples: |
+      - Graph Theory
+      - CSE483
+      - graph algorithms
+
+  - intent: ask_cse484_computational_geometry
+    examples: |
+      - Computational Geometry
+      - CSE484
+      - geometry in cse
+
+  # ========================================
+  # GENERAL EDUCATION COURSES
+  # ========================================
+
+  - intent: ask_bachelor_cse_general_education
+    examples: |
+      - general education courses in cse
+      - liberal arts courses in cse
+      - humanities electives in cse
+
+  - intent: ask_gen203_environment
+    examples: |
+      - Ecological System and Environment
+      - GEN203
+      - environment course
+
+  - intent: ask_general_education_options
+    examples: |
+      - general education options cse
+      - GE electives list cse 
+      - available general education courses in cse
+
+  # ========================================
+  # SEMESTER INFORMATION
+  # ========================================
+
+  - intent: ask_bachelor_cse_semester_credits
+    examples: |
+      - how many credits per semester?
+      - credit load each semester
+      - semester credit requirements
+
+  - intent: ask_bachelor_cse_semester_courses
+    examples: |
+      - courses per semester
+      - number of courses
+
+  - intent: ask_bachelor_cse_prerequisites
+    examples: |
+      - prerequisites
+      - course prerequisites cse
+      - what courses do I need first?
+
+  - intent: ask_bachelor_cse_course_sequence
+    examples: |
+      - course sequence in cse
+      - suggested order of courses in cse
+      - course prerequisites chain cse
+
+  # ========================================
+  # SKILLS & LEARNING OUTCOMES
+  # ========================================
+
+  - intent: ask_bachelor_cse_skills_developed
+    examples: |
+      - what skills will I develop?
+      - graduate competencies
+      - skills learned
+
+  - intent: ask_bachelor_cse_teamwork
+    examples: |
+      - teamwork experience
+      - team projects
+      - collaborative learning
+
+  - intent: ask_bachelor_cse_research
+    examples: |
+      - research experience cse
+      - research opportunities for cse
+      - research skills development cse
+
+  - intent: ask_bachelor_cse_ethical_training
+    examples: |
+      - ethical training
+      - ethics in CSE
+      - professional responsibility
+
+  - intent: ask_bachelor_cse_communication
+    examples: |
+      - communication skills training
+      - technical writing
+      - presentation skills
+
+  # ========================================
+  # CAREER & OPPORTUNITIES
+  # ========================================
+
+  - intent: ask_bachelor_cse_career_paths
+    examples: |
+      - career opportunities in cse
+      - what jobs after bachelor in cse?
+      - career paths for CSE graduates
+
+  - intent: ask_bachelor_cse_entrepreneurship
+    examples: |
+      - entrepreneurship opportunities
+      - startup preparation
+      - launching a tech company
+
+
+  # ========================================
+  # ADMISSION & PRACTICAL INFO
+  # ========================================
+
+  - intent: ask_bachelor_cse_admission
+    examples: |
+      - how to apply for bachelor in cse?
+      - admission requirements for cse
+    
+
+  - intent: ask_bachelor_cse_practical_tools
+    examples: |
+      - what tools and software?
+      - programming tools
+      - technology used
+
+  - intent: ask_bachelor_cse_internships
+    examples: |
+      - internship opportunities for CSE students
+      - CSE undergraduate internships
+      - where can CSE students intern
+
+
+
+
+
+
+# ========================================
+# PROGRAM OVERVIEW
+# ========================================
+
+  - intent: ask_ba_program_overview
+    examples: |
+      - tell me about Bachelor of Arts at EWU
+      - what is the BA program structure
+      - how is Bachelor of Arts organized
+      - what does BA general program cover
+      - can you explain the BA degree
+      - Bachelor of Arts program details
+      - General BA curriculum overview
+
+  - intent: ask_ba_total_credits
+    examples: |
+      - how many credits for BA degree
+      - total credits needed to graduate
+      - BA credit requirements
+      - credits for Bachelor of Arts
+      - credit hour requirements
+      - minimum credits for BA
+
+  - intent: ask_ba_program_structure
+    examples: |
+      - how is BA program structured
+      - program organization and layout
+      - curriculum breakdown by year
+      - semester distribution
+      - course arrangement
+      - program flow from year 1 to 4
+
+  - intent: ask_ba_duration
+    examples: |
+      - how long is BA program
+      - program duration in years
+      - time to complete BA degree
+      - four year timeline
+      - years required for completion
+
+  - intent: ask_ba_core_courses
+    examples: |
+      - what are core BA courses
+      - compulsory BA courses list
+      - mandatory BA requirements
+      - core curriculum courses
+
+  # ========================================
+  # BUSINESS ADMINISTRATION FOUNDATION
+  # ========================================
+
+  - intent: ask_ba_business_foundation
+    examples: |
+      - business foundation courses
+      - intro to business subjects
+      - BUS101 details
+      - business basics courses
+      - starting business subjects
+      - introductory business courses
+
+  - intent: ask_bus101_introduction
+    examples: |
+      - what is BUS101
+      - Introduction to Business course
+      - BUS101 course details
+      - business introduction course
+      - what topics in BUS101
+      - BUS101 credits
+
+  - intent: ask_bus301_business_ethics
+    examples: |
+      - Business Ethics course
+      - BUS301 details
+      - ethics in business
+      - professional ethics course
+      - BUS301 requirements
+      - course BUS301
+
+  # ========================================
+  # INFORMATION TECHNOLOGY COURSES
+  # ========================================
+
+  - intent: ask_cse_courses_ba
+    examples: |
+      - CSE courses for BA students
+      - computer science courses available
+      - Introduction to Computers courses
+      - CSE101 CSE102 courses
+      - computer fundamentals
+      - IT courses for BA majors
+      - computing courses available
+
+  - intent: ask_cse101_intro_computers
+    examples: |
+      - CSE101 course details
+      - Introduction to Computers I
+      - what is CSE101 about
+      - computer basics course
+      - first computer course
+      - CSE101 prerequisites
+
+  - intent: ask_cse102_intro_computers2
+    examples: |
+      - CSE102 details
+      - Introduction to Computers II
+      - second computer course
+      - CSE102 prerequisites
+      - what comes after CSE101
+      - advanced computer intro
+
+  # ========================================
+  # MATHEMATICS & STATISTICS
+  # ========================================
+
+  - intent: ask_mat_courses_ba
+    examples: |
+      - mathematics courses for BA
+      - math courses available
+      - business mathematics
+      - calculus courses
+      - differential equations
+      - math course options
+
+  - intent: ask_mat100_college_math
+    examples: |
+      - MAT100 remedial course
+      - college mathematics
+      - MAT100 prerequisites
+      - who needs MAT100
+      - remedial math course
+
+  - intent: ask_mat101_calculus
+    examples: |
+      - MAT101 course details
+      - Differential Integral Calculus
+      - calculus fundamentals
+      - MAT101 prerequisites
+      - what is calculus about
+
+  - intent: ask_mat102_differential_equations
+    examples: |
+      - MAT102 details
+      - Differential Equations course
+      - special functions
+      - MAT102 prerequisites
+      - advanced calculus topics
+
+  - intent: ask_mat110_business_math1
+    examples: |
+      - MAT110 course
+      - Mathematics for Business and Economics I
+      - business math basics
+      - financial mathematics
+      - economic mathematics
+
+  - intent: ask_mat211_business_math2
+    examples: |
+      - MAT211 course details
+      - Mathematics for Business and Economics II
+      - advanced business math
+      - MAT211 prerequisites
+      - business mathematics 2
+
+  - intent: ask_eco_statistics
+    examples: |
+      - statistics courses available
+      - ECO104 statistics
+      - ECO204 statistics
+      - Statistics for Business and Economics
+      - business statistics course
+      - quantitative analysis
+
+  - intent: ask_eco104_stats1
+    examples: |
+      - ECO104 course details
+      - Statistics for Business and Economics I
+      - business statistics basics
+      - ECO104 prerequisites
+      - statistical methods in eco
+
+  - intent: ask_eco204_stats2
+    examples: |
+      - ECO204 details
+      - Statistics for Business and Economics II
+      - advanced statistics
+      - ECO204 prerequisites
+      - econometrics basics
+
+  # ========================================
+  # ECONOMICS COURSES
+  # ========================================
+
+  - intent: ask_eco_courses_ba
+    examples: |
+      - economics courses for BA
+      - ECO courses available
+      - microeconomics course
+      - macroeconomics course
+
+  - intent: ask_eco101_microeconomics
+    examples: |
+      - ECO101 course
+      - Principles of Microeconomics
+      - microeconomic basics
+      - consumer behavior economics
+      - market economics
+      - ECO101 details
+
+  - intent: ask_eco102_macroeconomics
+    examples: |
+      - ECO102 course details
+      - Introduction to Macroeconomics
+      - national economy
+      - inflation unemployment
+      - GDP economics
+      - macro course details
+
+  - intent: ask_eco200_agricultural
+    examples: |
+      - ECO200 course
+      - Agricultural Economics
+      - farming economics
+      - rural economy
+
+  - intent: ask_eco220_behavioral
+    examples: |
+      - ECO220 course
+      - Behavioral Economics
+      - consumer psychology
+      - decision making economics
+
+  - intent: ask_eco260_environmental
+    examples: |
+      - ECO260 course
+      - Environmental Natural Resource Economics
+      - sustainability economics
+      - ecological economics
+
+  # ========================================
+  # ENGLISH & COMMUNICATION COURSES
+  # ========================================
+
+  - intent: ask_eng_courses_ba
+    examples: |
+      - English courses for BA
+      - ENG courses available
+      - communication courses
+      - language courses in ba in english
+      - composition writing courses
+
+  - intent: ask_eng100_oral_communication
+    examples: |
+      - ENG100 course
+      - Improving Oral Communication Skills
+      - speaking skills course
+      - presentation course
+      - public speaking fundamentals
+
+  - intent: ask_eng101_basic_english
+    examples: |
+      - ENG101 course details
+      - Basic English course
+      - English fundamentals
+      - language basics
+      - ENG101 prerequisites
+
+  - intent: ask_eng102_composition
+    examples: |
+      - ENG102 course
+      - Composition and Communication Skills
+      - writing course
+      - communication fundamentals
+      - ENG102 prerequisites
+
+  - intent: ask_bus231_business_communication
+    examples: |
+      - BUS231 course
+      - Business Communication
+      - professional communication
+      - workplace communication
+      - business writing
+
+  # ========================================
+  # GENERAL EDUCATION COURSES
+  # ========================================
+
+  - intent: ask_gen_courses_ba
+    examples: |
+      - general education courses
+      - GEN courses available
+      - compulsory general education
+      - optional general education
+      - liberal arts courses
+      - humanities courses
+
+  - intent: ask_gen226_bangladesh
+    examples: |
+      - GEN226 course
+      - Emergence of Bangladesh
+      - Bangladesh history
+      - national development
+
+  - intent: ask_general_education_electives
+    examples: |
+      - general education electives
+      - choose from GEN courses
+      - optional GEN courses
+      - elective general education options
+      - humanities electives 
+
+  - intent: ask_gen201_bangladesh_studies
+    examples: |
+      - GEN201 Bangladesh Studies
+      - country background
+      - national studies
+
+  - intent: ask_gen202_eastern_culture
+    examples: |
+      - GEN202 Eastern Culture
+      - cultural heritage
+      - traditions courses
+
+  - intent: ask_gen203_environment
+    examples: |
+      - GEN203 Ecological System
+      - environmental course
+      - sustainability course
+
+  - intent: ask_gen204_western_thought
+    examples: |
+      - GEN204 Western Thought
+      - philosophy basics
+      - intellectual history
+
+  - intent: ask_gen205_psychology
+    examples: |
+      - GEN205 Introduction to Psychology
+      - human behavior
+      - psychological studies
+
+  - intent: ask_gen206_sociology
+    examples: |
+      - GEN206 Introduction to Sociology
+      - society studies
+      - social institutions gen206
+
+  - intent: ask_gen207_industrial_psychology
+    examples: |
+      - GEN207 Industrial Psychology
+      - workplace behavior
+      - organizational psychology
+
+  - intent: ask_gen208_philosophy
+    examples: |
+      - GEN208 Introduction to Philosophy
+      - philosophical thinking
+      - ethics and logic
+
+  - intent: ask_gen209_social_psychology
+    examples: |
+      - GEN209 Introduction to Social Psychology
+      - group behavior gen
+      - interpersonal dynamics
+
+  - intent: ask_gen210_international_relations
+    examples: |
+      - GEN210 International Relations
+      - global politics
+      - international studies
+
+  - intent: ask_gen211_journalism_media
+    examples: |
+      - GEN211 Journalism Media Studies
+      - media courses
+      - communication studies
+
+  - intent: ask_gen212_women_development
+    examples: |
+      - GEN212 Women in Development
+      - gender studies
+      - women's issues
+
+  - intent: ask_gen213_german_language
+    examples: |
+      - GEN213 German Language
+      - foreign language
+      - European language
+
+  - intent: ask_gen214_development_studies
+    examples: |
+      - GEN214 Development Studies
+      - development studies
+      - policy studies
+
+  - intent: ask_gen215_french_language
+    examples: |
+      - GEN215 French Language
+      - language courses french
+      - french language courses
+      - international language
+
+  - intent: ask_gen216_spanish_language
+    examples: |
+      - GEN216 Spanish Language
+      - foreign language learning
+
+  - intent: ask_gen217_chinese_language
+    examples: |
+      - GEN217 Chinese Language
+      - Asian language
+      - mandarin courses
+
+  - intent: ask_gen218_arabic_language
+    examples: |
+      - GEN218 Arabic Language
+      - Middle Eastern language
+      - language studies
+
+  - intent: ask_gen220_public_relations
+    examples: |
+      - GEN220 Public Relations
+      - PR fundamentals
+      - communication strategy
+
+  - intent: ask_gen221_globalization
+    examples: |
+      - GEN221 Globalization Development Change
+      - global economics
+      - international change
+
+  - intent: ask_gen223_security_studies
+    examples: |
+      - GEN223 Security Studies
+      - geopolitics
+      - international security
+
+  - intent: ask_gen224_bangla_language
+    examples: |
+      - GEN224 Bangla Language
+      - native language course
+      - Bengali studies
+
+  - intent: ask_gen225_demography_statistics
+    examples: |
+      - GEN225 Demography Statistics
+      - population studies
+      - demographic analysis
+
+  - intent: ask_gen239_professional_ethics
+    examples: |
+      - GEN239 Professional Ethics
+      - workplace ethics
+      - professional responsibility
+
+  - intent: ask_gen301_pr_relations
+    examples: |
+      - GEN301 Public Relations
+      - professional PR course
+
+  - intent: ask_gen302_development
+    examples: |
+      - GEN302 Development Studies
+      - advanced development
+
+  - intent: ask_gen303_globalization_identity
+    examples: |
+      - GEN303 Globalization Social Identity
+      - identity studies
+      - social change
+
+  # ========================================
+  # BIOLOGY & SCIENCE COURSES
+  # ========================================
+
+  - intent: ask_geb_courses_ba
+    examples: |
+      - biology courses for BA
+      - GEB courses available
+      - basic biology course
+      - cell biology
+
+  - intent: ask_geb101_basic_biology
+    examples: |
+      - GEB101 course
+      - Basic Biology
+      - biological fundamentals
+      - life science basics
+
+  - intent: ask_geb103_cell_biology
+    examples: |
+      - GEB103 course
+      - Cell Biology I
+      - cellular structures
+      - microscopic life
+
+  # ========================================
+  # LAW & LEGAL STUDIES
+  # ========================================
+
+  - intent: ask_law_courses_ba
+    examples: |
+      - law courses for BA
+      - LAW courses available
+      - legal studies options
+      - contract law course
+      - constitutional law
+
+  - intent: ask_law101_contract
+    examples: |
+      - LAW101 course
+      - Law of Contract I
+      - contract basics
+      - legal agreements
+
+  - intent: ask_law102_muslim_law
+    examples: |
+      - LAW102 course
+      - Muslim Law I
+      - religious legal systems
+      - Islamic jurisprudence
+
+  - intent: ask_law103_contract2
+    examples: |
+      - LAW103 course
+      - Law of Contract II
+      - advanced contracts
+
+  - intent: ask_law104_muslim_law2
+    examples: |
+      - LAW104 course
+      - Muslim Law II
+      - advanced Islamic law
+
+  - intent: ask_law105_statutes
+    examples: |
+      - LAW105 course
+      - Interpretation of Statutes
+      - legal interpretation
+      - legislative language
+
+  - intent: ask_law106_constitutional
+    examples: |
+      - LAW106 course
+      - Constitutional Law I
+      - government structure
+      - constitutional rights
+
+  - intent: ask_law107_bangladesh_legal
+    examples: |
+      - LAW107 course
+      - Legal System of Bangladesh
+      - national legal framework
+      - Bangladesh laws
+
+  - intent: ask_law108_administrative
+    examples: |
+      - LAW108 course
+      - Administrative Law
+      - government administration
+      - bureaucratic law
+
+  # ========================================
+  # INFORMATION SCIENCE COURSES
+  # ========================================
+
+  - intent: ask_isl_courses_ba
+    examples: |
+      - information science courses
+      - ISL courses available
+      - library management
+      - information studies
+
+  - intent: ask_isl101_information_studies
+    examples: |
+      - ISL101 course
+      - Introduction to Information Studies
+      - library basics
+      - information management
+
+  - intent: ask_isl103_information_society
+    examples: |
+      - ISL103 course
+      - Information and Society
+      - digital society
+      - knowledge management
+
+  # ========================================
+  # PHYSICS COURSES
+  # ========================================
+
+  - intent: ask_phy_courses_ba
+    examples: |
+      - physics courses for BA
+      - PHY courses available
+      - introductory physics
+
+  - intent: ask_phy100_intro_physics
+    examples: |
+      - PHY100 course
+      - Introductory Physics
+      - physics basics
+      - classical physics
+
+  # ========================================
+  # MANAGEMENT & BUSINESS COURSES
+  # ========================================
+
+  - intent: ask_mgt_courses_ba
+    examples: |
+      - management courses
+      - MGT courses available
+      - business management
+      - organizational management
+
+  - intent: ask_mgt101_principles_management
+    examples: |
+      - MGT101 course
+      - Principles of Management
+      - management basics
+      - organizational basics
+
+  - intent: ask_mgt251_organizational_behavior
+    examples: |
+      - MGT251 course
+      - Organizational Behavior mgt
+      - workplace dynamics
+      - employee behavior
+
+  - intent: ask_mgt321_industrial_management
+    examples: |
+      - MGT321 course
+      - Industrial Management
+      - production management
+      - operations management
+
+  - intent: ask_mgt337_operations
+    examples: |
+      - MGT337 course
+      - Production Operations Management
+      - supply chain basics
+      - operations planning
+
+  # ========================================
+  # POPULATION & HEALTH STUDIES
+  # ========================================
+
+  - intent: ask_pop_courses_ba
+    examples: |
+      - population studies courses
+      - POP courses available
+      - public health courses
+      - demography courses
+
+  - intent: ask_pop201_health_adolescents
+    examples: |
+      - POP201 course
+      - Health Challenges Adolescents Youths
+      - youth health issues
+      - development health
+
+  - intent: ask_pop202_public_health
+    examples: |
+      - POP202 course
+      - Introduction to Public Health
+      - public health basics
+      - health systems
+
+  - intent: ask_pop203_population_studies
+    examples: |
+      - POP203 course
+      - Introduction to Population Studies
+      - demographics
+      - population analysis
+
+  # ========================================
+  # SOCIOLOGY & ANTHROPOLOGY
+  # ========================================
+
+  - intent: ask_soc_courses_ba
+    examples: |
+      - sociology courses for BA
+      - SOC courses available
+      - anthropology courses
+      - social studies courses
+
+  - intent: ask_soc101_intro_sociology
+    examples: |
+      - SOC101 course
+      - Introduction to Sociology
+      - sociology basics
+      - social institutions course
+
+  - intent: ask_soc102_intro_anthropology
+    examples: |
+      - SOC102 course
+      - Introduction to Anthropology
+      - anthropology basics
+      - cultural anthropology
+
+  - intent: ask_soc105_peasant_societies
+    examples: |
+      - SOC105 course
+      - Peasant Societies
+      - agricultural societies
+      - rural communities soc105
+
+  - intent: ask_soc106_historical_sociology
+    examples: |
+      - SOC106 course
+      - Historical Sociology
+      - sociology through history
+      - social evolution
+
+  - intent: ask_soc107_social_problems
+    examples: |
+      - SOC107 course
+      - Social Problem and Analysis
+      - social issues
+      - problem analysis
+
+  - intent: ask_soc201_family_marriage
+    examples: |
+      - SOC201 course
+      - Sociology of Family Marriage
+      - family structures
+      - relationships
+
+  - intent: ask_soc202_social_psychology
+    examples: |
+      - SOC202 course
+      - Social Psychology
+      - group behavior soc
+      - social behavior
+
+  - intent: ask_soc203_group_development
+    examples: |
+      - SOC203 course
+      - Social Group Development
+      - group dynamics
+      - collective behavior
+
+  - intent: ask_soc205_rural_sociology
+    examples: |
+      - SOC205 course
+      - Rural Sociology
+      - rural communities soc205
+      - agricultural society
+
+  - intent: ask_soc206_statistics_sociology
+    examples: |
+      - SOC206 course
+      - Statistics for Sociology
+      - research methods soc
+      - data analysis sociology
+
+  - intent: ask_soc208_social_inequality
+    examples: |
+      - SOC208 course
+      - Social Stratification Inequality
+      - class systems
+      - inequality studies
+
+  - intent: ask_soc209_industrial_sociology
+    examples: |
+      - SOC209 course
+      - Industrial Sociology
+      - workplace sociology
+      - labor studies
+
+  - intent: ask_soc210_community_culture
+    examples: |
+      - SOC210 course
+      - Community Communication Culture
+      - cultural studies soc210
+      - community development soc201
+
+  - intent: ask_soc211_eastern_culture
+    examples: |
+      - SOC211 course
+      - Eastern Culture Heritage
+      - Asian culture
+      - traditional culture
+
+  - intent: ask_soc212_ecology_environment
+    examples: |
+      - SOC212 course
+      - Social Ecology Environment Society
+      - environmental sociology
+      - sustainability soc
+
+  - intent: ask_soc213_women_development
+    examples: |
+      - SOC213 course
+      - Women in Development
+      - gender equality
+      - women's studies
+
+  - intent: ask_soc214_development_studies
+    examples: |
+      - SOC214 course
+      - Introduction to Development Studies
+      - economic development soc214
+      - development issues
+
+  - intent: ask_soc215_social_relations
+    examples: |
+      - SOC215 course
+      - Social Public Relations
+      - social dynamics
+      - community relations
+
+  - intent: ask_soc216_globalization_identity
+    examples: |
+      - SOC216 course
+      - Globalization Social Identity
+      - global identity
+      - cultural identity
+
+  - intent: ask_soc217_religion_ethnicity
+    examples: |
+      - SOC217 course
+      - Religion Ethnicity Culture Development
+      - cultural diversity
+      - religious studies
+      - multicultural studies
+
+  - intent: ask_soc218_gender_sociology
+    examples: |
+      - SOC218 course
+      - Sociology of Gender
+      - gender relations
+      - women and men studies
+
+  - intent: ask_soc219_race_ethnicity
+    examples: |
+      - SOC219 course
+      - Sociology of Race Ethnicity
+      - racial studies
+      - ethnic diversity
+
+  - intent: ask_soc220_research_methodology
+    examples: |
+      - SOC220 course
+      - Quantitative Research Methodology
+      - research methods soc220
+      - statistical methods in soc
+
+  - intent: ask_soc221_social_history
+    examples: |
+      - SOC221 course
+      - Social History World Civilization
+      - history of societies
+      - world cultures
+
+  - intent: ask_soc310_organization_sociology
+    examples: |
+      - SOC310 course
+      - Sociology of Organization
+      - organizational theory
+      - institutional analysis
+
+  - intent: ask_total_program_credits_soc
+    examples: |
+      - total credits sociology
+      - sociology total credit
+
+  # ========================================
+  # ACCOUNTING & FINANCE COURSES
+  # ========================================
+
+  - intent: ask_act_courses_ba
+    examples: |
+      - accounting courses for BA
+      - ACT courses available
+      - financial accounting
+      - management accounting
+
+  - intent: ask_act101_financial_accounting
+    examples: |
+      - ACT101 course
+      - Financial Accounting
+      - accounting basics
+      - financial statements
+
+  - intent: ask_act201_management_accounting
+    examples: |
+      - ACT201 course
+      - Management Accounting
+      - cost accounting
+      - internal accounting
+
+  - intent: ask_fin101_principles_finance
+    examples: |
+      - FIN101 course
+      - Principles of Finance
+      - finance basics
+      - financial management
+
+  - intent: ask_fin201_business_finance
+    examples: |
+      - FIN201 course
+      - Business Finance
+      - corporate finance
+      - financial planning
+
+  # ========================================
+  # HRM & INTERNSHIP
+  # ========================================
+
+  - intent: ask_hrm301_human_resource
+    examples: |
+      - HRM301 course
+      - Human Resource Management
+      - HR basics
+      - personnel management
+
+  - intent: ask_bus498_internship
+    examples: |
+      - BUS498 course
+      - BUS499 course
+      - internship options
+      - project work
+      - practical experience
+      - work placement
+
+
+# ========================================
+# DEPARTMENT PROGRAMS INTENTS
+# ========================================
+
+  - intent: ask_cse_programs
+    examples: |
+      - what programs does CSE offer
+      - tell me about CSE programs
+      - Computer Science programs
+      - programs in CSE department
+      - what can I study in CSE
+      - CSE undergraduate and graduate programs
+      - Computer Science and Engineering courses
+      - what degrees does CSE offer
+      - CSE department programs
+      - available programs in computer science
+
+  - intent: ask_eee_programs
+    examples: |
+      - what programs does EEE offer
+      - tell me about EEE programs
+      - Electrical Engineering programs
+      - programs in EEE department
+      - what can I study in EEE
+      - EEE undergraduate and graduate programs
+      - Electrical and Electronic Engineering courses
+      - what degrees does EEE offer
+      - EEE department programs
+      - available programs in electrical engineering
+
+  - intent: ask_ce_programs
+    examples: |
+      - what programs does Civil Engineering offer
+      - tell me about Civil Engineering programs
+      - CE programs
+      - programs in Civil Engineering department
+      - what can I study in Civil Engineering
+      - Civil Engineering courses
+      - what degrees does Civil offer
+      - CE department programs
+      - available programs in civil engineering
+
+  - intent: ask_math_physics_programs
+    examples: |
+      - what programs does MPS offer
+      - tell me about Mathematics and Physical Sciences programs
+      - Math and Physics programs
+      - programs in MPS department
+      - what can I study in Mathematics
+      - what can I study in Physics
+      - MPS undergraduate and graduate programs
+      - Mathematics and Physics courses
+      - what degrees does MPS offer
+      - available programs in mathematics
+
+  - intent: ask_bba_programs
+    examples: |
+      - what programs does Business Administration offer
+      - tell me about BBA programs
+      - Business Administration programs
+      - programs in BBA department
+      - what can I study in Business
+      - BBA and MBA programs
+      - Business Administration courses
+      - what degrees does Business department offer
+      - available programs in business administration
+      - MBA and MIS programs
+
+  - intent: ask_economics_programs
+    examples: |
+      - what programs does Economics offer
+      - tell me about Economics programs
+      - Economics department programs
+      - programs in Economics department
+      - what can I study in Economics
+      - Economics undergraduate and graduate programs
+      - Economics courses
+      - what degrees does Economics offer
+      - available programs in economics
+      - BSS and MSS Economics
+
+  - intent: ask_english_programs
+    examples: |
+      - what programs does English offer
+      - tell me about English programs
+      - English department programs
+      - programs in English department
+      - what can I study in English
+      - English undergraduate and graduate programs
+      - BA and MA English
+      - what degrees does English offer
+      - available programs in english
+      - English Literature programs
+
+  - intent: ask_law_programs
+    examples: |
+      - what programs does Law offer
+      - tell me about Law programs
+      - Law department programs
+      - programs in Law department
+      - what can I study in Law
+      - Law undergraduate and graduate programs
+      - LLB and LLM programs
+      - what degrees does Law offer
+      - available programs in law
+      - Law courses
+
+  - intent: ask_media_programs
+    examples: |
+      - what programs does Media and Communication offer
+      - tell me about Media programs
+      - Media and Communication programs
+      - programs in Media department
+      - what can I study in Media
+      - Media Communication courses
+      - what degrees does Media offer
+      - available programs in media and communication
+      - journalism programs
+
+  - intent: ask_sociology_programs
+    examples: |
+      - what programs does Sociology offer
+      - tell me about Sociology programs
+      - Sociology and Anthropology programs
+      - programs in Sociology department
+      - what can I study in Sociology
+      - Sociology courses
+      - what degrees does Sociology offer
+      - available programs in sociology
+      - BSS in Sociology
+
+  - intent: ask_politics_programs
+    examples: |
+      - what programs does Government and Politics offer
+      - tell me about Politics programs
+      - Government and Politics programs
+      - programs in Politics department
+      - what can I study in Politics
+      - Government courses
+      - what degrees does Politics offer
+      - available programs in government and politics
+      - BSS in Government
+
+  - intent: ask_ier_programs
+    examples: |
+      - what programs does IER offer
+      - tell me about IER programs
+      - Institute of Education and Research programs
+      - programs in IER
+      - what can I study in IER
+      - Education programs
+      - BEd and MEd programs
+      - what degrees does IER offer
+      - available programs in education
+      - teaching programs
+
+  - intent: ask_pharmacy_programs
+    examples: |
+      - what programs does Pharmacy offer
+      - tell me about Pharmacy programs
+      - Pharmacy department programs
+      - programs in Pharmacy department
+      - what can I study in Pharmacy
+      - Pharmacy undergraduate and graduate programs
+      - BPharm and MPhil programs
+      - what degrees does Pharmacy offer
+      - available programs in pharmacy
+      - pharmaceutical sciences programs
+
+
+
+
+
+
+#synonyms
+# ========================================
+# UNIVERSITY & FACULTY SYNONYMS
+# ========================================
+
+  - synonym: East West University
+    examples: |
+      - EWU
+      - East West Uni
+      - EastWest University
+      - East-West University
+      - the university
+      - our university
+      - ewu
+      - uni
+      - university
+
+  - synonym: Faculty of Science and Engineering
+    examples: |
+      - FSE
+      - Science and Engineering Faculty
+      - School of Engineering and Science
+
+  - synonym: Faculty of Business and Economics
+    examples: |
+      - FBE
+      - Business and Economics Faculty
+
+  - synonym: Faculty of Liberal Arts and Social Sciences
+    examples: |
+      - FLASS
+      - FASS
+      - Arts and Social Sciences Faculty
+      - Humanities Faculty
+      - School of Arts and Social Sciences
+
+# ========================================
+# ENGINEERING DEPARTMENTS
+# ========================================
+
+  - synonym: Computer Science and Engineering
+    examples: |
+      - CSE
+      - Computer Science
+      - CS
+      - CSE Department
+      - Computer Engineering Department
+      - Computer Science Dept
+
+  - synonym: Electrical and Electronic Engineering
+    examples: |
+      - EEE
+      - Electrical Engineering
+      - Electronic Engineering
+      - EEE Department
+      - Power Engineering Department
+
+  - synonym: Electronics and Communications Engineering
+    examples: |
+      - ICE
+      - Information and Communication Engineering
+      - Communications Engineering Department
+      - Telecommunications Department
+      - ICE Department
+
+  - synonym: Civil Engineering
+    examples: |
+      - CE
+      - Civil
+      - CE Department
+      - Civil Dept
+      - Civil department
+      - Civil Engineering Department
+
+  - synonym: Genetic Engineering and Biotechnology
+    examples: |
+      - GEB
+      - Genetic Engineering Department
+      - Biotechnology Department
+      - GEB Department
+      - Biotech Department
+
+  - synonym: Pharmacy
+    examples: |
+      - Pharmacy Department
+      - Pharmaceutical Sciences
+      - Pharmacy Faculty
+      - Pharmaceutical Engineering Department
+
+  - synonym: Mathematical and Physical Sciences
+    examples: |
+      - MPS
+      - Math and Physics
+      - Mathematics Department
+      - Physical Sciences
+      - Mathematical Sciences Department
+
+# ========================================
+# BUSINESS & ECONOMICS DEPARTMENTS
+# ========================================
+
+  - synonym: Business Administration
+    examples: |
+      - Business Admin
+      - Business Administration Department
+      - Business School
+      - Business Studies Department
+      - Business faculty
+      - Department of Business Administration
+
+  - synonym: Economics
+    examples: |
+      - Economics Department
+      - Econ
+      - Economic Sciences
+      - Applied Economics Department
+      - Econometrics Department
+
+# ========================================
+# ARTS & SOCIAL SCIENCES DEPARTMENTS
+# ========================================
+
+  - synonym: English
+    examples: |
+      - English Department
+      - English Language
+      - English Literature Department
+      - English Studies
+      - Language Department
+
+  - synonym: Law
+    examples: |
+      - Law Department
+      - Legal Studies
+      - Law Faculty
+      - School of Law
+      - Justice Studies
+
+  - synonym: Social Relations
+    examples: |
+      - Social Relations Department
+      - SR Department
+      - Social Studies
+      - Interdisciplinary Studies Department
+
+  - synonym: Information Studies
+    examples: |
+      - IS Department
+      - Information Studies Department
+      - Library Science
+      - Information Science Department
+
+  - synonym: Sociology
+    examples: |
+      - Sociology Department
+      - Sociology and Anthropology
+      - Sociological Studies
+      - Social Anthropology Department
+
+# ========================================
+# ACADEMIC LEVELS & PROGRAMS
+# ========================================
+
+  - synonym: Undergraduate Program
+    examples: |
+      - Bachelor degree
+      - Bachelor's program
+      - First degree
+      - Undergraduate studies
+      - UG program
+
+  - synonym: Graduate Program
+    examples: |
+      - Master's program
+      - Postgraduate studies
+      - Master's degree
+      - Advanced degree
+      - Post-graduate program
+      - Graduate studies
+      - Higher education
+
+  - synonym: Diploma Program
+    examples: |
+      - Diploma course
+      - Post-graduate diploma
+      - PGDM
+      - Certificate program
+      - Short-term program
+      - Professional diploma
+
+# ========================================
+# ADMINISTRATIVE UNITS
+# ========================================
+
+  - synonym: Office of Vice Chancellor
+    examples: |
+      - VC Office
+      - Vice Chancellor's office
+      - Administrative office
+
+  - synonym: Office of Registrar
+    examples: |
+      - Registrar Office
+      - Academic Affairs Office
+
+  - synonym: Office of Proctor
+    examples: |
+      - Proctor's office
+      - Student Affairs Office
+      - Discipline office
+
+  - synonym: Information and Communication Services
+    examples: |
+      - ICS
+      - IT Services
+      - Technical Support
+      - IT Department
+      - Computer Services
+
+  - synonym: Library Services
+    examples: |
+      - University Library
+      - Central Library
+      - Digital Library
+      - E-Library
+      - Library
+
+  - synonym: Center for Research and Training
+    examples: |
+      - CRT
+      - Research Center
+      - Training Center
+
+  - synonym: Engineering and Maintenance Department
+    examples: |
+      - EMD
+      - Maintenance Department
+      - Engineering Services
+      - Campus Services
+
+# ========================================
+# SPECIALIZED CENTERS & SERVICES
+# ========================================
+
+  - synonym: Student Welfare Office
+    examples: |
+      - Student Affairs
+      - Student Support
+      - Welfare Services
+      - Student Services
+
+  - synonym: Career Counseling Center
+    examples: |
+      - Career Services
+      - Placement Office
+      - Job Placement
+      - Career Development
+
+  - synonym: Medical Center
+    examples: |
+      - EWU Medical Centre
+      - Health Services
+      - Campus Clinic
+      - Health Center
+
+  - synonym: Admission Office
+    examples: |
+      - Admissions Department
+      - Admission Services
+      - Enrollment Office
+
+# ========================================
+# DEGREE ABBREVIATIONS (NO CONFLICTS)
+# ========================================
+
+  - synonym: Bachelor of Science
+    examples: |
+      - BSc
+      - B.Sc
+      - BS
+      - B.S.
+      - Undergraduate science degree
+
+  - synonym: Bachelor of Arts
+    examples: |
+      - BA
+      - B.A
+      - Undergraduate arts degree
+
+  - synonym: Bachelor of Business Administration
+    examples: |
+      - BBA
+      - B.B.A
+
+  - synonym: Bachelor of Pharmacy
+    examples: |
+      - B.Pharm
+      - B.Pharm.
+      - Pharmacy undergraduate degree
+
+  - synonym: Master of Science
+    examples: |
+      - MS
+      - M.S
+      - M.Sc
+      - MSc
+
+  - synonym: Master of Arts
+    examples: |
+      - MA
+      - M.A
+
+  - synonym: Master of Business Administration
+    examples: |
+      - MBA
+      - M.B.A
+      - Executive MBA
+      - EMBA
+
+  - synonym: Master of Pharmacy
+    examples: |
+      - M.Pharm
+      - M.Pharm.
+      - Pharmacy graduate degree
