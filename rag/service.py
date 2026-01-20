@@ -21,9 +21,10 @@ generator = transformers.pipeline(
     "text-generation",
     model=model,
     tokenizer=tokenizer,
-    temperature=0.0,
+    do_sample=False,  # fix 500 error
     max_new_tokens=256
 )
+
 
 class QueryRequest(BaseModel):
     query: str
