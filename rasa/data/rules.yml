@@ -1,0 +1,4532 @@
+version: "3.1"
+
+rules:
+
+# ========================================
+# BASIC BOT INTERACTIONS
+# ========================================
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: Respond to greetings
+  steps:
+  - intent: greet
+  - action: utter_greet
+
+- rule: Respond when user affirms
+  steps:
+  - intent: affirm
+  - action: utter_great
+
+- rule: Respond when user denies
+  steps:
+  - intent: deny
+  - action: utter_sorry
+
+- rule: Respond to great mood
+  steps:
+  - intent: mood_great
+  - action: utter_happy
+
+- rule: Respond to unhappy mood
+  steps:
+  - intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+
+
+- rule: List all faculties
+  steps:
+  - intent: ask_all_faculties
+  - action: utter_all_faculties
+
+- rule: Answer parking inquiry
+  steps:
+  - intent: ask_parking
+  - action: utter_parking
+
+- rule: Answer cafeteria inquiry
+  steps:
+  - intent: ask_cafeteria
+  - action: utter_cafeteria
+
+- rule: Answer library inquiry
+  steps:
+  - intent: ask_library
+  - action: utter_library
+
+- rule: Answer common room inquiry
+  steps:
+  - intent: ask_common_room
+  - action: utter_common_room
+
+- rule: Answer career counseling inquiry
+  steps:
+  - intent: ask_career_counseling
+  - action: utter_career_counseling
+
+- rule: Answer indoor games inquiry
+  steps:
+  - intent: ask_indoor_games
+  - action: utter_indoor_games
+
+- rule: Answer prayer room inquiry
+  steps:
+  - intent: ask_prayer_room
+  - action: utter_prayer_room
+
+- rule: Answer transportation inquiry
+  steps:
+  - intent: ask_transportation
+  - action: utter_transportation
+
+- rule: Answer general facilities inquiry
+  steps:
+  - intent: ask_facilities
+  - action: utter_facilities
+
+
+
+
+- rule: Answer CCC mission inquiry
+  steps:
+  - intent: ask_ccc_mission
+  - action: utter_ccc_mission
+
+- rule: Answer CCC objectives inquiry
+  steps:
+  - intent: ask_ccc_objectives
+  - action: utter_ccc_objectives
+
+- rule: Answer career counseling services inquiry
+  steps:
+  - intent: ask_career_counseling_services
+  - action: utter_career_counseling_services
+
+- rule: Answer CV writing inquiry
+  steps:
+  - intent: ask_cv_writing
+  - action: utter_cv_writing
+
+- rule: Answer workshops inquiry
+  steps:
+  - intent: ask_workshops
+  - action: utter_workshops
+
+- rule: Answer career talks inquiry
+  steps:
+  - intent: ask_career_talks
+  - action: utter_career_talks
+
+- rule: Answer on-campus recruitment inquiry
+  steps:
+  - intent: ask_on_campus_recruitment
+  - action: utter_on_campus_recruitment
+
+- rule: Answer job fairs inquiry
+  steps:
+  - intent: ask_job_fairs
+  - action: utter_job_fairs
+
+- rule: Answer internship placement inquiry
+  steps:
+  - intent: ask_internship_placement
+  - action: utter_internship_placement
+
+- rule: Answer job registration inquiry
+  steps:
+  - intent: ask_job_registration
+  - action: utter_job_registration
+
+- rule: Answer mental wellbeing inquiry
+  steps:
+  - intent: ask_mental_wellbeing
+  - action: utter_mental_wellbeing
+
+- rule: Answer counseling hours inquiry
+  steps:
+  - intent: ask_counseling_hours
+  - action: utter_counseling_hours
+
+- rule: Answer counseling location inquiry
+  steps:
+  - intent: ask_counseling_location
+  - action: utter_counseling_location
+
+- rule: Answer contact information inquiry
+  steps:
+  - intent: ask_contact_information
+  - action: utter_contact_information
+
+- rule: Answer website inquiry
+  steps:
+  - intent: ask_website
+  - action: utter_website
+
+- rule: Answer higher studies inquiry
+  steps:
+  - intent: ask_higher_studies
+  - action: utter_higher_studies
+
+- rule: Answer career development inquiry
+  steps:
+  - intent: ask_career_development
+  - action: utter_career_development
+
+
+- rule: Answer general clubs inquiry
+  steps:
+  - intent: ask_about_clubs
+  - action: utter_about_clubs
+
+- rule: Answer Agro-Industrialization Club inquiry
+  steps:
+  - intent: ask_agro_club
+  - action: utter_agro_club
+
+- rule: Answer Business Club inquiry
+  steps:
+  - intent: ask_business_club
+  - action: utter_business_club
+
+- rule: Answer Creative Marketing Club inquiry
+  steps:
+  - intent: ask_marketing_club
+  - action: utter_marketing_club
+
+- rule: Answer Computer Programming Club inquiry
+  steps:
+  - intent: ask_programming_club
+  - action: utter_programming_club
+
+- rule: Answer Club for Performing Arts inquiry
+  steps:
+  - intent: ask_performing_arts_club
+  - action: utter_performing_arts_club
+
+- rule: Answer Debating Club inquiry
+  steps:
+  - intent: ask_debate_club
+  - action: utter_debate_club
+
+- rule: Answer Economics Club inquiry
+  steps:
+  - intent: ask_economics_club
+  - action: utter_economics_club
+
+- rule: Answer Electronics Club inquiry
+  steps:
+  - intent: ask_electronics_club
+  - action: utter_electronics_club
+
+- rule: Answer English Conversation Club inquiry
+  steps:
+  - intent: ask_english_club
+  - action: utter_english_club
+
+- rule: Answer Environmental & Social Club inquiry
+  steps:
+  - intent: ask_environmental_club
+  - action: utter_environmental_club
+
+- rule: Answer Investment and Finance Club inquiry
+  steps:
+  - intent: ask_investment_club
+  - action: utter_investment_club
+
+- rule: Answer IEEE Student Branch inquiry
+  steps:
+  - intent: ask_ieee
+  - action: utter_ieee
+
+- rule: Answer Model United Nations Club inquiry
+  steps:
+  - intent: ask_mun_club
+  - action: utter_mun_club
+
+- rule: Answer Photography Club inquiry
+  steps:
+  - intent: ask_photography_club
+  - action: utter_photography_club
+
+- rule: Answer Robotics Club inquiry
+  steps:
+  - intent: ask_robotics_club
+  - action: utter_robotics_club
+
+- rule: Answer Rotaract Club inquiry
+  steps:
+  - intent: ask_rotaract_club
+  - action: utter_rotaract_club
+
+- rule: Answer Science Club inquiry
+  steps:
+  - intent: ask_science_club
+  - action: utter_science_club
+
+- rule: Answer Sociology Club inquiry
+  steps:
+  - intent: ask_sociology_club
+  - action: utter_sociology_club
+
+- rule: Answer Sports Club inquiry
+  steps:
+  - intent: ask_sports_club
+  - action: utter_sports_club
+
+- rule: Answer Telecommunication Club inquiry
+  steps:
+  - intent: ask_telecom_club
+  - action: utter_telecom_club
+
+- rule: Answer Cyber Security Club inquiry
+  steps:
+  - intent: ask_cybersecurity_club
+  - action: utter_cybersecurity_club
+
+- rule: Answer Health and Well-Being Club inquiry
+  steps:
+  - intent: ask_health_wellness_club
+  - action: utter_health_wellness_club
+
+- rule: Answer club events inquiry
+  steps:
+  - intent: ask_club_events
+  - action: utter_club_events
+
+- rule: Answer how to join inquiry
+  steps:
+  - intent: ask_how_to_join
+  - action: utter_how_to_join
+
+- rule: Answer club contact inquiry
+  steps:
+  - intent: ask_club_contact
+  - action: utter_club_contact
+
+
+
+- rule: Answer general faculties inquiry
+  steps:
+  - intent: ask_about_faculties
+  - action: utter_about_faculties
+
+- rule: Answer Science and Engineering Faculty inquiry
+  steps:
+  - intent: ask_science_engineering_faculty
+  - action: utter_science_engineering_faculty
+
+- rule: Answer Business and Economics Faculty inquiry
+  steps:
+  - intent: ask_business_economics_faculty
+  - action: utter_business_economics_faculty
+
+- rule: Answer Arts and Social Sciences Faculty inquiry
+  steps:
+  - intent: ask_arts_social_sciences_faculty
+  - action: utter_arts_social_sciences_faculty
+
+- rule: Answer IER inquiry
+  steps:
+  - intent: ask_ier
+  - action: utter_ier
+
+- rule: Answer Pharmacy Department inquiry
+  steps:
+  - intent: ask_pharmacy_department
+  - action: utter_pharmacy_department
+
+- rule: Answer CSE Department inquiry
+  steps:
+  - intent: ask_cse_department
+  - action: utter_cse_department
+
+- rule: Answer EEE Department inquiry
+  steps:
+  - intent: ask_eee_department
+  - action: utter_eee_department
+
+- rule: Answer Civil Engineering inquiry
+  steps:
+  - intent: ask_civil_engineering
+  - action: utter_civil_engineering
+
+- rule: Answer Mathematics and Sciences inquiry
+  steps:
+  - intent: ask_mathematics_sciences
+  - action: utter_mathematics_sciences
+
+- rule: Answer Business Administration inquiry
+  steps:
+  - intent: ask_business_admin
+  - action: utter_business_admin
+
+- rule: Answer Economics Department inquiry
+  steps:
+  - intent: ask_economics_department
+  - action: utter_economics_department
+
+- rule: Answer English Department inquiry
+  steps:
+  - intent: ask_english_department
+  - action: utter_english_department
+
+- rule: Answer Law Department inquiry
+  steps:
+  - intent: ask_law_department
+  - action: utter_law_department
+
+- rule: Answer Media and Communication inquiry
+  steps:
+  - intent: ask_media_communication
+  - action: utter_media_communication
+
+- rule: Answer Sociology Department inquiry
+  steps:
+  - intent: ask_sociology_department
+  - action: utter_sociology_department
+
+- rule: Answer Government and Politics inquiry
+  steps:
+  - intent: ask_government_politics
+  - action: utter_government_politics
+
+
+- rule: Answer undergraduate programs inquiry
+  steps:
+  - intent: ask_undergraduate_programs
+  - action: utter_undergraduate_programs
+
+- rule: Answer postgraduate programs inquiry
+  steps:
+  - intent: ask_postgraduate_programs
+  - action: utter_postgraduate_programs
+
+- rule: Answer academic structure inquiry
+  steps:
+  - intent: ask_academic_structure
+  - action: utter_academic_structure
+
+
+# ========================================
+# UNIVERSITY INFORMATION
+# ========================================
+
+- rule: Provide EWU location
+  steps:
+  - intent: location
+  - action: utter_location
+
+- rule: Provide facebook information
+  steps:
+  - intent: facebook
+  - action: utter_facebook
+
+- rule: Show departments
+  steps:
+  - intent: departments
+  - action: utter_departments
+
+
+
+
+# ========================================
+# ABOUT EWU (STATIC DATA)
+# ========================================
+
+- rule: Show EWU history
+  steps:
+  - intent: ewu_history
+  - action: utter_ewu_history
+
+- rule: Show EWU vision
+  steps:
+  - intent: ewu_vision
+  - action: utter_ewu_vision
+
+- rule: Show EWU mission
+  steps:
+  - intent: ewu_mission
+  - action: utter_ewu_mission
+
+- rule: Show board of trustees
+  steps:
+  - intent: ewu_board
+  - action: utter_ewu_board
+
+# ========================================
+# ADMIN STAFF (STATIC)
+# ========================================
+
+- rule: Show admin staff information
+  steps:
+  - intent: admin_staff
+  - action: utter_admin_staff
+
+- rule: Show Vice Chancellor info
+  steps:
+  - intent: vice_chancellor
+  - action: utter_vice_chancellor
+
+- rule: Show Registrar info
+  steps:
+  - intent: registrar
+  - action: utter_registrar
+
+- rule: Show Treasurer info
+  steps:
+  - intent: treasurer
+  - action: utter_treasurer
+
+- rule: Show Director of Admissions info
+  steps:
+  - intent: director_admissions
+  - action: utter_director_admissions
+
+- rule: Show Pro Vice Chancellor (Academics) info
+  steps:
+  - intent: pro_vc_academics
+  - action: utter_pro_vc_academics
+
+
+
+
+- rule: Answer general notable alumni inquiry
+  steps:
+  - intent: ask_notable_alumni
+  - action: utter_notable_alumni
+
+- rule: Answer Md. Abir Hasan inquiry
+  steps:
+  - intent: ask_alumni_md_abir_hasan
+  - action: utter_alumni_md_abir_hasan
+
+- rule: Answer Md. Nazmul Khan inquiry
+  steps:
+  - intent: ask_alumni_md_nazmul_khan
+  - action: utter_alumni_md_nazmul_khan
+
+- rule: Answer Fatima Tasnim inquiry
+  steps:
+  - intent: ask_alumni_fatima_tasnim
+  - action: utter_alumni_fatima_tasnim
+
+- rule: Answer Redoan Rony inquiry
+  steps:
+  - intent: ask_alumni_redoan_rony
+  - action: utter_alumni_redoan_rony
+
+- rule: Answer MD Fahim inquiry
+  steps:
+  - intent: ask_alumni_md_fahim
+  - action: utter_alumni_md_fahim
+
+- rule: Answer Md. Shafayat Hossain inquiry
+  steps:
+  - intent: ask_alumni_shafayat_hossain
+  - action: utter_alumni_shafayat_hossain
+
+- rule: Answer Miraj Ahmed inquiry
+  steps:
+  - intent: ask_alumni_miraj_ahmed
+  - action: utter_alumni_miraj_ahmed
+
+- rule: Answer Mohammad Sajjad Islam Shejan inquiry
+  steps:
+  - intent: ask_alumni_sajjad_islam
+  - action: utter_alumni_sajjad_islam
+
+- rule: Answer Rubana Huq inquiry
+  steps:
+  - intent: ask_alumni_rubana_huq
+  - action: utter_alumni_rubana_huq
+
+- rule: Answer Afran Nisho inquiry
+  steps:
+  - intent: ask_alumni_afran_nisho
+  - action: utter_alumni_afran_nisho
+
+- rule: Answer alumni by department inquiry
+  steps:
+  - intent: ask_alumni_by_department
+  - action: utter_alumni_by_department
+
+- rule: Answer alumni by sector inquiry
+  steps:
+  - intent: ask_alumni_by_sector
+  - action: utter_alumni_by_sector
+
+- rule: Answer alumni portal inquiry
+  steps:
+  - intent: ask_alumni_portal
+  - action: utter_alumni_portal
+
+- rule: Answer alumni foundation inquiry
+  steps:
+  - intent: ask_alumni_foundation
+  - action: utter_alumni_foundation
+
+- rule: Answer alumni events inquiry
+  steps:
+  - intent: ask_alumni_events
+  - action: utter_alumni_events
+
+- rule: Answer global alumni network inquiry
+  steps:
+  - intent: ask_alumni_global_network
+  - action: utter_alumni_global_network
+
+- rule: Answer how to join alumni inquiry
+  steps:
+  - intent: ask_how_to_join_alumni
+  - action: utter_how_to_join_alumni
+
+- rule: Answer alumni support inquiry
+  steps:
+  - intent: ask_alumni_support
+  - action: utter_alumni_support
+
+# ========================================
+# ACADEMIC INFORMATION (STATIC)
+# ========================================
+
+- rule: List undergraduate programs
+  steps:
+  - intent: undergraduate_programs
+  - action: utter_undergraduate_programs
+
+- rule: List postgraduate programs
+  steps:
+  - intent: postgraduate_programs
+  - action: utter_postgraduate_programs
+
+- rule: List diploma programs
+  steps:
+  - intent: diploma_programs
+  - action: utter_diploma_programs
+
+# ========================================
+# TUITION FEES (DYNAMIC DATA)
+# ========================================
+
+- rule: General tuition information
+  steps:
+  - intent: tuition
+  - action: action_tuition_general
+
+- rule: Application fee information
+  steps:
+  - intent: application_fee
+  - action: action_application_fee
+
+- rule: CSE tuition fee
+  steps:
+  - intent: tuition_cse
+  - action: action_tuition_cse
+
+- rule: BBA tuition fee
+  steps:
+  - intent: tuition_bba
+  - action: action_tuition_bba
+
+- rule: Civil Engineering tuition fee
+  steps:
+  - intent: tuition_civil
+  - action: action_tuition_civil
+
+- rule: Data Science tuition fee
+  steps:
+  - intent: tuition_data_science
+  - action: action_tuition_data_science
+
+- rule: Economics tuition fee
+  steps:
+  - intent: tuition_economics
+  - action: action_tuition_economics
+
+- rule: EEE tuition fee
+  steps:
+  - intent: tuition_eee
+  - action: action_tuition_eee
+
+- rule: English tuition fee
+  steps:
+  - intent: tuition_english
+  - action: action_tuition_english
+
+- rule: GEB tuition fee
+  steps:
+  - intent: tuition_geb
+  - action: action_tuition_geb
+
+- rule: Law tuition fee
+  steps:
+  - intent: tuition_law
+  - action: action_tuition_law
+
+- rule: Pharmacy tuition fee
+  steps:
+  - intent: tuition_pharmacy
+  - action: action_tuition_pharmacy
+
+- rule: Sociology tuition fee
+  steps:
+  - intent: tuition_sociology
+  - action: action_tuition_sociology
+
+- rule: ICE tuition fee
+  steps:
+  - intent: tuition_ice
+  - action: action_tuition_ice
+
+- rule: Information Studies tuition fee
+  steps:
+  - intent: tuition_information_studies
+  - action: action_tuition_information_studies
+
+- rule: Mathematics tuition fee
+  steps:
+  - intent: tuition_math
+  - action: action_tuition_math
+
+- rule: PPHS tuition fee
+  steps:
+  - intent: tuition_pphs
+  - action: action_tuition_pphs
+
+- rule: Social Relations tuition fee
+  steps:
+  - intent: tuition_social_relations
+  - action: action_tuition_social_relations
+
+- rule: MBA fee information
+  steps:
+  - intent: mba_fee
+  - action: action_mba_fee
+
+- rule: EMBA fee information
+  steps:
+  - intent: emba_fee
+  - action: action_emba_fee
+
+- rule: MDS fee information
+  steps:
+  - intent: mds_fee
+  - action: action_mds_fee
+
+- rule: MSS Economics fee information
+  steps:
+  - intent: mss_economics_fee
+  - action: action_mss_economics_fee
+
+- rule: MA English fee information
+  steps:
+  - intent: ma_english_fee
+  - action: action_ma_english_fee
+
+- rule: MA English Extended fee information
+  steps:
+  - intent: ma_english_extended_fee
+  - action: action_ma_english_extended_fee
+
+- rule: MA TESOL fee information
+  steps:
+  - intent: ma_tesol_fee
+  - action: action_ma_tesol_fee
+
+- rule: MA TESOL 40 credits fee information
+  steps:
+  - intent: ma_tesol_40_fee
+  - action: action_ma_tesol_40_fee
+
+- rule: MA TESOL 42 credits fee information
+  steps:
+  - intent: ma_tesol_42_fee
+  - action: action_ma_tesol_42_fee
+
+- rule: MA TESOL 48 credits fee information
+  steps:
+  - intent: ma_tesol_48_fee
+  - action: action_ma_tesol_48_fee
+
+- rule: LLM fee information
+  steps:
+  - intent: llm_fee
+  - action: action_llm_fee
+
+- rule: MPRHGD fee information
+  steps:
+  - intent: mprhgd_fee
+  - action: action_mprhgd_fee
+
+- rule: Data Science Analytics fee information
+  steps:
+  - intent: ds_analytics_fee
+  - action: action_ds_analytics_fee
+
+- rule: MS CSE fee information
+  steps:
+  - intent: ms_cse_fee
+  - action: action_ms_cse_fee
+
+- rule: MS Data Science fee information
+  steps:
+  - intent: ms_data_science_fee
+  - action: action_ms_data_science_fee
+
+- rule: M.Pharm fee information
+  steps:
+  - intent: mpharm_fee
+  - action: action_mpharm_fee
+
+- rule: PGDED fee information
+  steps:
+  - intent: pgded_fee
+  - action: action_pgded_fee
+
+- rule: PPDM fee information
+  steps:
+  - intent: ppdm_fee
+  - action: action_ppdm_fee
+
+- rule: PPDM Diploma fee information
+  steps:
+  - intent: ppdm_diploma_fee
+  - action: action_ppdm_diploma_fee
+
+# ========================================
+# ADMISSION DEADLINES - GENERAL
+# ========================================
+
+- rule: General admission deadline
+  steps:
+  - intent: admission_deadline
+  - action: action_admission_deadline_general
+
+- rule: CSE admission deadline
+  steps:
+  - intent: admission_deadline_cse
+  - action: action_admission_deadline_cse
+
+- rule: BBA admission deadline
+  steps:
+  - intent: admission_deadline_bba
+  - action: action_admission_deadline_bba
+
+- rule: Economics admission deadline
+  steps:
+  - intent: admission_deadline_economics
+  - action: action_admission_deadline_economics
+
+- rule: English admission deadline
+  steps:
+  - intent: admission_deadline_english
+  - action: action_admission_deadline_english
+
+- rule: Law admission deadline
+  steps:
+  - intent: admission_deadline_law
+  - action: action_admission_deadline_law
+
+- rule: Sociology admission deadline
+  steps:
+  - intent: admission_deadline_sociology
+  - action: action_admission_deadline_sociology
+
+- rule: Information Studies admission deadline
+  steps:
+  - intent: admission_deadline_information_studies
+  - action: action_admission_deadline_information_studies
+
+- rule: PPHS admission deadline
+  steps:
+  - intent: admission_deadline_pphs
+  - action: action_admission_deadline_pphs
+
+- rule: ICE admission deadline
+  steps:
+  - intent: admission_deadline_ice
+  - action: action_admission_deadline_ice
+
+- rule: EEE admission deadline
+  steps:
+  - intent: admission_deadline_eee
+  - action: action_admission_deadline_eee
+
+- rule: Pharmacy admission deadline
+  steps:
+  - intent: admission_deadline_pharmacy
+  - action: action_admission_deadline_pharmacy
+
+- rule: GEB admission deadline
+  steps:
+  - intent: admission_deadline_geb
+  - action: action_admission_deadline_geb
+
+- rule: Civil admission deadline
+  steps:
+  - intent: admission_deadline_civil
+  - action: action_admission_deadline_civil
+
+- rule: Math admission deadline
+  steps:
+  - intent: admission_deadline_math
+  - action: action_admission_deadline_math
+
+- rule: Data Science admission deadline
+  steps:
+  - intent: admission_deadline_data_science
+  - action: action_admission_deadline_data_science
+
+- rule: MBA admission deadline
+  steps:
+  - intent: admission_deadline_mba
+  - action: action_admission_deadline_mba
+
+- rule: EMBA admission deadline
+  steps:
+  - intent: admission_deadline_emba
+  - action: action_admission_deadline_emba
+
+- rule: MDS admission deadline
+  steps:
+  - intent: admission_deadline_mds
+  - action: action_admission_deadline_mds
+
+- rule: MSS Economics admission deadline
+  steps:
+  - intent: admission_deadline_mss_economics
+  - action: action_admission_deadline_mss_economics
+
+- rule: MA English admission deadline
+  steps:
+  - intent: admission_deadline_ma_english
+  - action: action_admission_deadline_ma_english
+
+- rule: MA TESOL admission deadline
+  steps:
+  - intent: admission_deadline_ma_tesol
+  - action: action_admission_deadline_ma_tesol
+
+- rule: MPRHGD admission deadline
+  steps:
+  - intent: admission_deadline_mprhgd
+  - action: action_admission_deadline_mprhgd
+
+- rule: LLM admission deadline
+  steps:
+  - intent: admission_deadline_llm
+  - action: action_admission_deadline_llm
+
+- rule: MS CSE admission deadline
+  steps:
+  - intent: admission_deadline_ms_cse
+  - action: action_admission_deadline_ms_cse
+
+- rule: MS Data Science admission deadline
+  steps:
+  - intent: admission_deadline_ms_data_science
+  - action: action_admission_deadline_ms_data_science
+
+- rule: M.Pharm admission deadline
+  steps:
+  - intent: admission_deadline_mpharm
+  - action: action_admission_deadline_mpharm
+
+- rule: PPDM admission deadline
+  steps:
+  - intent: admission_deadline_ppdm
+  - action: action_admission_deadline_ppdm
+
+# ========================================
+# ADMISSION TEST DATES
+# ========================================
+
+- rule: General admission test date
+  steps:
+  - intent: admission_test_date
+  - action: action_admission_test_date_general
+
+- rule: CSE admission test date
+  steps:
+  - intent: admission_test_date_cse
+  - action: action_admission_test_date_cse
+
+- rule: BBA admission test date
+  steps:
+  - intent: admission_test_date_bba
+  - action: action_admission_test_date_bba
+
+- rule: MBA admission test date
+  steps:
+  - intent: admission_test_date_mba
+  - action: action_admission_test_date_mba
+
+# ========================================
+# ADMISSION REQUIREMENTS
+# ========================================
+
+- rule: General admission requirements
+  steps:
+  - intent: admission_requirements
+  - action: action_admission_requirements_general
+
+- rule: Undergraduate admission requirements
+  steps:
+  - intent: admission_requirements_undergraduate
+  - action: action_admission_requirements_general
+
+- rule: Graduate admission requirements
+  steps:
+  - intent: admission_requirements_graduate
+  - action: action_admission_requirements_general
+
+- rule: CSE admission requirements
+  steps:
+  - intent: admission_requirements_cse
+  - action: action_admission_requirements_cse
+
+- rule: EEE admission requirements
+  steps:
+  - intent: admission_requirements_eee
+  - action: action_admission_requirements_general
+
+- rule: Pharmacy admission requirements
+  steps:
+  - intent: admission_requirements_pharmacy
+  - action: action_admission_requirements_pharmacy
+
+- rule: MBA admission requirements
+  steps:
+  - intent: admission_requirements_mba
+  - action: action_admission_requirements_mba
+
+- rule: EMBA admission requirements
+  steps:
+  - intent: admission_requirements_emba
+  - action: action_admission_requirements_general
+
+- rule: GPA requirements
+  steps:
+  - intent: gpa_requirements
+  - action: action_admission_requirements_general
+
+- rule: O/A level requirements
+  steps:
+  - intent: oalevel_requirements
+  - action: action_admission_requirements_general
+
+- rule: Diploma requirements
+  steps:
+  - intent: diploma_requirements
+  - action: action_admission_requirements_general
+
+- rule: Freedom fighter quota
+  steps:
+  - intent: freedom_fighter_quota
+  - action: action_admission_requirements_general
+
+# ========================================
+# ADMISSION PROCESS
+# ========================================
+
+- rule: Show admission process
+  steps:
+  - intent: admission_process
+  - action: action_admission_application_steps
+
+- rule: Show admission overview
+  steps:
+  - intent: admission_overview
+  - action: action_admission_application_steps
+
+- rule: Show all admission application steps
+  steps:
+  - intent: admission_application_steps
+  - action: action_admission_application_steps
+
+- rule: Show admission office contact details
+  steps:
+  - intent: admission_contact
+  - action: action_admission_contact
+
+- rule: Admission help
+  steps:
+  - intent: admission_help
+  - action: action_admission_help
+
+- rule: G Suite email activation instructions
+  steps:
+  - intent: email_setup
+  - action: action_post_admission_g_suite
+
+- rule: G Suite activation via direct intent
+  steps:
+  - intent: g_suite
+  - action: action_post_admission_g_suite
+
+- rule: Show required documents for upload
+  steps:
+  - intent: admission_documents
+  - action: action_post_admission_document_upload
+
+- rule: Document upload process
+  steps:
+  - intent: document_upload
+  - action: action_post_admission_document_upload
+
+- rule: How to access advising slip
+  steps:
+  - intent: advising_slip
+  - action: action_post_admission_advising_slip
+
+- rule: Course assignment and advising information
+  steps:
+  - intent: course_assignment
+  - action: action_post_admission_advising_slip
+
+- rule: Show tuition payment methods
+  steps:
+  - intent: tuition_payment
+  - action: action_post_admission_tuition_payment
+
+- rule: Payment methods and requirements
+  steps:
+  - intent: payment_methods
+  - action: action_post_admission_tuition_payment
+
+- rule: Show important admission notes
+  steps:
+  - intent: important_notes
+  - action: action_admission_important_notes
+
+- rule: Admission policies
+  steps:
+  - intent: admission_policy
+  - action: action_admission_important_notes
+
+
+- rule: Admission test preparation
+  steps:
+  - intent: admission_test_preparation
+  - action: utter_default
+
+- rule: Admission results
+  steps:
+  - intent: admission_result
+  - action: utter_default
+
+# ========================================
+# FACILITIES
+# ========================================
+
+- rule: General facilities
+  steps:
+  - intent: facilities
+  - action: action_facilities_general
+
+- rule: Library facilities
+  steps:
+  - intent: library_facilities
+  - action: action_library_facilities
+
+- rule: Lab facilities
+  steps:
+  - intent: lab_facilities
+  - action: action_lab_facilities
+
+- rule: Computer lab facilities
+  steps:
+  - intent: computer_lab
+  - action: action_computer_lab
+
+- rule: Engineering lab facilities
+  steps:
+  - intent: engineering_lab
+  - action: action_engineering_labs
+
+- rule: Cafeteria facilities
+  steps:
+  - intent: cafeteria_facilities
+  - action: action_cafeteria_facilities
+
+- rule: WiFi/Internet facilities
+  steps:
+  - intent: wifi_internet
+  - action: action_wifi_internet
+
+- rule: Parking facilities
+  steps:
+  - intent: parking_facilities
+  - action: action_parking_facilities
+
+- rule: Sports facilities
+  steps:
+  - intent: sports_facilities
+  - action: action_sports_facilities
+
+- rule: Hostel facilities
+  steps:
+  - intent: hostel_facilities
+  - action: utter_hostel
+
+- rule: Transportation facilities
+  steps:
+  - intent: transportation_facilities
+  - action: action_transportation_facilities
+
+- rule: Medical facilities
+  steps:
+  - intent: medical_facilities
+  - action: action_medical_facilities
+
+- rule: Prayer room facilities
+  steps:
+  - intent: prayer_room
+  - action: action_prayer_room
+
+- rule: Common room facilities
+  steps:
+  - intent: common_room
+  - action: action_common_room
+
+- rule: Career counseling services
+  steps:
+  - intent: career_counseling
+  - action: action_career_counseling
+
+- rule: ICS services
+  steps:
+  - intent: ics_services
+  - action: action_ics_services
+
+# ========================================
+# EVENTS AND WORKSHOPS
+# ========================================
+
+- rule: General events information
+  steps:
+  - intent: events
+  - action: action_events_workshops
+
+- rule: Events and workshops
+  steps:
+  - intent: events_workshops
+  - action: action_events_workshops
+
+- rule: Recent events
+  steps:
+  - intent: recent_events
+  - action: action_recent_events
+
+- rule: Orientation program
+  steps:
+  - intent: orientation_program
+  - action: action_recent_events
+
+- rule: Seminar workshop
+  steps:
+  - intent: seminar_workshop
+  - action: action_events_workshops
+
+- rule: Cultural events
+  steps:
+  - intent: cultural_events
+  - action: action_events_workshops
+
+- rule: Sports events
+  steps:
+  - intent: sports_events
+  - action: action_events_workshops
+
+- rule: World pharmacists day
+  steps:
+  - intent: world_pharmacists_day
+  - action: action_recent_events
+
+- rule: Freshers welcome
+  steps:
+  - intent: freshers_welcome
+  - action: action_recent_events
+
+# ========================================
+# FACULTY INFORMATION
+# ========================================
+
+- rule: General faculty info
+  steps:
+  - intent: faculty_info
+  - action: action_faculty_info
+
+- rule: CSE faculty
+  steps:
+  - intent: faculty_cse
+  - action: action_faculty_cse
+
+- rule: BBA faculty
+  steps:
+  - intent: faculty_bba
+  - action: action_faculty_bba
+
+- rule: EEE faculty
+  steps:
+  - intent: faculty_eee
+  - action: action_faculty_eee
+
+- rule: ICE faculty
+  steps:
+  - intent: faculty_ice
+  - action: action_faculty_ice
+
+- rule: Pharmacy faculty
+  steps:
+  - intent: faculty_pharmacy
+  - action: action_faculty_pharmacy
+
+- rule: Civil faculty
+  steps:
+  - intent: faculty_civil
+  - action: action_faculty_civil
+
+- rule: GEB faculty
+  steps:
+  - intent: faculty_geb
+  - action: action_faculty_geb
+
+- rule: Economics faculty
+  steps:
+  - intent: faculty_economics
+  - action: action_faculty_economics
+
+- rule: English faculty
+  steps:
+  - intent: faculty_english
+  - action: action_faculty_english
+
+- rule: Law faculty
+  steps:
+  - intent: faculty_law
+  - action: action_faculty_law
+
+- rule: Math faculty
+  steps:
+  - intent: faculty_math
+  - action: action_faculty_math
+
+- rule: Sociology faculty
+  steps:
+  - intent: faculty_sociology
+  - action: action_faculty_sociology
+
+- rule: Information Studies faculty
+  steps:
+  - intent: faculty_information_studies
+  - action: action_faculty_information_studies
+
+- rule: PPHS faculty
+  steps:
+  - intent: faculty_pphs
+  - action: action_faculty_pphs
+
+- rule: Data Science faculty
+  steps:
+  - intent: faculty_data_science
+  - action: action_faculty_data_science
+
+- rule: Social Relations faculty
+  steps:
+  - intent: faculty_social_relations
+  - action: action_faculty_social_relations
+
+
+- rule: Chairperson info
+  steps:
+  - intent: chairperson_info
+  - action: action_chairperson_info
+
+
+# ========================================
+# SCHOLARSHIP AND FINANCIAL AID
+# ========================================
+
+- rule: Scholarship eligibility information
+  steps:
+  - intent: scholarship_eligibility
+  - action: utter_scholarships_overview
+
+- rule: Waiver information
+  steps:
+  - intent: waiver_information
+  - action: utter_scholarships_overview
+
+- rule: Show scholarships overview
+  steps:
+  - intent: scholarships_overview
+  - action: utter_scholarships_overview
+
+- rule: Show merit scholarships
+  steps:
+  - intent: merit_scholarships
+  - action: utter_merit_scholarships
+
+- rule: Show financial assistance
+  steps:
+  - intent: financial_assistance
+  - action: utter_financial_assistance
+
+- rule: Show family concession
+  steps:
+  - intent: family_concession
+  - action: utter_family_concession
+
+- rule: Show freedom fighters scholarship
+  steps:
+  - intent: freedom_fighters_scholarship
+  - action: utter_freedom_fighters_scholarship
+
+- rule: Show Medha Lalon scholarship
+  steps:
+  - intent: medha_lalon_scholarship
+  - action: utter_medha_lalon_scholarship
+
+- rule: Show employee benefits
+  steps:
+  - intent: employee_benefits
+  - action: utter_employee_benefits
+
+- rule: Show scholarship continuation requirements
+  steps:
+  - intent: scholarship_continuation
+  - action: utter_scholarship_continuation
+
+# ========================================
+# SEXUAL HARASSMENT POLICY
+# ========================================
+
+- rule: Show sexual harassment policy overview
+  steps:
+  - intent: sexual_harassment_policy
+  - action: utter_sexual_harassment_policy
+
+- rule: Show harassment definition and examples
+  steps:
+  - intent: harassment_definition
+  - action: utter_harassment_definition
+
+- rule: Show complaint process
+  steps:
+  - intent: harassment_complaint_process
+  - action: utter_harassment_complaint_process
+
+- rule: Show harassment punishments
+  steps:
+  - intent: harassment_punishments
+  - action: utter_harassment_punishments
+
+# ========================================
+# UNIVERSITY RULES & CONDUCT
+# ========================================
+
+- rule: Show general conduct rules
+  steps:
+  - intent: general_conduct_rules
+  - action: utter_general_conduct_rules
+
+- rule: Show academic misconduct policy
+  steps:
+  - intent: academic_misconduct
+  - action: utter_academic_misconduct
+
+- rule: Show social misconduct examples
+  steps:
+  - intent: social_misconduct
+  - action: utter_social_misconduct
+
+- rule: Show health and safety violations
+  steps:
+  - intent: health_safety_violations
+  - action: utter_health_safety_violations
+
+- rule: Show disciplinary action
+  steps:
+  - intent: disciplinary_action
+  - action: utter_disciplinary_action
+
+- rule: Show code of conduct information
+  steps:
+  - intent: code_of_conduct
+  - action: utter_code_of_conduct
+
+# ========================================
+# ADDITIONAL ACADEMIC INFORMATION
+# ========================================
+
+- rule: Campus life information
+  steps:
+  - intent: campus_life
+  - action: utter_campus_life
+
+- rule: Alumni information
+  steps:
+  - intent: alumni
+  - action: utter_notable_alumni
+
+- rule: Alumni network information
+  steps:
+  - intent: alumni_network
+  - action: utter_notable_alumni
+
+- rule: Research opportunities
+  steps:
+  - intent: research_opportunities
+  - action: utter_research
+
+- rule: Internship opportunities
+  steps:
+  - intent: internship_opportunities
+  - action: utter_internship
+
+- rule: Grading system information
+  steps:
+  - intent: grading
+  - action: action_grading_system
+
+- rule: Semester system
+  steps:
+  - intent: semester_system
+  - action: utter_semester_system
+
+
+- rule: Credit system
+  steps:
+  - intent: credit_system
+  - action: utter_credit_system
+
+
+- rule: Clubs and societies
+  steps:
+  - intent: clubs_societies
+  - action: utter_clubs
+
+- rule: International students
+  steps:
+  - intent: international_students
+  - action: utter_international_students
+
+- rule: Transfer students
+  steps:
+  - intent: transfer_students
+  - action: utter_transfer_students
+
+- rule: University ranking
+  steps:
+  - intent: university_ranking
+  - action: utter_university_ranking
+
+- rule: Accreditation
+  steps:
+  - intent: accreditation
+  - action: utter_accreditation
+
+# ========================================
+# FALLBACK
+# ========================================
+
+- rule: Handle unknown intents
+  steps:
+  - intent: fallback
+  - action: utter_default
+
+
+
+- rule: Answer Business and Economics Faculty inquiry
+  steps:
+  - intent: ask_business_economics_faculty
+  - action: utter_business_economics_faculty
+
+- rule: Answer Arts and Social Sciences Faculty inquiry
+  steps:
+  - intent: ask_arts_social_sciences_faculty
+  - action: utter_arts_social_sciences_faculty
+
+- rule: Answer IER inquiry
+  steps:
+  - intent: ask_ier
+  - action: utter_ier
+
+- rule: Answer Pharmacy Department inquiry
+  steps:
+  - intent: ask_pharmacy_department
+  - action: utter_pharmacy_department
+
+
+
+# ========================================
+# GENERAL HELPDESK RULES
+# ========================================
+
+- rule: Provide general helpdesk contact information
+  steps:
+  - intent: ask_helpdesk_contact
+  - action: utter_helpdesk_contact
+
+- rule: Provide helpdesk general information
+  steps:
+  - intent: ask_helpdesk_general_info
+  - action: utter_helpdesk_general_info
+
+# ========================================
+# ACADEMIC DEPARTMENTS - HELPDESK RULES
+# ========================================
+
+- rule: Provide CSE helpdesk contact
+  steps:
+  - intent: ask_helpdesk_cse
+  - action: utter_helpdesk_cse
+
+- rule: Provide EEE helpdesk contact
+  steps:
+  - intent: ask_helpdesk_eee
+  - action: utter_helpdesk_eee
+
+- rule: Provide Civil Engineering helpdesk contact
+  steps:
+  - intent: ask_helpdesk_ce
+  - action: utter_helpdesk_ce
+
+- rule: Provide BBA helpdesk contact
+  steps:
+  - intent: ask_helpdesk_bba
+  - action: utter_helpdesk_bba
+
+- rule: Provide MBA helpdesk contact
+  steps:
+  - intent: ask_helpdesk_mba
+  - action: utter_helpdesk_mba
+
+- rule: Provide Economics helpdesk contact
+  steps:
+  - intent: ask_helpdesk_economics
+  - action: utter_helpdesk_economics
+
+- rule: Provide English helpdesk contact
+  steps:
+  - intent: ask_helpdesk_english
+  - action: utter_helpdesk_english
+
+- rule: Provide Law helpdesk contact
+  steps:
+  - intent: ask_helpdesk_law
+  - action: utter_helpdesk_law
+
+- rule: Provide Pharmacy helpdesk contact
+  steps:
+  - intent: ask_helpdesk_pharmacy
+  - action: utter_helpdesk_pharmacy
+
+- rule: Provide GEB helpdesk contact
+  steps:
+  - intent: ask_helpdesk_geb
+  - action: utter_helpdesk_geb
+
+- rule: Provide Sociology helpdesk contact
+  steps:
+  - intent: ask_helpdesk_sociology
+  - action: utter_helpdesk_sociology
+
+- rule: Provide MPS helpdesk contact
+  steps:
+  - intent: ask_helpdesk_mps
+  - action: utter_helpdesk_mps
+
+- rule: Provide DSR helpdesk contact
+  steps:
+  - intent: ask_helpdesk_dsr
+  - action: utter_helpdesk_dsr
+
+- rule: Provide DIS helpdesk contact
+  steps:
+  - intent: ask_helpdesk_dis
+  - action: utter_helpdesk_dis
+
+# ========================================
+# ADMINISTRATIVE OFFICES - HELPDESK RULES
+# ========================================
+
+- rule: Provide Accounts Office helpdesk contact
+  steps:
+  - intent: ask_helpdesk_accounts
+  - action: utter_helpdesk_accounts
+
+- rule: Provide Registrar Office helpdesk contact
+  steps:
+  - intent: ask_helpdesk_registrar
+  - action: utter_helpdesk_registrar
+
+- rule: Provide ICS helpdesk contact
+  steps:
+  - intent: ask_helpdesk_ics
+  - action: utter_helpdesk_ics
+
+- rule: Provide COE helpdesk contact
+  steps:
+  - intent: ask_helpdesk_coe
+  - action: utter_helpdesk_coe
+
+
+
+  # ========================================
+# MA ENGLISH - GENERAL RULES
+# ========================================
+
+- rule: Provide MA English program overview
+  steps:
+  - intent: ask_ma_english_overview
+  - action: utter_ma_english_overview
+
+- rule: Provide MA English core courses
+  steps:
+  - intent: ask_ma_english_core_courses
+  - action: utter_ma_english_core_courses
+
+- rule: Provide MA English elective courses
+  steps:
+  - intent: ask_ma_english_elective_courses
+  - action: utter_ma_english_elective_courses
+
+# ========================================
+# CORE COURSES - RULES
+# ========================================
+
+- rule: Provide ENG 9501 information
+  steps:
+  - intent: ask_eng_9501
+  - action: utter_eng_9501
+
+- rule: Provide ENG 9506 information
+  steps:
+  - intent: ask_eng_9506
+  - action: utter_eng_9506
+
+- rule: Provide ENG 9507 information
+  steps:
+  - intent: ask_eng_9507
+  - action: utter_eng_9507
+
+- rule: Provide ENG 9508 information
+  steps:
+  - intent: ask_eng_9508
+  - action: utter_eng_9508
+
+- rule: Provide ENG 9509 information
+  steps:
+  - intent: ask_eng_9509
+  - action: utter_eng_9509
+
+# ========================================
+# ELECTIVE COURSES - RULES
+# ========================================
+
+- rule: Provide ENG 9502 information
+  steps:
+  - intent: ask_eng_9502
+  - action: utter_eng_9502
+
+- rule: Provide ENG 9503 information
+  steps:
+  - intent: ask_eng_9503
+  - action: utter_eng_9503
+
+- rule: Provide ENG 9504 information
+  steps:
+  - intent: ask_eng_9504
+  - action: utter_eng_9504
+
+- rule: Provide ENG 9505 information
+  steps:
+  - intent: ask_eng_9505
+  - action: utter_eng_9505
+
+- rule: Provide ENG 9510 information
+  steps:
+  - intent: ask_eng_9510
+  - action: utter_eng_9510
+
+- rule: Provide ENG 9511 information
+  steps:
+  - intent: ask_eng_9511
+  - action: utter_eng_9511
+
+- rule: Provide ENG 9512 information
+  steps:
+  - intent: ask_eng_9512
+  - action: utter_eng_9512
+
+- rule: Provide ENG 9513 information
+  steps:
+  - intent: ask_eng_9513
+  - action: utter_eng_9513
+
+- rule: Provide ENG 9514 information
+  steps:
+  - intent: ask_eng_9514
+  - action: utter_eng_9514
+
+- rule: Provide ENG 9515 information
+  steps:
+  - intent: ask_eng_9515
+  - action: utter_eng_9515
+
+- rule: Provide ENG 9516 information
+  steps:
+  - intent: ask_eng_9516
+  - action: utter_eng_9516
+
+- rule: Provide ENG 9517 information
+  steps:
+  - intent: ask_eng_9517
+  - action: utter_eng_9517
+
+- rule: Provide ENG 9518 information
+  steps:
+  - intent: ask_eng_9518
+  - action: utter_eng_9518
+
+- rule: Provide ENG 9519 information
+  steps:
+  - intent: ask_eng_9519
+  - action: utter_eng_9519
+
+- rule: Provide ENG 9520 information
+  steps:
+  - intent: ask_eng_9520
+  - action: utter_eng_9520
+
+- rule: Provide ENG 9521 information
+  steps:
+  - intent: ask_eng_9521
+  - action: utter_eng_9521
+
+- rule: Provide ENG 9545 information
+  steps:
+  - intent: ask_eng_9545
+  - action: utter_eng_9545
+
+- rule: Provide ENG 9582 information
+  steps:
+  - intent: ask_eng_9582
+  - action: utter_eng_9582
+
+- rule: Provide ENG 9599 information
+  steps:
+  - intent: ask_eng_9599
+  - action: utter_eng_9599
+
+# ========================================
+# SPECIFIC ISSUE ROUTING RULE
+# ========================================
+
+- rule: Route to appropriate helpdesk based on issue
+  steps:
+  - intent: ask_specific_department_issue
+  - action: utter_specific_department_issue
+
+
+# ========================================
+# GENERAL MBA RULES
+# ========================================
+
+- rule: Provide MBA program overview
+  steps:
+  - intent: ask_mba_overview
+  - action: utter_mba_overview
+
+- rule: Provide MBA credit information
+  steps:
+  - intent: ask_mba_credits
+  - action: utter_mba_credits
+
+- rule: Provide MBA program structure
+  steps:
+  - intent: ask_mba_structure
+  - action: utter_mba_structure
+
+- rule: Provide MBA program duration
+  steps:
+  - intent: ask_mba_duration
+  - action: utter_mba_duration
+
+- rule: Provide MBA skills information
+  steps:
+  - intent: ask_mba_skills
+  - action: utter_mba_skills
+
+- rule: Provide MBA non-business background info
+  steps:
+  - intent: ask_mba_non_business_background
+  - action: utter_mba_non_business_background
+
+- rule: Provide MBA work experience requirements
+  steps:
+  - intent: ask_mba_work_experience
+  - action: utter_mba_work_experience
+
+# ========================================
+# FOUNDATION COURSES RULES
+# ========================================
+
+- rule: Provide MBA foundation courses overview
+  steps:
+  - intent: ask_mba_foundation_courses
+  - action: utter_mba_foundation_courses
+
+- rule: Provide MBA course waiver policy
+  steps:
+  - intent: ask_mba_course_waiver
+  - action: utter_mba_course_waiver
+
+- rule: Provide MBA 9501 information
+  steps:
+  - intent: ask_mba_9501
+  - action: utter_mba_9501
+
+- rule: Provide MBA 9502 information
+  steps:
+  - intent: ask_mba_9502
+  - action: utter_mba_9502
+
+- rule: Provide MBA 9503 information
+  steps:
+  - intent: ask_mba_9503
+  - action: utter_mba_9503
+
+- rule: Provide MBA 9504 information
+  steps:
+  - intent: ask_mba_9504
+  - action: utter_mba_9504
+
+- rule: Provide MBA 9505 information
+  steps:
+  - intent: ask_mba_9505
+  - action: utter_mba_9505
+
+- rule: Provide MBA 9506 information
+  steps:
+  - intent: ask_mba_9506
+  - action: utter_mba_9506
+
+- rule: Provide MBA 9507 information
+  steps:
+  - intent: ask_mba_9507
+  - action: utter_mba_9507
+
+- rule: Provide MBA 9508 information
+  steps:
+  - intent: ask_mba_9508
+  - action: utter_mba_9508
+
+- rule: Provide MBA 9509 information
+  steps:
+  - intent: ask_mba_9509
+  - action: utter_mba_9509
+
+- rule: Provide MBA 9510 information
+  steps:
+  - intent: ask_mba_9510
+  - action: utter_mba_9510
+
+# ========================================
+# CORE COURSES RULES
+# ========================================
+
+- rule: Provide MBA core courses overview
+  steps:
+  - intent: ask_mba_core_courses
+  - action: utter_mba_core_courses
+
+- rule: Provide MBA 9601 information
+  steps:
+  - intent: ask_mba_9601
+  - action: utter_mba_9601
+
+- rule: Provide MBA 9602 information
+  steps:
+  - intent: ask_mba_9602
+  - action: utter_mba_9602
+
+- rule: Provide MBA 9603 information
+  steps:
+  - intent: ask_mba_9603
+  - action: utter_mba_9603
+
+- rule: Provide MBA 9604 information
+  steps:
+  - intent: ask_mba_9604
+  - action: utter_mba_9604
+
+- rule: Provide MBA 9605 information
+  steps:
+  - intent: ask_mba_9605
+  - action: utter_mba_9605
+
+- rule: Provide MBA 9606 information
+  steps:
+  - intent: ask_mba_9606
+  - action: utter_mba_9606
+
+# ========================================
+# CONCENTRATION RULES
+# ========================================
+
+- rule: Provide MBA concentrations overview
+  steps:
+  - intent: ask_mba_concentrations
+  - action: utter_mba_concentrations
+
+- rule: Provide MBA concentration requirements
+  steps:
+  - intent: ask_mba_concentration_requirements
+  - action: utter_mba_concentration_requirements
+
+- rule: Provide Accounting concentration information
+  steps:
+  - intent: ask_accounting_concentration
+  - action: utter_accounting_concentration
+
+- rule: Provide Finance concentration information
+  steps:
+  - intent: ask_finance_concentration
+  - action: utter_finance_concentration
+
+- rule: Provide HRM concentration information
+  steps:
+  - intent: ask_hrm_concentration
+  - action: utter_hrm_concentration
+
+- rule: Provide IT concentration information
+  steps:
+  - intent: ask_it_concentration
+  - action: utter_it_concentration
+
+- rule: Provide Bank Management concentration information
+  steps:
+  - intent: ask_bank_management_concentration
+  - action: utter_bank_management_concentration
+
+- rule: Provide Management concentration information
+  steps:
+  - intent: ask_management_concentration
+  - action: utter_management_concentration
+
+- rule: Provide Marketing concentration information
+  steps:
+  - intent: ask_marketing_concentration
+  - action: utter_marketing_concentration
+
+- rule: Provide Operations Management concentration information
+  steps:
+  - intent: ask_operations_management_concentration
+  - action: utter_operations_management_concentration
+
+- rule: Provide Risk Management concentration information
+  steps:
+  - intent: ask_risk_management_concentration
+  - action: utter_risk_management_concentration
+
+- rule: Provide Textile concentration information
+  steps:
+  - intent: ask_textile_concentration
+  - action: utter_textile_concentration
+
+- rule: Provide Entrepreneurship concentration information
+  steps:
+  - intent: ask_entrepreneurship_concentration
+  - action: utter_entrepreneurship_concentration
+
+- rule: Provide Supply Chain concentration information
+  steps:
+  - intent: ask_supply_chain_concentration
+  - action: utter_supply_chain_concentration
+
+
+# ========================================
+# GENERAL PROGRAM RULES
+# ========================================
+
+- rule: Provide MDS program overview
+  steps:
+  - intent: ask_mds_overview
+  - action: utter_mds_overview
+
+- rule: Provide MDS credit requirements
+  steps:
+  - intent: ask_mds_credits
+  - action: utter_mds_credits
+
+- rule: Provide MDS program structure
+  steps:
+  - intent: ask_mds_structure
+  - action: utter_mds_structure
+
+- rule: Provide MDS program flexibility information
+  steps:
+  - intent: ask_mds_flexibility
+  - action: utter_mds_flexibility
+
+# ========================================
+# FOUNDATION COURSES RULES
+# ========================================
+
+- rule: Provide MDS foundation courses overview
+  steps:
+  - intent: ask_mds_foundation_courses
+  - action: utter_mds_foundation_courses
+
+- rule: Provide MDS foundation course flexibility
+  steps:
+  - intent: ask_mds_foundation_flexibility
+  - action: utter_mds_foundation_flexibility
+
+- rule: Provide MDS 501 information
+  steps:
+  - intent: ask_mds_501
+  - action: utter_mds_501
+
+- rule: Provide MDS 502 information
+  steps:
+  - intent: ask_mds_502
+  - action: utter_mds_502
+
+- rule: Provide MDS 503 information
+  steps:
+  - intent: ask_mds_503
+  - action: utter_mds_503
+
+- rule: Provide MDS 504 information
+  steps:
+  - intent: ask_mds_504
+  - action: utter_mds_504
+
+# ========================================
+# CORE COURSES RULES
+# ========================================
+
+- rule: Provide MDS core courses overview
+  steps:
+  - intent: ask_mds_core_courses
+  - action: utter_mds_core_courses
+
+- rule: Provide MDS core course flexibility
+  steps:
+  - intent: ask_mds_core_flexibility
+  - action: utter_mds_core_flexibility
+
+- rule: Provide Sustainable Development course information
+  steps:
+  - intent: ask_mds_sustainable_development
+  - action: utter_mds_sustainable_development
+
+- rule: Provide Governance course information
+  steps:
+  - intent: ask_mds_governance
+  - action: utter_mds_governance
+
+- rule: Provide Development Management course information
+  steps:
+  - intent: ask_mds_development_management
+  - action: utter_mds_development_management
+
+- rule: Provide Program Design course information
+  steps:
+  - intent: ask_mds_program_design
+  - action: utter_mds_program_design
+
+- rule: Provide Project Management course information
+  steps:
+  - intent: ask_mds_project_management
+  - action: utter_mds_project_management
+
+- rule: Provide Microfinance course information
+  steps:
+  - intent: ask_mds_microfinance
+  - action: utter_mds_microfinance
+
+- rule: Provide Social Enterprise course information
+  steps:
+  - intent: ask_mds_social_enterprise
+  - action: utter_mds_social_enterprise
+
+- rule: Provide Research and Development course information
+  steps:
+  - intent: ask_mds_research_development
+  - action: utter_mds_research_development
+
+- rule: Provide Legal Issues course information
+  steps:
+  - intent: ask_mds_legal_issues
+  - action: utter_mds_legal_issues
+
+# ========================================
+# SPECIALIZATION RULES
+# ========================================
+
+- rule: Provide MDS specializations overview
+  steps:
+  - intent: ask_mds_specializations
+  - action: utter_mds_specializations
+
+- rule: Provide MDS specialization requirements
+  steps:
+  - intent: ask_mds_specialization_requirements
+  - action: utter_mds_specialization_requirements
+
+- rule: Provide Enterprise Development specialization information
+  steps:
+  - intent: ask_enterprise_development
+  - action: utter_mds_enterprise_development
+
+- rule: Provide Entrepreneurship Development specialization information
+  steps:
+  - intent: ask_entrepreneurship_development
+  - action: utter_mds_entrepreneurship_development
+
+- rule: Provide Climate and Sustainable Development specialization information
+  steps:
+  - intent: ask_climate_sustainable_dev
+  - action: utter_mds_climate_sustainable_dev
+
+# ========================================
+# ENTERPRISE DEVELOPMENT COURSES RULES
+# ========================================
+
+- rule: Provide Monitoring and Evaluation course information
+  steps:
+  - intent: ask_mds_monitoring_evaluation
+  - action: utter_mds_monitoring_evaluation
+
+- rule: Provide Vocational Education course information
+  steps:
+  - intent: ask_mds_vocational_education
+  - action: utter_mds_vocational_education
+
+- rule: Provide Professional Ethics course information
+  steps:
+  - intent: ask_mds_professional_ethics
+  - action: utter_mds_professional_ethics
+
+- rule: Provide Gerontology course information
+  steps:
+  - intent: ask_mds_gerontology
+  - action: utter_mds_gerontology
+
+- rule: Provide Sustainable Communities course information
+  steps:
+  - intent: ask_mds_sustainable_communities
+  - action: utter_mds_sustainable_communities
+
+- rule: Provide Women and Entrepreneurship course information
+  steps:
+  - intent: ask_mds_women_entrepreneurship
+  - action: utter_mds_women_entrepreneurship
+
+- rule: Provide Strategic Management course information
+  steps:
+  - intent: ask_mds_strategic_management
+  - action: utter_mds_strategic_management
+
+- rule: Provide Leadership Development course information
+  steps:
+  - intent: ask_mds_leadership_development
+  - action: utter_mds_leadership_development
+
+- rule: Provide Micro Enterprises course information
+  steps:
+  - intent: ask_mds_micro_enterprises
+  - action: utter_mds_micro_enterprises
+
+# ========================================
+# ENTREPRENEURSHIP DEVELOPMENT COURSES RULES
+# ========================================
+
+- rule: Provide Entrepreneurship course information
+  steps:
+  - intent: ask_mds_entrepreneurship
+  - action: utter_mds_entrepreneurship
+
+- rule: Provide Business Planning course information
+  steps:
+  - intent: ask_mds_business_planning
+  - action: utter_mds_business_planning
+
+- rule: Provide Sustainable Business course information
+  steps:
+  - intent: ask_mds_sustainable_business
+  - action: utter_mds_sustainable_business
+
+- rule: Provide Small Credits course information
+  steps:
+  - intent: ask_mds_small_credits
+  - action: utter_mds_small_credits
+
+- rule: Provide Banking for Small Enterprises course information
+  steps:
+  - intent: ask_mds_banking_small_enterprises
+  - action: utter_mds_banking_small_enterprises
+
+- rule: Provide Research Methodology course information
+  steps:
+  - intent: ask_mds_research_methodology
+  - action: utter_mds_research_methodology
+
+# ========================================
+# CLIMATE & SUSTAINABILITY COURSES RULES
+# ========================================
+
+- rule: Provide Environmental Impact Assessment course information
+  steps:
+  - intent: ask_mds_environmental_impact
+  - action: utter_mds_environmental_impact
+
+- rule: Provide Environment Policy course information
+  steps:
+  - intent: ask_mds_environment_policy
+  - action: utter_mds_environment_policy
+
+- rule: Provide Gender and Development course information
+  steps:
+  - intent: ask_mds_gender_development
+  - action: utter_mds_gender_development
+
+- rule: Provide Disaster Management course information
+  steps:
+  - intent: ask_mds_disaster_management
+  - action: utter_mds_disaster_management
+
+- rule: Provide Community-Based Health Services course information
+  steps:
+  - intent: ask_mds_health_services
+  - action: utter_mds_health_services
+
+- rule: Provide Environmental Management course information
+  steps:
+  - intent: ask_mds_environmental_management
+  - action: utter_mds_environmental_management
+
+# ========================================
+# PROGRAM REQUIREMENTS & OPPORTUNITIES RULES
+# ========================================
+
+- rule: Provide additional requirement information
+  steps:
+  - intent: ask_mds_additional_requirement
+  - action: utter_mds_additional_requirement
+
+- rule: Provide research components information
+  steps:
+  - intent: ask_mds_research_components
+  - action: utter_mds_research_components
+
+- rule: Provide career opportunities after MDS
+  steps:
+  - intent: ask_mds_career_opportunities
+  - action: utter_mds_career_opportunities
+
+- rule: Provide information for non-economics background students
+  steps:
+  - intent: ask_mds_non_background
+  - action: utter_mds_non_background
+
+- rule: Provide interdisciplinary learning information
+  steps:
+  - intent: ask_mds_interdisciplinary
+  - action: utter_mds_career_opportunities_multiple
+
+
+# ========================================
+# GENERAL PROGRAM RULES
+# ========================================
+
+- rule: Provide M.Phil Pharmacy program overview
+  steps:
+  - intent: ask_mphil_pharmacy_overview
+  - action: utter_mphil_pharmacy_overview
+
+- rule: Provide M.Phil Pharmacy credit requirements
+  steps:
+  - intent: ask_mphil_pharmacy_credits
+  - action: utter_mphil_pharmacy_credits
+
+- rule: Provide M.Phil Pharmacy program duration
+  steps:
+  - intent: ask_mphil_pharmacy_duration
+  - action: utter_mphil_pharmacy_duration
+
+- rule: Provide M.Phil Pharmacy thesis information
+  steps:
+  - intent: ask_mphil_pharmacy_thesis
+  - action: utter_mphil_pharmacy_thesis
+
+# ========================================
+# SEMESTER INFORMATION RULES
+# ========================================
+
+- rule: Provide M.Phil Pharmacy semester information
+  steps:
+  - intent: ask_mphil_pharmacy_semesters
+  - action: utter_mphil_pharmacy_semesters
+
+- rule: Provide M.Phil Pharmacy prerequisites
+  steps:
+  - intent: ask_mphil_pharmacy_prerequisites
+  - action: utter_mphil_pharmacy_prerequisites
+
+# ========================================
+# FIRST SEMESTER RULES
+# ========================================
+
+- rule: Provide M.Phil Pharmacy semester 1 overview
+  steps:
+  - intent: ask_mphil_pharmacy_semester1_overview
+  - action: utter_mphil_pharmacy_semester1_overview
+
+- rule: Provide PHRM 510 information
+  steps:
+  - intent: ask_mphil_pharmacy_phrm510
+  - action: utter_mphil_pharmacy_phrm510
+
+- rule: Provide PHRM 511 information
+  steps:
+  - intent: ask_mphil_pharmacy_phrm511
+  - action: utter_mphil_pharmacy_phrm511
+
+- rule: Provide PHRM 512 information
+  steps:
+  - intent: ask_mphil_pharmacy_phrm512
+  - action: utter_mphil_pharmacy_phrm512
+
+- rule: Provide PHRM 513 information
+  steps:
+  - intent: ask_mphil_pharmacy_phrm513
+  - action: utter_mphil_pharmacy_phrm513
+
+- rule: Provide M.Phil Pharmacy semester 1 optional courses
+  steps:
+  - intent: ask_mphil_pharmacy_semester1_optional
+  - action: utter_mphil_pharmacy_semester1_optional
+
+# ========================================
+# SECOND SEMESTER RULES
+# ========================================
+
+- rule: Provide M.Phil Pharmacy semester 2 overview
+  steps:
+  - intent: ask_mphil_pharmacy_semester2_overview
+  - action: utter_mphil_pharmacy_semester2_overview
+
+- rule: Provide PHRM 520 information
+  steps:
+  - intent: ask_mphil_pharmacy_phrm520
+  - action: utter_mphil_pharmacy_phrm520
+
+- rule: Provide PHRM 521 information
+  steps:
+  - intent: ask_mphil_pharmacy_phrm521
+  - action: utter_mphil_pharmacy_phrm521
+
+- rule: Provide PHRM 522 information
+  steps:
+  - intent: ask_mphil_pharmacy_phrm522
+  - action: utter_mphil_pharmacy_phrm522
+
+- rule: Provide PHRM 523 information
+  steps:
+  - intent: ask_mphil_pharmacy_phrm523
+  - action: utter_mphil_pharmacy_phrm523
+
+- rule: Provide M.Phil Pharmacy semester 2 optional courses
+  steps:
+  - intent: ask_mphil_pharmacy_semester2_optional
+  - action: utter_mphil_pharmacy_semester2_optional
+
+- rule: Provide M.Phil Pharmacy semester 2 prerequisites
+  steps:
+  - intent: ask_mphil_pharmacy_semester2_prerequisites
+  - action: utter_mphil_pharmacy_semester2_prerequisites
+
+# ========================================
+# THIRD SEMESTER RULES
+# ========================================
+
+- rule: Provide M.Phil Pharmacy semester 3 overview
+  steps:
+  - intent: ask_mphil_pharmacy_semester3_overview
+  - action: utter_mphil_pharmacy_semester3_overview
+
+- rule: Provide PHRM 530 information
+  steps:
+  - intent: ask_mphil_pharmacy_phrm530
+  - action: utter_mphil_pharmacy_phrm530
+
+- rule: Provide PHRM 531 information
+  steps:
+  - intent: ask_mphil_pharmacy_phrm531
+  - action: utter_mphil_pharmacy_phrm531
+
+- rule: Provide PHRM 532 information
+  steps:
+  - intent: ask_mphil_pharmacy_phrm532
+  - action: utter_mphil_pharmacy_phrm532
+
+- rule: Provide PHRM 533 information
+  steps:
+  - intent: ask_mphil_pharmacy_phrm533
+  - action: utter_mphil_pharmacy_phrm533
+
+- rule: Provide PHRM 534 information
+  steps:
+  - intent: ask_mphil_pharmacy_phrm534
+  - action: utter_mphil_pharmacy_phrm534
+
+- rule: Provide M.Phil Pharmacy semester 3 optional courses
+  steps:
+  - intent: ask_mphil_pharmacy_semester3_optional
+  - action: utter_mphil_pharmacy_semester3_optional
+
+- rule: Provide M.Phil Pharmacy semester 3 prerequisites
+  steps:
+  - intent: ask_mphil_pharmacy_semester3_prerequisites
+  - action: utter_mphil_pharmacy_semester3_prerequisites
+
+# ========================================
+# PROGRAM REQUIREMENTS & POLICIES RULES
+# ========================================
+
+- rule: Provide M.Phil Pharmacy core course requirements
+  steps:
+  - intent: ask_mphil_pharmacy_core_mandatory
+  - action: utter_mphil_pharmacy_core_mandatory
+
+- rule: Provide M.Phil Pharmacy optional course selection info
+  steps:
+  - intent: ask_mphil_pharmacy_optional_selection
+  - action: utter_mphil_pharmacy_optional_selection
+
+- rule: Provide M.Phil Pharmacy credit distribution
+  steps:
+  - intent: ask_mphil_pharmacy_credit_distribution
+  - action: utter_mphil_pharmacy_credit_distribution
+
+- rule: Provide M.Phil Pharmacy pharmacology focus
+  steps:
+  - intent: ask_mphil_pharmacy_pharmacology_focus
+  - action: utter_mphil_pharmacy_pharmacology_focus
+
+- rule: Provide M.Phil Pharmacy career opportunities
+  steps:
+  - intent: ask_mphil_pharmacy_career_opportunities
+  - action: utter_mphil_pharmacy_career_opportunities
+
+
+
+
+# ========================================
+# GENERAL PROGRAM RULES
+# ========================================
+
+- rule: Provide MS in CSE program overview
+  steps:
+  - intent: ask_ms_cse_overview
+  - action: utter_ms_cse_overview
+
+- rule: Provide MS in CSE credit requirements
+  steps:
+  - intent: ask_ms_cse_credits
+  - action: utter_ms_cse_credits
+
+- rule: Provide MS in CSE program duration
+  steps:
+  - intent: ask_ms_cse_duration
+  - action: utter_ms_cse_duration
+
+- rule: Provide MS in CSE program cost
+  steps:
+  - intent: ask_ms_cse_cost
+  - action: utter_ms_cse_cost
+
+- rule: Provide MS in CSE major options
+  steps:
+  - intent: ask_ms_cse_majors
+  - action: utter_ms_cse_majors
+
+- rule: Provide MS in CSE track information
+  steps:
+  - intent: ask_ms_cse_tracks
+  - action: utter_ms_cse_tracks
+
+# ========================================
+# ADMISSION REQUIREMENTS RULES
+# ========================================
+
+- rule: Provide MS in CSE admission requirements
+  steps:
+  - intent: ask_ms_cse_admission_requirements
+  - action: utter_ms_cse_admission_requirements
+
+- rule: Provide MS in CSE CGPA requirement
+  steps:
+  - intent: ask_ms_cse_cgpa_requirement
+  - action: utter_ms_cse_cgpa_requirement
+
+- rule: Provide MS in CSE bachelor's degree requirement
+  steps:
+  - intent: ask_ms_cse_bachelor_degree
+  - action: utter_ms_cse_bachelor_degree
+
+- rule: Provide MS in CSE secondary education requirements
+  steps:
+  - intent: ask_ms_cse_secondary_requirements
+  - action: utter_ms_cse_secondary_requirements
+
+- rule: Provide MS in CSE admission test information
+  steps:
+  - intent: ask_ms_cse_admission_test
+  - action: utter_ms_cse_admission_test
+
+- rule: Provide MS in CSE non-CSE background information
+  steps:
+  - intent: ask_ms_cse_non_cse_background
+  - action: utter_ms_cse_non_cse_background
+
+- rule: Provide MS in CSE 3-year degree information
+  steps:
+  - intent: ask_ms_cse_three_year_degree
+  - action: utter_ms_cse_three_year_degree
+
+- rule: Provide MS in CSE international student information
+  steps:
+  - intent: ask_ms_cse_international_students
+  - action: utter_ms_cse_international_students
+
+# ========================================
+# PROGRAMS & MAJORS RULES
+# ========================================
+
+- rule: Provide MS in CSE compulsory courses
+  steps:
+  - intent: ask_ms_cse_compulsory_courses
+  - action: utter_ms_cse_compulsory_courses
+
+- rule: Provide Data Science major information
+  steps:
+  - intent: ask_ms_cse_data_science_major
+  - action: utter_ms_cse_data_science_major
+
+- rule: Provide Software Engineering major information
+  steps:
+  - intent: ask_ms_cse_software_engineering_major
+  - action: utter_ms_cse_software_engineering_major
+
+- rule: Provide Networking major information
+  steps:
+  - intent: ask_ms_cse_networking_major
+  - action: utter_ms_cse_networking_major
+
+- rule: Provide Systems Engineering major information
+  steps:
+  - intent: ask_ms_cse_systems_engineering_major
+  - action: utter_ms_cse_systems_engineering_major
+
+# ========================================
+# TRACKS & THESIS/PROJECT RULES
+# ========================================
+
+- rule: Provide MS in CSE thesis track information
+  steps:
+  - intent: ask_ms_cse_thesis_track
+  - action: utter_ms_cse_thesis_track
+
+- rule: Provide MS in CSE project track information
+  steps:
+  - intent: ask_ms_cse_project_track
+  - action: utter_ms_cse_project_track
+
+- rule: Provide thesis vs project comparison
+  steps:
+  - intent: ask_ms_cse_thesis_vs_project
+  - action: utter_ms_cse_thesis_vs_project
+
+- rule: Provide MS in CSE major change information
+  steps:
+  - intent: ask_ms_cse_major_change
+  - action: utter_ms_cse_major_change
+
+- rule: Provide MS in CSE track change information
+  steps:
+  - intent: ask_ms_cse_track_change
+  - action: utter_ms_cse_track_change
+
+# ========================================
+# COURSES & CURRICULUM RULES
+# ========================================
+
+- rule: Provide MS in CSE electives available
+  steps:
+  - intent: ask_ms_cse_electives_available
+  - action: utter_ms_cse_electives_available
+
+- rule: Provide MS in CSE prerequisites information
+  steps:
+  - intent: ask_ms_cse_prerequisites
+  - action: utter_ms_cse_prerequisites
+
+- rule: Provide MS in CSE thesis course information
+  steps:
+  - intent: ask_ms_cse_thesis_course
+  - action: utter_ms_cse_thesis_course
+
+- rule: Provide MS in CSE project course information
+  steps:
+  - intent: ask_ms_cse_project_course
+  - action: utter_ms_cse_project_course
+
+- rule: Provide MS in CSE course codes
+  steps:
+  - intent: ask_ms_cse_course_codes
+  - action: utter_ms_cse_course_codes
+
+- rule: Provide MS in CSE cross-major electives information
+  steps:
+  - intent: ask_ms_cse_cross_major_electives
+  - action: utter_ms_cse_cross_major_electives
+
+# ========================================
+# SPECIFIC COURSE RULES
+# ========================================
+
+- rule: Provide CSE504 Algorithms information
+  steps:
+  - intent: ask_cse504_algorithms
+  - action: utter_cse504_algorithms
+
+- rule: Provide CSE505 Database Systems information
+  steps:
+  - intent: ask_cse505_database
+  - action: utter_cse505_database
+
+- rule: Provide CSE596 IT Project Management information
+  steps:
+  - intent: ask_cse596_it_project_management
+  - action: utter_cse596_it_project_management
+
+- rule: Provide CSE520 Statistics course information
+  steps:
+  - intent: ask_cse520_statistics
+  - action: utter_cse520_statistics
+
+- rule: Provide CSE521 Machine Learning information
+  steps:
+  - intent: ask_cse521_machine_learning
+  - action: utter_cse521_machine_learning
+
+- rule: Provide CSE550 Software Engineering information
+  steps:
+  - intent: ask_cse550_software_engineering
+  - action: utter_cse550_software_engineering
+
+- rule: Provide CSE551 Testing course information
+  steps:
+  - intent: ask_cse551_testing
+  - action: utter_cse551_testing
+
+- rule: Provide CSE560 Distributed Systems information
+  steps:
+  - intent: ask_cse560_distributed_systems
+  - action: utter_cse560_distributed_systems
+
+- rule: Provide CSE561 Networking course information
+  steps:
+  - intent: ask_cse561_networking
+  - action: utter_cse561_networking
+
+- rule: Provide CSE570 IoT course information
+  steps:
+  - intent: ask_cse570_iot
+  - action: utter_cse570_iot
+
+- rule: Provide CSE571 Microprocessors course information
+  steps:
+  - intent: ask_cse571_microprocessors
+  - action: utter_cse571_microprocessors
+
+# ========================================
+# POLICIES & PROCEDURES RULES
+# ========================================
+
+- rule: Provide MS in CSE enrollment declaration information
+  steps:
+  - intent: ask_ms_cse_enrollment_declaration
+  - action: utter_ms_cse_enrollment_declaration
+
+- rule: Provide MS in CSE elective requirements
+  steps:
+  - intent: ask_ms_cse_elective_requirements
+  - action: utter_ms_cse_elective_requirements
+
+- rule: Provide MS in CSE core course requirements
+  steps:
+  - intent: ask_ms_cse_core_requirements
+  - action: utter_ms_cse_core_requirements
+
+- rule: Provide MS in CSE maximum duration information
+  steps:
+  - intent: ask_ms_cse_max_duration
+  - action: utter_ms_cse_max_duration
+
+- rule: Provide MS in CSE career opportunities
+  steps:
+  - intent: ask_ms_cse_career_opportunities
+  - action: utter_ms_cse_career_opportunities
+
+
+
+
+# ========================================
+# GENERAL PROGRAM RULES
+# ========================================
+
+- rule: Provide MS in DSA program overview
+  steps:
+  - intent: ask_ms_dsa_overview
+  - action: utter_ms_dsa_overview
+
+- rule: Provide MS in DSA credit requirements
+  steps:
+  - intent: ask_ms_dsa_credits
+  - action: utter_ms_dsa_credits
+
+- rule: Provide MS in DSA core courses overview
+  steps:
+  - intent: ask_ms_dsa_core_courses
+  - action: utter_ms_dsa_core_courses
+
+- rule: Provide MS in DSA electives overview
+  steps:
+  - intent: ask_ms_dsa_electives
+  - action: utter_ms_dsa_electives
+
+- rule: Provide MS in DSA research project information
+  steps:
+  - intent: ask_ms_dsa_research_project
+  - action: utter_ms_dsa_research_project
+
+- rule: Provide MS in DSA credit distribution
+  steps:
+  - intent: ask_ms_dsa_credit_distribution
+  - action: utter_ms_dsa_credit_distribution
+
+- rule: Provide MS in DSA total courses information
+  steps:
+  - intent: ask_ms_dsa_total_courses
+  - action: utter_ms_dsa_total_courses
+
+# ========================================
+# CORE COURSES - SPECIFIC RULES
+# ========================================
+
+- rule: Provide DSA5001 Statistical Methods information
+  steps:
+  - intent: ask_ms_dsa_statistical_methods
+  - action: utter_ms_dsa_statistical_methods
+
+- rule: Provide DSA5002 Programming information
+  steps:
+  - intent: ask_ms_dsa_programming
+  - action: utter_ms_dsa_programming
+
+- rule: Provide DSA5003 Database information
+  steps:
+  - intent: ask_ms_dsa_database
+  - action: utter_ms_dsa_database
+
+- rule: Provide DSA5004 Regression information
+  steps:
+  - intent: ask_ms_dsa_regression
+  - action: utter_ms_dsa_regression
+
+- rule: Provide DSA5005 Multivariate information
+  steps:
+  - intent: ask_ms_dsa_multivariate
+  - action: utter_ms_dsa_multivariate
+
+- rule: Provide DSA5006 Machine Learning information
+  steps:
+  - intent: ask_ms_dsa_machine_learning
+  - action: utter_ms_dsa_machine_learning
+
+- rule: Provide DSA5007 Big Data information
+  steps:
+  - intent: ask_ms_dsa_bigdata
+  - action: utter_ms_dsa_bigdata
+
+# ========================================
+# ELECTIVE COURSES - SPECIFIC RULES
+# ========================================
+
+- rule: Provide DSA5011 AI & Deep Learning information
+  steps:
+  - intent: ask_ms_dsa_ai_deep_learning
+  - action: utter_ms_dsa_ai_deep_learning
+
+- rule: Provide DSA5021 Time Series information
+  steps:
+  - intent: ask_ms_dsa_time_series
+  - action: utter_ms_dsa_time_series
+
+- rule: Provide DSA5041 Econometrics information
+  steps:
+  - intent: ask_ms_dsa_econometrics
+  - action: utter_ms_dsa_econometrics
+
+- rule: Provide DSA5043 Business Analytics information
+  steps:
+  - intent: ask_ms_dsa_business_analytics
+  - action: utter_ms_dsa_business_analytics
+
+- rule: Provide DSA5045 ML for Finance information
+  steps:
+  - intent: ask_ms_dsa_machine_learning_finance
+  - action: utter_ms_dsa_machine_learning_finance
+
+- rule: Provide DSA5047 Data Analytics for Finance information
+  steps:
+  - intent: ask_ms_dsa_data_analytics_finance
+  - action: utter_ms_dsa_data_analytics_finance
+
+- rule: Provide DSA5061 Environmental Data Analysis information
+  steps:
+  - intent: ask_ms_dsa_environmental
+  - action: utter_ms_dsa_environmental
+
+- rule: Provide DSA5063 Bioinformatics information
+  steps:
+  - intent: ask_ms_dsa_bioinformatics
+  - action: utter_ms_dsa_bioinformatics
+
+- rule: Provide DSA5065 Biostatistics information
+  steps:
+  - intent: ask_ms_dsa_biostatistics
+  - action: utter_ms_dsa_biostatistics
+
+- rule: Provide DSA5071 GLM information
+  steps:
+  - intent: ask_ms_dsa_glm
+  - action: utter_ms_dsa_glm
+
+- rule: Provide DSA5073 Categorical Data information
+  steps:
+  - intent: ask_ms_dsa_categorical
+  - action: utter_ms_dsa_categorical
+
+- rule: Provide DSA5075 Design of Experiment information
+  steps:
+  - intent: ask_ms_dsa_doe
+  - action: utter_ms_dsa_doe
+
+- rule: Provide DSA5077 Actuarial Data information
+  steps:
+  - intent: ask_ms_dsa_actuarial
+  - action: utter_ms_dsa_actuarial
+
+# ========================================
+# PROGRAM FEATURES & REQUIREMENTS RULES
+# ========================================
+
+- rule: Provide MS in DSA research project prerequisites
+  steps:
+  - intent: ask_ms_dsa_project_prerequisites
+  - action: utter_ms_dsa_project_prerequisites
+
+- rule: Provide MS in DSA more electives information
+  steps:
+  - intent: ask_ms_dsa_more_electives
+  - action: utter_ms_dsa_more_electives
+
+- rule: Provide MS in DSA mandatory core information
+  steps:
+  - intent: ask_ms_dsa_mandatory_core
+  - action: utter_ms_dsa_mandatory_core
+
+- rule: Provide MS in DSA finance specialization
+  steps:
+  - intent: ask_ms_dsa_finance_specialization
+  - action: utter_ms_dsa_finance_specialization
+
+- rule: Provide MS in DSA health specialization
+  steps:
+  - intent: ask_ms_dsa_health_specialization
+  - action: utter_ms_dsa_health_specialization
+
+- rule: Provide MS in DSA programming languages
+  steps:
+  - intent: ask_ms_dsa_programming_languages
+  - action: utter_ms_dsa_programming_languages
+
+- rule: Provide MS in DSA data ethics information
+  steps:
+  - intent: ask_ms_dsa_data_ethics
+  - action: utter_ms_dsa_data_ethics
+
+- rule: Provide MS in DSA practical application information
+  steps:
+  - intent: ask_ms_dsa_practical_application
+  - action: utter_ms_dsa_practical_application
+
+
+# ========================================
+# GENERAL PROGRAM RULES
+# ========================================
+
+- rule: Provide MSS Economics program overview
+  steps:
+  - intent: ask_mss_eco_overview
+  - action: utter_mss_eco_overview
+
+- rule: Provide MSS Economics credit requirements
+  steps:
+  - intent: ask_mss_eco_credits
+  - action: utter_mss_eco_credits
+
+- rule: Provide MSS Economics program structure
+  steps:
+  - intent: ask_mss_eco_structure
+  - action: utter_mss_eco_structure
+
+- rule: Provide MSS Economics total courses
+  steps:
+  - intent: ask_mss_eco_total_courses
+  - action: utter_mss_eco_total_courses
+
+# ========================================
+# TRACKS & SPECIALIZATIONS RULES
+# ========================================
+
+- rule: Provide MSS Economics tracks information
+  steps:
+  - intent: ask_mss_eco_tracks
+  - action: utter_mss_eco_tracks
+
+- rule: Provide MSS Economics general track information
+  steps:
+  - intent: ask_mss_eco_general_track
+  - action: utter_mss_eco_general_track
+
+- rule: Provide MSS Economics specializations information
+  steps:
+  - intent: ask_mss_eco_specializations
+  - action: utter_mss_eco_specializations
+
+# ========================================
+# CORE COURSES RULES
+# ========================================
+
+- rule: Provide MSS Economics core courses information
+  steps:
+  - intent: ask_mss_eco_core_courses
+  - action: utter_mss_eco_core_courses
+
+- rule: Provide ECO501 Advanced Microeconomics information
+  steps:
+  - intent: ask_eco501_microeconomics
+  - action: utter_eco501_microeconomics
+
+- rule: Provide ECO502 Advanced Macroeconomics information
+  steps:
+  - intent: ask_eco502_macroeconomics
+  - action: utter_eco502_macroeconomics
+
+- rule: Provide ECO511 Mathematical Economics information
+  steps:
+  - intent: ask_eco511_mathematical
+  - action: utter_eco511_mathematical
+
+- rule: Provide ECO565 Advanced Econometrics information
+  steps:
+  - intent: ask_eco565_econometrics
+  - action: utter_eco565_econometrics
+
+# ========================================
+# ELECTIVE CORE COURSES RULES
+# ========================================
+
+- rule: Provide MSS Economics elective core information
+  steps:
+  - intent: ask_mss_eco_elective_core
+  - action: utter_mss_eco_elective_core
+
+- rule: Provide MSS Economics elective core list
+  steps:
+  - intent: ask_mss_eco_elective_core_list
+  - action: utter_mss_eco_elective_core_list
+
+- rule: Provide ECO521 Public Economics information
+  steps:
+  - intent: ask_eco521_public
+  - action: utter_eco521_public
+
+- rule: Provide ECO529 International Financial Economics information
+  steps:
+  - intent: ask_eco529_international_finance
+  - action: utter_eco529_international_finance
+
+- rule: Provide ECO532 Economics of Development information
+  steps:
+  - intent: ask_eco532_development
+  - action: utter_eco532_development
+
+- rule: Provide ECO545 Monetary Theory information
+  steps:
+  - intent: ask_eco545_monetary
+  - action: utter_eco545_monetary
+
+- rule: Provide ECO575 History of Economic Thought information
+  steps:
+  - intent: ask_eco575_history_economic
+  - action: utter_eco575_history_economic
+
+# ========================================
+# SPECIALIZATIONS RULES
+# ========================================
+
+- rule: Provide Agricultural Economics specialization information
+  steps:
+  - intent: ask_mss_eco_agricultural_spec
+  - action: utter_mss_eco_agricultural_spec
+
+- rule: Provide Environmental and Natural Resource Economics specialization
+  steps:
+  - intent: ask_mss_eco_environmental_spec
+  - action: utter_mss_eco_environmental_spec
+
+- rule: Provide Labor Economics specialization information
+  steps:
+  - intent: ask_mss_eco_labor_spec
+  - action: utter_mss_eco_labor_spec
+
+- rule: Provide Energy Economics specialization information
+  steps:
+  - intent: ask_mss_eco_energy_spec
+  - action: utter_mss_eco_energy_spec
+
+- rule: Provide Econometrics specialization information
+  steps:
+  - intent: ask_mss_eco_econometrics_spec
+  - action: utter_mss_eco_econometrics_spec
+
+# ========================================
+# SPECIALIZATION-SPECIFIC COURSES RULES
+# ========================================
+
+- rule: Provide Agricultural Economics specialization courses
+  steps:
+  - intent: ask_mss_eco_agricultural_courses
+  - action: utter_mss_eco_agricultural_courses
+
+- rule: Provide Environmental Economics specialization courses
+  steps:
+  - intent: ask_mss_eco_environmental_courses
+  - action: utter_mss_eco_environmental_courses
+
+- rule: Provide Labor Economics specialization courses
+  steps:
+  - intent: ask_mss_eco_labor_courses
+  - action: utter_mss_eco_labor_courses
+
+- rule: Provide Energy Economics specialization courses
+  steps:
+  - intent: ask_mss_eco_energy_courses
+  - action: utter_mss_eco_energy_courses
+
+- rule: Provide Econometrics specialization courses
+  steps:
+  - intent: ask_mss_eco_econometrics_courses
+  - action: utter_mss_eco_econometrics_courses
+
+# ========================================
+# THESIS & COURSEWORK RULES
+# ========================================
+
+- rule: Provide thesis or coursework information
+  steps:
+  - intent: ask_mss_eco_thesis_or_coursework
+  - action: utter_mss_eco_thesis_or_coursework
+
+- rule: Provide MSS Economics thesis details
+  steps:
+  - intent: ask_mss_eco_thesis_details
+  - action: utter_mss_eco_thesis_details
+
+- rule: Provide MSS Economics coursework alternative information
+  steps:
+  - intent: ask_mss_eco_coursework_alternative
+  - action: utter_mss_eco_coursework_alternative
+
+# ========================================
+# ADVANCED COURSES RULES
+# ========================================
+
+- rule: Provide ECO590 Quantitative Modeling information
+  steps:
+  - intent: ask_eco590_quantitative
+  - action: utter_eco590_quantitative
+
+- rule: Provide ECO592 Advanced Mathematical Economics information
+  steps:
+  - intent: ask_eco592_advanced_math
+  - action: utter_eco592_advanced_math
+
+- rule: Provide ECO593 Advanced Health Economics information
+  steps:
+  - intent: ask_eco593_health_economics
+  - action: utter_eco593_health_economics
+
+- rule: Provide ECO584 Project Evaluation and Analysis information
+  steps:
+  - intent: ask_eco584_project_evaluation
+  - action: utter_eco584_project_evaluation
+
+- rule: Provide ECO585 Applied Cost Benefit Analysis information
+  steps:
+  - intent: ask_eco585_cost_benefit
+  - action: utter_eco585_cost_benefit
+
+# ========================================
+# PROGRAM POLICIES & REQUIREMENTS RULES
+# ========================================
+
+- rule: Provide MSS Economics prerequisites information
+  steps:
+  - intent: ask_mss_eco_prerequisites
+  - action: utter_mss_eco_prerequisites
+
+- rule: Provide MSS Economics 600-level requirement
+  steps:
+  - intent: ask_mss_eco_600level_requirement
+  - action: utter_mss_eco_600level_requirement
+
+- rule: Provide MSS Economics mixing specializations information
+  steps:
+  - intent: ask_mss_eco_mixing_specializations
+  - action: utter_mss_eco_mixing_specializations
+
+- rule: Provide general vs specialization track comparison
+  steps:
+  - intent: ask_mss_eco_general_vs_specialization
+  - action: utter_mss_eco_general_vs_specialization
+
+- rule: Provide cross-listed courses information
+  steps:
+  - intent: ask_mss_eco_cross_listed_courses
+  - action: utter_mss_eco_cross_listed_courses
+
+- rule: Provide MSS Economics career opportunities
+  steps:
+  - intent: ask_mss_eco_career_opportunities
+  - action: utter_mss_eco_career_opportunities
+
+- rule: Provide MSS Economics quantitative skills information
+  steps:
+  - intent: ask_mss_eco_quantitative_skills
+  - action: utter_mss_eco_quantitative_skills
+
+- rule: Provide MSS Economics applied courses information
+  steps:
+  - intent: ask_mss_eco_applied_courses
+  - action: utter_mss_eco_applied_courses
+
+- rule: Provide MSS Economics policy-focused courses
+  steps:
+  - intent: ask_mss_eco_policy_courses
+  - action: utter_mss_eco_policy_courses
+
+
+
+
+# ========================================
+# PROGRAM OVERVIEW RULES
+# ========================================
+
+- rule: Provide Bachelor CSE program overview
+  steps:
+  - intent: ask_bachelor_cse_overview
+  - action: utter_bachelor_cse_overview
+
+- rule: Provide Bachelor CSE total credits
+  steps:
+  - intent: ask_bachelor_cse_total_credits
+  - action: utter_bachelor_cse_total_credits
+
+- rule: Provide Bachelor CSE program structure
+  steps:
+  - intent: ask_bachelor_cse_program_structure
+  - action: utter_bachelor_cse_program_structure
+
+- rule: Provide Bachelor CSE duration
+  steps:
+  - intent: ask_bachelor_cse_duration
+  - action: utter_bachelor_cse_duration
+
+- rule: Provide Bachelor CSE core courses
+  steps:
+  - intent: ask_bachelor_cse_core_courses
+  - action: utter_bachelor_cse_core_courses
+
+- rule: Provide Bachelor CSE electives
+  steps:
+  - intent: ask_bachelor_cse_electives
+  - action: utter_bachelor_cse_electives
+
+- rule: Provide Bachelor CSE capstone information
+  steps:
+  - intent: ask_bachelor_cse_capstone
+  - action: utter_bachelor_cse_capstone
+
+# ========================================
+# PROGRAM OBJECTIVES & OUTCOMES RULES
+# ========================================
+
+- rule: Provide Bachelor CSE vision
+  steps:
+  - intent: ask_bachelor_cse_vision
+  - action: utter_bachelor_cse_vision
+
+- rule: Provide Bachelor CSE mission
+  steps:
+  - intent: ask_bachelor_cse_mission
+  - action: utter_bachelor_cse_mission
+
+- rule: Provide Bachelor CSE PEOs
+  steps:
+  - intent: ask_bachelor_cse_peos
+  - action: utter_bachelor_cse_peos
+
+- rule: Provide Bachelor CSE program outcomes
+  steps:
+  - intent: ask_bachelor_cse_program_outcomes
+  - action: utter_bachelor_cse_program_outcomes
+
+- rule: Provide Bachelor CSE knowledge profiles
+  steps:
+  - intent: ask_bachelor_cse_knowledge_profiles
+  - action: utter_bachelor_cse_knowledge_profiles
+
+- rule: Provide Bachelor CSE engineering problems
+  steps:
+  - intent: ask_bachelor_cse_engineering_problems
+  - action: utter_bachelor_cse_engineering_problems
+
+- rule: Provide Bachelor CSE engineering activities
+  steps:
+  - intent: ask_bachelor_cse_engineering_activities
+  - action: utter_bachelor_cse_engineering_activities
+
+# ========================================
+# FIRST YEAR COURSE RULES
+# ========================================
+
+- rule: Provide Bachelor CSE first year information
+  steps:
+  - intent: ask_bachelor_cse_first_year
+  - action: utter_bachelor_cse_first_year
+
+- rule: Provide ENG101 Basic English course
+  steps:
+  - intent: ask_eng101_basic_english
+  - action: utter_eng101_basic_english
+
+- rule: Provide MAT101 Calculus course
+  steps:
+  - intent: ask_mat101_calculus
+  - action: utter_mat101_calculus
+
+- rule: Provide CSE103 Structured Programming course
+  steps:
+  - intent: ask_cse103_programming
+  - action: utter_cse103_programming
+
+- rule: Provide CHE109 Engineering Chemistry course
+  steps:
+  - intent: ask_che109_chemistry
+  - action: utter_che109_chemistry
+
+- rule: Provide Bachelor CSE first year semester 2
+  steps:
+  - intent: ask_bachelor_cse_first_year_semester2
+  - action: utter_bachelor_cse_first_year_semester2
+
+- rule: Provide ENG102 Composition and Communication
+  steps:
+  - intent: ask_eng102_composition
+  - action: utter_eng102_composition
+
+- rule: Provide MAT102 Differential Equations
+  steps:
+  - intent: ask_mat102_differential_equations
+  - action: utter_mat102_differential_equations
+
+- rule: Provide CSE106 Discrete Mathematics
+  steps:
+  - intent: ask_cse106_discrete_math
+  - action: utter_cse106_discrete_math
+
+- rule: Provide Bachelor CSE first year semester 3
+  steps:
+  - intent: ask_bachelor_cse_first_year_semester3
+  - action: utter_bachelor_cse_first_year_semester3
+
+- rule: Provide PHY109 Engineering Physics-I
+  steps:
+  - intent: ask_phy109_physics
+  - action: utter_phy109_physics
+
+- rule: Provide MAT104 Geometry and Vector Analysis
+  steps:
+  - intent: ask_mat104_geometry_vector
+  - action: utter_mat104_geometry_vector
+
+- rule: Provide CSE110 Object Oriented Programming
+  steps:
+  - intent: ask_cse110_oop
+  - action: utter_cse110_oop
+
+# ========================================
+# SECOND YEAR COURSE RULES
+# ========================================
+
+- rule: Provide Bachelor CSE second year information
+  steps:
+  - intent: ask_bachelor_cse_second_year
+  - action: utter_bachelor_cse_second_year
+
+- rule: Provide Bachelor CSE second year semester 1
+  steps:
+  - intent: ask_bachelor_cse_second_year_semester1
+  - action: utter_bachelor_cse_second_year_semester1
+
+- rule: Provide GEN226 Emergence of Bangladesh
+  steps:
+  - intent: ask_gen226_bangladesh
+  - action: utter_gen226_bangladesh
+
+- rule: Provide STA102 Statistics and Probability
+  steps:
+  - intent: ask_sta102_statistics
+  - action: utter_sta102_statistics
+
+- rule: Provide CSE200 Engineering Drawing
+  steps:
+  - intent: ask_cse200_engineering_drawing
+  - action: utter_cse200_engineering_drawing
+
+- rule: Provide CSE209 Electrical Circuits
+  steps:
+  - intent: ask_cse209_electrical_circuits
+  - action: utter_cse209_electrical_circuits
+
+- rule: Provide Bachelor CSE second year semester 2
+  steps:
+  - intent: ask_bachelor_cse_second_year_semester2
+  - action: utter_bachelor_cse_second_year_semester2
+
+- rule: Provide MAT205 Linear Algebra
+  steps:
+  - intent: ask_mat205_linear_algebra
+  - action: utter_mat205_linear_algebra
+
+- rule: Provide CSE207 Data Structures
+  steps:
+  - intent: ask_cse207_data_structures
+  - action: utter_cse207_data_structures
+
+- rule: Provide CSE251 Electronic Circuits
+  steps:
+  - intent: ask_cse251_electronic_circuits
+  - action: utter_cse251_electronic_circuits
+
+- rule: Provide Bachelor CSE second year semester 3
+  steps:
+  - intent: ask_bachelor_cse_second_year_semester3
+  - action: utter_bachelor_cse_second_year_semester3
+
+- rule: Provide PHY209 Engineering Physics-II
+  steps:
+  - intent: ask_phy209_physics2
+  - action: utter_phy209_physics2
+
+- rule: Provide CSE325 Operating Systems
+  steps:
+  - intent: ask_cse325_operating_systems
+  - action: utter_cse325_operating_systems
+
+# ========================================
+# THIRD YEAR COURSE RULES
+# ========================================
+
+- rule: Provide Bachelor CSE third year information
+  steps:
+  - intent: ask_bachelor_cse_third_year
+  - action: utter_bachelor_cse_third_year
+
+- rule: Provide CSE246 Algorithms
+  steps:
+  - intent: ask_cse246_algorithms
+  - action: utter_cse246_algorithms
+
+- rule: Provide CSE302 Database Systems
+  steps:
+  - intent: ask_cse302_database
+  - action: utter_cse302_database
+
+- rule: Provide Bachelor CSE third year semester 2
+  steps:
+  - intent: ask_bachelor_cse_third_year_semester2
+  - action: utter_bachelor_cse_third_year_semester2
+
+- rule: Provide CSE345 Digital Logic Design
+  steps:
+  - intent: ask_cse345_digital_logic
+  - action: utter_cse345_digital_logic
+
+- rule: Provide CSE347 Information Systems
+  steps:
+  - intent: ask_cse347_information_systems
+  - action: utter_cse347_information_systems
+
+- rule: Provide Bachelor CSE third year semester 3
+  steps:
+  - intent: ask_bachelor_cse_third_year_semester3
+  - action: utter_bachelor_cse_third_year_semester3
+
+- rule: Provide CSE360 Computer Architecture
+  steps:
+  - intent: ask_cse360_computer_architecture
+  - action: utter_cse360_computer_architecture
+
+- rule: Provide CSE405 Computer Networks
+  steps:
+  - intent: ask_cse405_networks
+  - action: utter_cse405_networks
+
+# ========================================
+# FOURTH YEAR COURSE RULES
+# ========================================
+
+- rule: Provide Bachelor CSE fourth year information
+  steps:
+  - intent: ask_bachelor_cse_fourth_year
+  - action: utter_bachelor_cse_fourth_year
+
+- rule: Provide Bachelor CSE fourth year semester 1
+  steps:
+  - intent: ask_bachelor_cse_fourth_year_semester1
+  - action: utter_bachelor_cse_fourth_year_semester1
+
+- rule: Provide CSE407 Green Computing
+  steps:
+  - intent: ask_cse407_green_computing
+  - action: utter_cse407_green_computing
+
+- rule: Provide Bachelor CSE fourth year semester 2
+  steps:
+  - intent: ask_bachelor_cse_fourth_year_semester2
+  - action: utter_bachelor_cse_fourth_year_semester2
+
+- rule: Provide CSE487 Cyber Security, Ethics and Law
+  steps:
+  - intent: ask_cse487_cybersecurity
+  - action: utter_cse487_cybersecurity
+
+- rule: Provide Bachelor CSE fourth year semester 3
+  steps:
+  - intent: ask_bachelor_cse_fourth_year_semester3
+  - action: utter_bachelor_cse_fourth_year_semester3
+
+- rule: Provide CSE495 IT Project Management
+  steps:
+  - intent: ask_cse495_project_management
+  - action: utter_cse495_project_management
+
+# ========================================
+# SPECIALIZATIONS RULES
+# ========================================
+
+- rule: Provide Bachelor CSE specializations
+  steps:
+  - intent: ask_bachelor_cse_specializations
+  - action: utter_bachelor_cse_specializations
+
+- rule: Provide Data Science specialization
+  steps:
+  - intent: ask_bachelor_cse_data_science_major
+  - action: utter_bachelor_cse_data_science_major
+
+- rule: Provide Software Engineering specialization
+  steps:
+  - intent: ask_bachelor_cse_software_engineering_major
+  - action: utter_bachelor_cse_software_engineering_major
+
+- rule: Provide Networking specialization
+  steps:
+  - intent: ask_bachelor_cse_networking_major
+  - action: utter_bachelor_cse_networking_major
+
+- rule: Provide Hardware Engineering specialization
+  steps:
+  - intent: ask_bachelor_cse_hardware_major
+  - action: utter_bachelor_cse_hardware_major
+
+# ========================================
+# MAJOR-SPECIFIC COURSE RULES
+# ========================================
+
+- rule: Provide CSE303 Statistics for Data Science
+  steps:
+  - intent: ask_cse303_data_science_stats
+  - action: utter_cse303_data_science_stats
+
+- rule: Provide CSE366 Artificial Intelligence
+  steps:
+  - intent: ask_cse366_artificial_intelligence
+  - action: utter_cse366_artificial_intelligence
+
+- rule: Provide CSE412 Software Engineering
+  steps:
+  - intent: ask_cse412_software_engineering
+  - action: utter_cse412_software_engineering
+
+- rule: Provide CSE430 Software Testing and QA
+  steps:
+  - intent: ask_cse430_testing_qa
+  - action: utter_cse430_testing_qa
+
+- rule: Provide CSE350 Data Communications
+  steps:
+  - intent: ask_cse350_data_communications
+  - action: utter_cse350_data_communications
+
+- rule: Provide CSE432 Digital Signal Processing
+  steps:
+  - intent: ask_cse432_signal_processing
+  - action: utter_cse432_signal_processing
+
+- rule: Provide CSE355 Digital System Design
+  steps:
+  - intent: ask_cse355_digital_systems
+  - action: utter_cse355_digital_systems
+
+- rule: Provide CSE442 Microprocessors
+  steps:
+  - intent: ask_cse442_microprocessors
+  - action: utter_cse442_microprocessors
+
+# ========================================
+# ELECTIVE COURSE RULES
+# ========================================
+
+- rule: Provide CSE225 Numerical Methods
+  steps:
+  - intent: ask_cse225_numerical_methods
+  - action: utter_cse225_numerical_methods
+
+- rule: Provide CSE313 Theory of Computations
+  steps:
+  - intent: ask_cse313_theory_computation
+  - action: utter_cse313_theory_computation
+
+- rule: Provide CSE460 Cryptography
+  steps:
+  - intent: ask_cse460_cryptography
+  - action: utter_cse460_cryptography
+
+- rule: Provide CSE471 Compiler Design
+  steps:
+  - intent: ask_cse471_compiler_design
+  - action: utter_cse471_compiler_design
+
+- rule: Provide CSE483 Graph Theory
+  steps:
+  - intent: ask_cse483_graph_theory
+  - action: utter_cse483_graph_theory
+
+- rule: Provide CSE484 Computational Geometry
+  steps:
+  - intent: ask_cse484_computational_geometry
+  - action: utter_cse484_computational_geometry
+
+# ========================================
+# GENERAL EDUCATION RULES
+# ========================================
+
+- rule: Provide general education courses information
+  steps:
+  - intent: ask_bachelor_cse_general_education
+  - action: utter_bachelor_cse_general_education
+
+
+- rule: Provide GEN203 Environment course
+  steps:
+  - intent: ask_gen203_environment
+  - action: utter_gen203_environment
+
+- rule: Provide general education options
+  steps:
+  - intent: ask_general_education_options
+  - action: utter_general_education_options
+
+# ========================================
+# SEMESTER INFORMATION RULES
+# ========================================
+
+- rule: Provide semester credits information
+  steps:
+  - intent: ask_bachelor_cse_semester_credits
+  - action: utter_bachelor_cse_semester_credits
+
+- rule: Provide courses per semester
+  steps:
+  - intent: ask_bachelor_cse_semester_courses
+  - action: utter_bachelor_cse_semester_courses
+
+- rule: Provide prerequisites information
+  steps:
+  - intent: ask_bachelor_cse_prerequisites
+  - action: utter_bachelor_cse_prerequisites
+
+- rule: Provide course sequence information
+  steps:
+  - intent: ask_bachelor_cse_course_sequence
+  - action: utter_bachelor_cse_course_sequence
+
+# ========================================
+# SKILLS & LEARNING OUTCOME RULES
+# ========================================
+
+- rule: Provide skills developed in program
+  steps:
+  - intent: ask_bachelor_cse_skills_developed
+  - action: utter_bachelor_cse_skills_developed
+
+- rule: Provide teamwork experience information
+  steps:
+  - intent: ask_bachelor_cse_teamwork
+  - action: utter_bachelor_cse_teamwork
+
+- rule: Provide research experience information
+  steps:
+  - intent: ask_bachelor_cse_research
+  - action: utter_bachelor_cse_research
+
+- rule: Provide ethical training information
+  steps:
+  - intent: ask_bachelor_cse_ethical_training
+  - action: utter_bachelor_cse_ethical_training
+
+- rule: Provide communication skills training
+  steps:
+  - intent: ask_bachelor_cse_communication
+  - action: utter_bachelor_cse_communication
+
+# ========================================
+# CAREER OPPORTUNITY RULES
+# ========================================
+
+- rule: Provide career paths information
+  steps:
+  - intent: ask_bachelor_cse_career_paths
+  - action: utter_bachelor_cse_career_paths
+
+- rule: Provide entrepreneurship opportunities
+  steps:
+  - intent: ask_bachelor_cse_entrepreneurship
+  - action: utter_bachelor_cse_entrepreneurship
+
+
+# ========================================
+# PRACTICAL INFORMATION RULES
+# ========================================
+
+- rule: Provide admission information
+  steps:
+  - intent: ask_bachelor_cse_admission
+  - action: utter_bachelor_cse_admission
+
+- rule: Provide practical tools information
+  steps:
+  - intent: ask_bachelor_cse_practical_tools
+  - action: utter_bachelor_cse_practical_tools
+
+- rule: Provide internship opportunities
+  steps:
+  - intent: ask_bachelor_cse_internships
+  - action: utter_bachelor_cse_internships
+
+
+
+
+# ========================================
+# DEPARTMENT PROGRAMS RULES
+# ========================================
+
+- rule: Provide CSE programs information
+  steps:
+    - intent: ask_cse_programs
+    - action: utter_cse_programs
+
+- rule: Provide EEE programs information
+  steps:
+    - intent: ask_eee_programs
+    - action: utter_eee_programs
+
+- rule: Provide Civil Engineering programs information
+  steps:
+    - intent: ask_ce_programs
+    - action: utter_ce_programs
+
+- rule: Provide Math and Physics programs information
+  steps:
+    - intent: ask_math_physics_programs
+    - action: utter_math_physics_programs
+
+- rule: Provide BBA programs information
+  steps:
+    - intent: ask_bba_programs
+    - action: utter_bba_programs
+
+- rule: Provide Economics programs information
+  steps:
+    - intent: ask_economics_programs
+    - action: utter_economics_programs
+
+- rule: Provide English programs information
+  steps:
+    - intent: ask_english_programs
+    - action: utter_english_programs
+
+- rule: Provide Law programs information
+  steps:
+    - intent: ask_law_programs
+    - action: utter_law_programs
+
+- rule: Provide Media programs information
+  steps:
+    - intent: ask_media_programs
+    - action: utter_media_programs
+
+- rule: Provide Sociology programs information
+  steps:
+    - intent: ask_sociology_programs
+    - action: utter_sociology_programs
+
+- rule: Provide Politics programs information
+  steps:
+    - intent: ask_politics_programs
+    - action: utter_politics_programs
+
+- rule: Provide IER programs information
+  steps:
+    - intent: ask_ier_programs
+    - action: utter_ier_programs
+
+- rule: Provide Pharmacy programs information
+  steps:
+    - intent: ask_pharmacy_programs
+    - action: utter_pharmacy_programs
+
+
+
+
+- rule: Provide Act101 Financial Accounting information
+  steps:
+    - intent: ask_act101_financial_accounting
+    - action: utter_act101_financial_accounting
+
+- rule: Provide Act201 Management Accounting information
+  steps:
+    - intent: ask_act201_management_accounting
+    - action: utter_act201_management_accounting
+
+- rule: Provide Act Courses Ba information
+  steps:
+    - intent: ask_act_courses_ba
+    - action: utter_act_courses_ba
+
+- rule: Provide Ba Business Foundation information
+  steps:
+    - intent: ask_ba_business_foundation
+    - action: utter_ba_business_foundation
+
+- rule: Provide Ba Core Courses information
+  steps:
+    - intent: ask_ba_core_courses
+    - action: utter_ba_core_courses
+
+- rule: Provide Ba Duration information
+  steps:
+    - intent: ask_ba_duration
+    - action: utter_ba_duration
+
+- rule: Provide Ba Program Overview information
+  steps:
+    - intent: ask_ba_program_overview
+    - action: utter_ba_program_overview
+
+- rule: Provide Ba Program Structure information
+  steps:
+    - intent: ask_ba_program_structure
+    - action: utter_ba_program_structure
+
+- rule: Provide Ba Total Credits information
+  steps:
+    - intent: ask_ba_total_credits
+    - action: utter_ba_total_credits
+
+- rule: Provide Bachelor Cse First Year Semester1 information
+  steps:
+    - intent: ask_bachelor_cse_first_year_semester1
+    - action: utter_bachelor_cse_first_year_semester1
+
+- rule: Provide Bus101 Introduction information
+  steps:
+    - intent: ask_bus101_introduction
+    - action: utter_bus101_introduction
+
+- rule: Provide Bus231 Business Communication information
+  steps:
+    - intent: ask_bus231_business_communication
+    - action: utter_bus231_business_communication
+
+- rule: Provide Bus301 Business Ethics information
+  steps:
+    - intent: ask_bus301_business_ethics
+    - action: utter_bus301_business_ethics
+
+- rule: Provide Bus498 Internship information
+  steps:
+    - intent: ask_bus498_internship
+    - action: utter_bus498_internship
+
+
+- rule: Provide Cse101 Intro Computers information
+  steps:
+    - intent: ask_cse101_intro_computers
+    - action: utter_cse101_intro_computers
+
+- rule: Provide Cse102 Intro Computers2 information
+  steps:
+    - intent: ask_cse102_intro_computers2
+    - action: utter_cse102_intro_computers2
+
+- rule: Provide Cse Courses Ba information
+  steps:
+    - intent: ask_cse_courses_ba
+    - action: utter_cse_courses_ba
+
+- rule: Provide Eco101 Microeconomics information
+  steps:
+    - intent: ask_eco101_microeconomics
+    - action: utter_eco101_microeconomics
+
+- rule: Provide Eco102 Macroeconomics information
+  steps:
+    - intent: ask_eco102_macroeconomics
+    - action: utter_eco102_macroeconomics
+
+- rule: Provide Eco104 Stats1 information
+  steps:
+    - intent: ask_eco104_stats1
+    - action: utter_eco104_stats1
+
+- rule: Provide Eco200 Agricultural information
+  steps:
+    - intent: ask_eco200_agricultural
+    - action: utter_eco200_agricultural
+
+- rule: Provide Eco204 Stats2 information
+  steps:
+    - intent: ask_eco204_stats2
+    - action: utter_eco204_stats2
+
+- rule: Provide Eco220 Behavioral information
+  steps:
+    - intent: ask_eco220_behavioral
+    - action: utter_eco220_behavioral
+
+- rule: Provide Eco260 Environmental information
+  steps:
+    - intent: ask_eco260_environmental
+    - action: utter_eco260_environmental
+
+- rule: Provide Eco Courses Ba information
+  steps:
+    - intent: ask_eco_courses_ba
+    - action: utter_eco_courses_ba
+
+- rule: Provide Eco Statistics information
+  steps:
+    - intent: ask_eco_statistics
+    - action: utter_eco_statistics
+
+- rule: Provide Eng100 Oral Communication information
+  steps:
+    - intent: ask_eng100_oral_communication
+    - action: utter_eng100_oral_communication
+
+- rule: Provide Eng Courses Ba information
+  steps:
+    - intent: ask_eng_courses_ba
+    - action: utter_eng_courses_ba
+
+- rule: Provide Fin101 Principles Finance information
+  steps:
+    - intent: ask_fin101_principles_finance
+    - action: utter_fin101_principles_finance
+
+- rule: Provide Fin201 Business Finance information
+  steps:
+    - intent: ask_fin201_business_finance
+    - action: utter_fin201_business_finance
+
+- rule: Provide Geb101 Basic Biology information
+  steps:
+    - intent: ask_geb101_basic_biology
+    - action: utter_geb101_basic_biology
+
+- rule: Provide Geb103 Cell Biology information
+  steps:
+    - intent: ask_geb103_cell_biology
+    - action: utter_geb103_cell_biology
+
+- rule: Provide Geb Courses Ba information
+  steps:
+    - intent: ask_geb_courses_ba
+    - action: utter_geb_courses_ba
+
+- rule: Provide Gen201 Bangladesh Studies information
+  steps:
+    - intent: ask_gen201_bangladesh_studies
+    - action: utter_gen201_bangladesh_studies
+
+- rule: Provide Gen202 Eastern Culture information
+  steps:
+    - intent: ask_gen202_eastern_culture
+    - action: utter_gen202_eastern_culture
+
+- rule: Provide Gen204 Western Thought information
+  steps:
+    - intent: ask_gen204_western_thought
+    - action: utter_gen204_western_thought
+
+- rule: Provide Gen205 Psychology information
+  steps:
+    - intent: ask_gen205_psychology
+    - action: utter_gen205_psychology
+
+- rule: Provide Gen206 Sociology information
+  steps:
+    - intent: ask_gen206_sociology
+    - action: utter_gen206_sociology
+
+- rule: Provide Gen207 Industrial Psychology information
+  steps:
+    - intent: ask_gen207_industrial_psychology
+    - action: utter_gen207_industrial_psychology
+
+- rule: Provide Gen208 Philosophy information
+  steps:
+    - intent: ask_gen208_philosophy
+    - action: utter_gen208_philosophy
+
+- rule: Provide Gen209 Social Psychology information
+  steps:
+    - intent: ask_gen209_social_psychology
+    - action: utter_gen209_social_psychology
+
+- rule: Provide Gen210 International Relations information
+  steps:
+    - intent: ask_gen210_international_relations
+    - action: utter_gen210_international_relations
+
+- rule: Provide Gen211 Journalism Media information
+  steps:
+    - intent: ask_gen211_journalism_media
+    - action: utter_gen211_journalism_media
+
+- rule: Provide Gen212 Women Development information
+  steps:
+    - intent: ask_gen212_women_development
+    - action: utter_gen212_women_development
+
+- rule: Provide Gen213 German Language information
+  steps:
+    - intent: ask_gen213_german_language
+    - action: utter_gen213_german_language
+
+- rule: Provide Gen214 Development Studies information
+  steps:
+    - intent: ask_gen214_development_studies
+    - action: utter_gen214_development_studies
+
+- rule: Provide Gen215 French Language information
+  steps:
+    - intent: ask_gen215_french_language
+    - action: utter_gen215_french_language
+
+- rule: Provide Gen216 Spanish Language information
+  steps:
+    - intent: ask_gen216_spanish_language
+    - action: utter_gen216_spanish_language
+
+- rule: Provide Gen217 Chinese Language information
+  steps:
+    - intent: ask_gen217_chinese_language
+    - action: utter_gen217_chinese_language
+
+- rule: Provide Gen218 Arabic Language information
+  steps:
+    - intent: ask_gen218_arabic_language
+    - action: utter_gen218_arabic_language
+
+- rule: Provide Gen220 Public Relations information
+  steps:
+    - intent: ask_gen220_public_relations
+    - action: utter_gen220_public_relations
+
+- rule: Provide Gen221 Globalization information
+  steps:
+    - intent: ask_gen221_globalization
+    - action: utter_gen221_globalization
+
+- rule: Provide Gen223 Security Studies information
+  steps:
+    - intent: ask_gen223_security_studies
+    - action: utter_gen223_security_studies
+
+- rule: Provide Gen224 Bangla Language information
+  steps:
+    - intent: ask_gen224_bangla_language
+    - action: utter_gen224_bangla_language
+
+- rule: Provide Gen225 Demography Statistics information
+  steps:
+    - intent: ask_gen225_demography_statistics
+    - action: utter_gen225_demography_statistics
+
+- rule: Provide Gen239 Professional Ethics information
+  steps:
+    - intent: ask_gen239_professional_ethics
+    - action: utter_gen239_professional_ethics
+
+- rule: Provide Gen301 Pr Relations information
+  steps:
+    - intent: ask_gen301_pr_relations
+    - action: utter_gen301_pr_relations
+
+- rule: Provide Gen302 Development information
+  steps:
+    - intent: ask_gen302_development
+    - action: utter_gen302_development
+
+- rule: Provide Gen303 Globalization Identity information
+  steps:
+    - intent: ask_gen303_globalization_identity
+    - action: utter_gen303_globalization_identity
+
+- rule: Provide Gen Courses Ba information
+  steps:
+    - intent: ask_gen_courses_ba
+    - action: utter_gen_courses_ba
+
+- rule: Provide General Education Electives information
+  steps:
+    - intent: ask_general_education_electives
+    - action: utter_general_education_electives
+
+- rule: Provide Hrm301 Human Resource information
+  steps:
+    - intent: ask_hrm301_human_resource
+    - action: utter_hrm301_human_resource
+
+- rule: Provide Isl101 Information Studies information
+  steps:
+    - intent: ask_isl101_information_studies
+    - action: utter_isl101_information_studies
+
+- rule: Provide Isl103 Information Society information
+  steps:
+    - intent: ask_isl103_information_society
+    - action: utter_isl103_information_society
+
+- rule: Provide Isl Courses Ba information
+  steps:
+    - intent: ask_isl_courses_ba
+    - action: utter_isl_courses_ba
+
+- rule: Provide Law101 Contract information
+  steps:
+    - intent: ask_law101_contract
+    - action: utter_law101_contract
+
+- rule: Provide Law102 Muslim Law information
+  steps:
+    - intent: ask_law102_muslim_law
+    - action: utter_law102_muslim_law
+
+- rule: Provide Law103 Contract2 information
+  steps:
+    - intent: ask_law103_contract2
+    - action: utter_law103_contract2
+
+- rule: Provide Law104 Muslim Law2 information
+  steps:
+    - intent: ask_law104_muslim_law2
+    - action: utter_law104_muslim_law2
+
+- rule: Provide Law105 Statutes information
+  steps:
+    - intent: ask_law105_statutes
+    - action: utter_law105_statutes
+
+- rule: Provide Law106 Constitutional information
+  steps:
+    - intent: ask_law106_constitutional
+    - action: utter_law106_constitutional
+
+- rule: Provide Law107 Bangladesh Legal information
+  steps:
+    - intent: ask_law107_bangladesh_legal
+    - action: utter_law107_bangladesh_legal
+
+- rule: Provide Law108 Administrative information
+  steps:
+    - intent: ask_law108_administrative
+    - action: utter_law108_administrative
+
+- rule: Provide Law Courses Ba information
+  steps:
+    - intent: ask_law_courses_ba
+    - action: utter_law_courses_ba
+
+- rule: Provide Mat100 College Math information
+  steps:
+    - intent: ask_mat100_college_math
+    - action: utter_mat100_college_math
+
+- rule: Provide Mat110 Business Math1 information
+  steps:
+    - intent: ask_mat110_business_math1
+    - action: utter_mat110_business_math1
+
+- rule: Provide Mat211 Business Math2 information
+  steps:
+    - intent: ask_mat211_business_math2
+    - action: utter_mat211_business_math2
+
+- rule: Provide Mat Courses Ba information
+  steps:
+    - intent: ask_mat_courses_ba
+    - action: utter_mat_courses_ba
+
+- rule: Provide Mgt101 Principles Management information
+  steps:
+    - intent: ask_mgt101_principles_management
+    - action: utter_mgt101_principles_management
+
+- rule: Provide Mgt251 Organizational Behavior information
+  steps:
+    - intent: ask_mgt251_organizational_behavior
+    - action: utter_mgt251_organizational_behavior
+
+- rule: Provide Mgt321 Industrial Management information
+  steps:
+    - intent: ask_mgt321_industrial_management
+    - action: utter_mgt321_industrial_management
+
+- rule: Provide Mgt337 Operations information
+  steps:
+    - intent: ask_mgt337_operations
+    - action: utter_mgt337_operations
+
+- rule: Provide Mgt Courses Ba information
+  steps:
+    - intent: ask_mgt_courses_ba
+    - action: utter_mgt_courses_ba
+
+- rule: Provide Ms Dsa Anomaly Detection information
+  steps:
+    - intent: ask_ms_dsa_anomaly_detection
+    - action: utter_ms_dsa_anomaly_detection
+
+- rule: Provide Ms Dsa Categorical Models information
+  steps:
+    - intent: ask_ms_dsa_categorical_models
+    - action: utter_ms_dsa_categorical_models
+
+- rule: Provide Ms Dsa Climate Prediction information
+  steps:
+    - intent: ask_ms_dsa_climate_prediction
+    - action: utter_ms_dsa_climate_prediction
+
+- rule: Provide Ms Dsa Cluster Analysis information
+  steps:
+    - intent: ask_ms_dsa_cluster_analysis
+    - action: utter_ms_dsa_cluster_analysis
+
+- rule: Provide Ms Dsa Computer Vision information
+  steps:
+    - intent: ask_ms_dsa_computer_vision
+    - action: utter_ms_dsa_computer_vision
+
+- rule: Provide Ms Dsa Cross Validation information
+  steps:
+    - intent: ask_ms_dsa_cross_validation
+    - action: utter_ms_dsa_cross_validation
+
+- rule: Provide Ms Dsa Ensemble Methods information
+  steps:
+    - intent: ask_ms_dsa_ensemble_methods
+    - action: utter_ms_dsa_ensemble_methods
+
+- rule: Provide Ms Dsa Factor Analysis information
+  steps:
+    - intent: ask_ms_dsa_factor_analysis
+    - action: utter_ms_dsa_factor_analysis
+
+- rule: Provide Ms Dsa Feature Engineering information
+  steps:
+    - intent: ask_ms_dsa_feature_engineering
+    - action: utter_ms_dsa_feature_engineering
+
+- rule: Provide Ms Dsa Incomplete Data information
+  steps:
+    - intent: ask_ms_dsa_incomplete_data
+    - action: utter_ms_dsa_incomplete_data
+
+- rule: Provide Ms Dsa Manova information
+  steps:
+    - intent: ask_ms_dsa_manova
+    - action: utter_ms_dsa_manova
+
+- rule: Provide Ms Dsa Mapreduce information
+  steps:
+    - intent: ask_ms_dsa_mapreduce
+    - action: utter_ms_dsa_mapreduce
+
+
+- rule: Provide Ms Dsa Nlp information
+  steps:
+    - intent: ask_ms_dsa_nlp
+    - action: utter_ms_dsa_nlp
+
+- rule: Provide Ms Dsa Optimization information
+  steps:
+    - intent: ask_ms_dsa_optimization
+    - action: utter_ms_dsa_optimization
+
+- rule: Provide Ms Dsa Panel Data information
+  steps:
+    - intent: ask_ms_dsa_panel_data
+    - action: utter_ms_dsa_panel_data
+
+- rule: Provide Ms Dsa Real World Applications information
+  steps:
+    - intent: ask_ms_dsa_real_world_applications
+    - action: utter_ms_dsa_real_world_applications
+
+- rule: Provide Ms Dsa Reinforcement Learning information
+  steps:
+    - intent: ask_ms_dsa_reinforcement_learning
+    - action: utter_ms_dsa_reinforcement_learning
+
+- rule: Provide Ms Dsa Sql Database information
+  steps:
+    - intent: ask_ms_dsa_sql_database
+    - action: utter_ms_dsa_sql_database
+
+- rule: Provide Ms Dsa Survival Analysis information
+  steps:
+    - intent: ask_ms_dsa_survival_analysis
+    - action: utter_ms_dsa_survival_analysis
+
+- rule: Provide Phy100 Intro Physics information
+  steps:
+    - intent: ask_phy100_intro_physics
+    - action: utter_phy100_intro_physics
+
+- rule: Provide Phy Courses Ba information
+  steps:
+    - intent: ask_phy_courses_ba
+    - action: utter_phy_courses_ba
+
+- rule: Provide Pop201 Health Adolescents information
+  steps:
+    - intent: ask_pop201_health_adolescents
+    - action: utter_pop201_health_adolescents
+
+- rule: Provide Pop202 Public Health information
+  steps:
+    - intent: ask_pop202_public_health
+    - action: utter_pop202_public_health
+
+- rule: Provide Pop203 Population Studies information
+  steps:
+    - intent: ask_pop203_population_studies
+    - action: utter_pop203_population_studies
+
+- rule: Provide Pop Courses Ba information
+  steps:
+    - intent: ask_pop_courses_ba
+    - action: utter_pop_courses_ba
+
+
+- rule: Provide Soc101 Intro Sociology information
+  steps:
+    - intent: ask_soc101_intro_sociology
+    - action: utter_soc101_intro_sociology
+
+- rule: Provide Soc102 Intro Anthropology information
+  steps:
+    - intent: ask_soc102_intro_anthropology
+    - action: utter_soc102_intro_anthropology
+
+- rule: Provide Soc105 Peasant Societies information
+  steps:
+    - intent: ask_soc105_peasant_societies
+    - action: utter_soc105_peasant_societies
+
+- rule: Provide Soc106 Historical Sociology information
+  steps:
+    - intent: ask_soc106_historical_sociology
+    - action: utter_soc106_historical_sociology
+
+- rule: Provide Soc107 Social Problems information
+  steps:
+    - intent: ask_soc107_social_problems
+    - action: utter_soc107_social_problems
+
+- rule: Provide Soc201 Family Marriage information
+  steps:
+    - intent: ask_soc201_family_marriage
+    - action: utter_soc201_family_marriage
+
+- rule: Provide Soc202 Social Psychology information
+  steps:
+    - intent: ask_soc202_social_psychology
+    - action: utter_soc202_social_psychology
+
+- rule: Provide Soc203 Group Development information
+  steps:
+    - intent: ask_soc203_group_development
+    - action: utter_soc203_group_development
+
+- rule: Provide Soc205 Rural Sociology information
+  steps:
+    - intent: ask_soc205_rural_sociology
+    - action: utter_soc205_rural_sociology
+
+- rule: Provide Soc206 Statistics Sociology information
+  steps:
+    - intent: ask_soc206_statistics_sociology
+    - action: utter_soc206_statistics_sociology
+
+- rule: Provide Soc208 Social Inequality information
+  steps:
+    - intent: ask_soc208_social_inequality
+    - action: utter_soc208_social_inequality
+
+- rule: Provide Soc209 Industrial Sociology information
+  steps:
+    - intent: ask_soc209_industrial_sociology
+    - action: utter_soc209_industrial_sociology
+
+- rule: Provide Soc210 Community Culture information
+  steps:
+    - intent: ask_soc210_community_culture
+    - action: utter_soc210_community_culture
+
+- rule: Provide Soc211 Eastern Culture information
+  steps:
+    - intent: ask_soc211_eastern_culture
+    - action: utter_soc211_eastern_culture
+
+- rule: Provide Soc212 Ecology Environment information
+  steps:
+    - intent: ask_soc212_ecology_environment
+    - action: utter_soc212_ecology_environment
+
+- rule: Provide Soc213 Women Development information
+  steps:
+    - intent: ask_soc213_women_development
+    - action: utter_soc213_women_development
+
+- rule: Provide Soc214 Development Studies information
+  steps:
+    - intent: ask_soc214_development_studies
+    - action: utter_soc214_development_studies
+
+- rule: Provide Soc215 Social Relations information
+  steps:
+    - intent: ask_soc215_social_relations
+    - action: utter_soc215_social_relations
+
+- rule: Provide Soc216 Globalization Identity information
+  steps:
+    - intent: ask_soc216_globalization_identity
+    - action: utter_soc216_globalization_identity
+
+- rule: Provide Soc217 Religion Ethnicity information
+  steps:
+    - intent: ask_soc217_religion_ethnicity
+    - action: utter_soc217_religion_ethnicity
+
+- rule: Provide Soc218 Gender Sociology information
+  steps:
+    - intent: ask_soc218_gender_sociology
+    - action: utter_soc218_gender_sociology
+
+- rule: Provide Soc219 Race Ethnicity information
+  steps:
+    - intent: ask_soc219_race_ethnicity
+    - action: utter_soc219_race_ethnicity
+
+- rule: Provide Soc220 Research Methodology information
+  steps:
+    - intent: ask_soc220_research_methodology
+    - action: utter_soc220_research_methodology
+
+- rule: Provide Soc221 Social History information
+  steps:
+    - intent: ask_soc221_social_history
+    - action: utter_soc221_social_history
+
+- rule: Provide Soc310 Organization Sociology information
+  steps:
+    - intent: ask_soc310_organization_sociology
+    - action: utter_soc310_organization_sociology
+
+- rule: Provide Soc Courses Ba information
+  steps:
+    - intent: ask_soc_courses_ba
+    - action: utter_soc_courses_ba
+
+- rule: Provide Total Program Credits information
+  steps:
+    - intent: ask_total_program_credits_cse
+    - action: utter_total_program_credits_cse
+
