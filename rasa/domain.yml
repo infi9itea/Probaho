@@ -1,5 +1,5 @@
 version: "3.1"
-
+#taken from https://github.com/Atkiya/rasabot
 intents:
 
 # ========================================
@@ -1086,7 +1086,7 @@ intents:
 actions:
 
 # ========== BASIC ACTIONS ==========
-
+- action_call_rag
 - action_greet
 
 # ========== TUITION FEES (UNDERGRADUATE) ==========

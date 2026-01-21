@@ -1,17 +1,12 @@
-import os
-import requests
+from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-from typing import Any, Text, Dict, List
-
-RAG_API_URL = os.getenv("RAG_API_URL")
-if not RAG_API_URL:
-    raise RuntimeError("RAG_API_URL environment variable not set")
-
-class ActionRagQuery(Action):
+import requests
+RAG_API_URL = "https://yieldingly-schizophytic-deanna.ngrok-free.dev/rag/query"
+class ActionCallRAG(Action):
 
     def name(self) -> Text:
-        return "action_rag_query"
+        return "action_call_rag"
 
     def run(
         self,
@@ -20,24 +15,24 @@ class ActionRagQuery(Action):
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
 
-        # 1. Get user message
         user_query = tracker.latest_message.get("text")
 
-        # 2. Call RAG API
+        payload = {
+            "query": user_query
+        }
+
         try:
-            response = requests.post(
-                RAG_API_URL,
-                json={"query": user_query},
-                timeout=10
-            )
+            response = requests.post(RAG_API_URL, json=payload, timeout=20)
             response.raise_for_status()
-            data = response.json()
-            answer = data.get("answer", "Sorry, I could not find an answer.")
+            result = response.json()
 
-        except Exception:
-            answer = "Sorry, the information service is currently unavailable."
+            answer = result.get(
+                "answer",
+                "I don't have that information right now."
+            )
 
-        # 3. Send answer back to user
+        except Exception as e:
+            answer = "I'm having trouble accessing university information right now."
+
         dispatcher.utter_message(text=answer)
-
         return []
