@@ -1,38 +1,50 @@
-from typing import Any, Text, Dict, List
+import requests
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-import requests
-RAG_API_URL = "https://yieldingly-schizophytic-deanna.ngrok-free.dev/rag/query"
+RAG_API_URL = "https://YOUR_NGROK_URL/rag/query"
 class ActionCallRAG(Action):
-
-    def name(self) -> Text:
+    def name(self):
         return "action_call_rag"
 
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain):
 
-        user_query = tracker.latest_message.get("text")
+        user_message = tracker.latest_message.get("text")
+
+        if not user_message:
+            dispatcher.utter_message(text="Please ask a question.")
+            return []
 
         payload = {
-            "query": user_query
+            "query": user_message
         }
 
         try:
-            response = requests.post(RAG_API_URL, json=payload, timeout=20)
-            response.raise_for_status()
-            result = response.json()
-
-            answer = result.get(
-                "answer",
-                "I don't have that information right now."
+            response = requests.post(
+                RAG_API_URL,
+                json=payload,
+                timeout=15
             )
 
-        except Exception as e:
-            answer = "I'm having trouble accessing university information right now."
+            if response.status_code != 200:
+                dispatcher.utter_message(
+                    text="Sorry, I'm having trouble retrieving information."
+                )
+                return []
 
-        dispatcher.utter_message(text=answer)
+            data = response.json()
+            answer = data.get("answer", "")
+            confidence = data.get("confidence", 0)
+
+            if confidence < 0.2 or not answer:
+                dispatcher.utter_message(response="utter_no_info")
+            else:
+                dispatcher.utter_message(text=answer)
+
+        except Exception:
+            dispatcher.utter_message(
+                text="The information service is currently unavailable."
+            )
+
         return []
