@@ -14,7 +14,8 @@ intents:
 - mood_unhappy
 - bot_challenge
 - fallback
-
+- admission_query
+- ask_question
 # ========================================
 # UNIVERSITY INFORMATION
 # ========================================

@@ -1,2 +1,2 @@
-rasa-sdk
 requests
+aiohttp
