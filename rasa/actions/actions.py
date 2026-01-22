@@ -2786,12 +2786,9 @@ class ActionPhi3RagAnswer(Action):
             
             logger.info(f"Calling RAG with query: {query[:50]}...")
             
-            response = requests.post(
-                "http://localhost:8000/phi3_rag",
-                json=payload,
-                timeout=500
-            )
-            
+            RAG_API_URL = "https://yieldingly-schizophytic-deanna.ngrok-free.dev/rag/query"
+            response = requests.post(RAG_API_URL, json=payload, timeout=500)
+
             if response.status_code == 200:
                 data = response.json()
                 
