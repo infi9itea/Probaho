@@ -21,7 +21,7 @@ class Retriever:
             device="cuda" if torch.cuda.is_available() else "cpu"
         )
 
-    def retrieve(self, query: str, top_k=6):
+    def retrieve(self, query: str, top_k=25):
         # Use simple similarity search (no score filtering)
         docs = self.vectorstore.similarity_search(query, k=top_k)
         if not docs:

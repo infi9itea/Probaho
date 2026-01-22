@@ -58,10 +58,10 @@ def rag_query(req: QueryRequest):
 
     prompt = f"""<s>[INST] You are a university information assistant. Use ONLY the context below to answer the question. If the answer is not in the context, say "I don't have that information."
 
-Context:
-{context_text}
-
-Question: {req.query} [/INST]"""
+    Context:
+    {context_text}
+    
+    Question: {req.query} [/INST]"""
 
     try:
         answer = generator(prompt)[0]["generated_text"].strip()
