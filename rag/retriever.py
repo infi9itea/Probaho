@@ -2,10 +2,11 @@ import torch
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from sentence_transformers import CrossEncoder
+
 class Retriever:
     def __init__(self, vectorstore_path: str):
         self.embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-L6-v2",
+            model_name="sentence-transformers/all-mpnet-base-v2",
             encode_kwargs={"normalize_embeddings": True}
         )
 
@@ -20,18 +21,13 @@ class Retriever:
             device="cuda" if torch.cuda.is_available() else "cpu"
         )
 
-    def retrieve(self, query: str, top_k=6, min_score=0.3):
-        docs = self.vectorstore.similarity_search_with_score(query, k=top_k)
-
+    def retrieve(self, query: str, top_k=6):
+        # Use simple similarity search (no score filtering)
+        docs = self.vectorstore.similarity_search(query, k=top_k)
         if not docs:
             return []
 
-        # confidence gate
-        best_score = docs[0][1]
-        if best_score < min_score:
-            return []
-
-        texts = [d.page_content for d, _ in docs]
+        texts = [d.page_content for d in docs]
         pairs = [(query, t) for t in texts]
         scores = self.reranker.predict(pairs)
 
