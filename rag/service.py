@@ -1,4 +1,5 @@
 import os
+import time
 from fastapi import FastAPI
 from pydantic import BaseModel
 from retriever import Retriever
@@ -7,7 +8,6 @@ import torch
 import bitsandbytes as bnb
 from huggingface_hub import login
 
-# Authenticate
 HF_TOKEN = os.getenv("HF_TOKEN")
 login(HF_TOKEN)
 
@@ -16,7 +16,6 @@ retriever = Retriever(VECTORSTORE_PATH)
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.3"
 
-# Quantization config
 bnb_config = transformers.BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_quant_type="nf4",
@@ -35,40 +34,59 @@ generator = transformers.pipeline(
     "text-generation",
     model=model,
     tokenizer=tokenizer,
-    max_new_tokens=256,
-    return_full_text=False,  # Only return the answer
+    max_new_tokens=512,
+    return_full_text=False,
     do_sample=False
 )
 
 class QueryRequest(BaseModel):
     query: str
+    top_k: int = 5
 
 app = FastAPI()
 
 @app.post("/rag/query")
 def rag_query(req: QueryRequest):
-    contexts = retriever.retrieve(req.query)
+    start = time.time()
+
+    contexts = retriever.retrieve(req.query, top_k=req.top_k, return_k=5)
     if not contexts:
         return {
-            "answer": "I don't have that information in my database.",
-            "confidence": 0.0
+            "response": "I don't have that information in my database.",
+            "confidence": 0.0,
+            "sources": [],
+            "processing_time": round(time.time() - start, 3)
         }
 
-    context_text = "\n\n".join(contexts)
+    selected = contexts[:3]
+    context_text = "\n\n".join([c["text"] for c in selected])
 
-    prompt = f"""<s>[INST] You are a university information assistant. Use ONLY the context below to answer the question. If the answer is not in the context, say "I don't have that information."
-
-    Context:
-    {context_text}
-    
-    Question: {req.query} [/INST]"""
+    prompt = (
+        "[INST] You are a university information assistant. "
+        "Use ONLY the context below to answer the question. "
+        "If the answer is not in the context, say \"I don't have that information.\" [/INST]\n\n"
+        f"Context:\n{context_text}\n\nQuestion: {req.query}"
+    )
 
     try:
-        answer = generator(prompt)[0]["generated_text"].strip()
+        generated = generator(prompt)[0]["generated_text"].strip()
     except Exception as e:
-        answer = f"Error generating response: {str(e)}"
+        return {
+            "response": f"Error generating response: {str(e)}",
+            "confidence": 0.0,
+            "sources": [c.get("source", "") for c in selected],
+            "processing_time": round(time.time() - start, 3)
+        }
+
+    scores = [c.get("score", 0.0) for c in selected]
+    if scores:
+        confidence = max(0.0, min(1.0, float(max(scores))))
+    else:
+        confidence = 0.5
 
     return {
-        "answer": answer,
-        "confidence": 0.8
+        "response": generated,
+        "confidence": round(confidence, 3),
+        "sources": [c.get("source", "") for c in selected],
+        "processing_time": round(time.time() - start, 3)
     }

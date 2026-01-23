@@ -2839,6 +2839,8 @@ class ActionPhi3RagAnswer(Action):
                 0.0
             )
     
+    # Replace the _send_response confidence branching with this clearer logic:
+
     def _send_response(
         self,
         dispatcher: CollectingDispatcher,
@@ -2848,58 +2850,38 @@ class ActionPhi3RagAnswer(Action):
         processing_time: float
     ):
         """
-        Send response to user with appropriate formatting based on confidence
-        
         Confidence levels:
         - >= 0.7: High confidence - send answer with sources
-        - 0.5-0.7: Medium confidence - send answer with disclaimer
-        - < 0.5: Low confidence - suggest contacting admissions
+        - 0.4-0.7: Medium confidence - send answer with disclaimer
+        - < 0.4: Low confidence - suggest contacting admissions
         """
-        
         if not answer or confidence < 0.4:
-            # Very low confidence - direct to admissions
             dispatcher.utter_message(
                 text=(
                     "I don't have reliable information about this. "
-                    "For accurate details, please contact:\n"
-                    " admissions@ewubd.edu\n"
+                    "For accurate details, please contact:\n admissions@ewubd.edu\n"
                 )
             )
-        
-        elif confidence < 0.2:
-            # Low-medium confidence - answer with strong disclaimer
+            return
+    
+        if confidence < 0.7:
+            # Medium confidence
             dispatcher.utter_message(
-                text=f" {answer}\n\n"
-                     "Note: I'm not entirely confident about this answer. "
-                     "Please verify with admissions@ewubd.edu"
+                text=f"{answer}\n\nNote: I'm not entirely confident about this answer. Please verify with admissions@ewubd.edu"
             )
-        
-        elif confidence < 0.3:
-            # Medium confidence - answer with mild disclaimer
-            dispatcher.utter_message(text=answer)
-            dispatcher.utter_message(
-                text=" For confirmation, you can contact admissions@ewubd.edu"
-            )
-        
         else:
-            # High confidence - send clean answer
+            # High confidence
             dispatcher.utter_message(text=answer)
-            
-            # Add sources for transparency (only show top 2)
-            if sources:
-                unique_sources = sorted(set(sources))[:2]
-                source_names = [s.replace('.json', '').replace('_', ' ').title() 
-                               for s in unique_sources]
-                
-                dispatcher.utter_message(
-                    text=f" Source: {', '.join(source_names)}"
-                )
-        
+    
+        # Add up to top-2 sources for transparency (if provided)
+        if sources:
+            unique_sources = sorted({s for s in sources if s})[:2]
+            if unique_sources:
+                source_names = [s.replace('.json', '').replace('_', ' ').title() for s in unique_sources]
+                dispatcher.utter_message(text=f"Source: {', '.join(source_names)}")
+    
         # Log performance (for monitoring)
-        logger.info(
-            f"Response sent - Confidence: {confidence:.2f}, "
-            f"Time: {processing_time:.2f}s"
-        )
+        logger.info(f"Response sent - Confidence: {confidence:.2f}, Time: {processing_time:.2f}s")
     
     def _build_history(self, tracker: Tracker) -> str:
         """
