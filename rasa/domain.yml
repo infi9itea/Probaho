@@ -1089,7 +1089,7 @@ actions:
 # ========== BASIC ACTIONS ==========
 - action_call_rag
 - action_greet
-
+- action_default_fallback
 # ========== TUITION FEES (UNDERGRADUATE) ==========
 
 - action_tuition_general

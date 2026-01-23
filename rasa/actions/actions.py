@@ -2911,26 +2911,21 @@ class ActionPhi3RagAnswer(Action):
         return "\n".join(reversed(history[-6:]))
 
 
-# class ActionDefaultFallback(Action):
-#     """Fallback to RAG for unrecognized intents"""
-    
-#     def name(self) -> Text:
-#         return "action_default_fallback"
-    
-#     def run(
-#         self,
-#         dispatcher: CollectingDispatcher,
-#         tracker: Tracker,
-#         domain: Dict[Text, Any],
-#     ) -> List[Dict[Text, Any]]:
-        
-#         user_message = tracker.latest_message.get("text", "")
-        
-#         logger.info(f"Fallback triggered for: {user_message}")
-        
-#         # Try RAG for unrecognized intents
-#         rag_action = ActionPhi3RagAnswer()
-#         return rag_action.run(dispatcher, tracker, domain)
+class ActionDefaultFallback(Action):
+    """Fallback to RAG for unrecognized intents"""  
+    def name(self) -> Text:
+        return "action_default_fallback"  
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:      
+        user_message = tracker.latest_message.get("text", "")      
+        logger.info(f"Fallback triggered for: {user_message}")      
+        # Try RAG for unrecognized intents
+        rag_action = ActionPhi3RagAnswer()
+        return rag_action.run(dispatcher, tracker, domain)
 
 
 
@@ -5827,196 +5822,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ActionPhi3RagAnswer(Action):
-    """RAG-powered answer generation using TinyLlama"""
-    
-    def name(self) -> Text:
-        return "action_phi3_rag_answer"
-    
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
-        
-        user_message = tracker.latest_message.get("text", "")
-        
-        if not user_message.strip():
-            dispatcher.utter_message(text="I didn't catch that. Could you please rephrase?")
-            return []
-        
-        # Build conversation history (for future use)
-        history = self._build_history(tracker)
-        
-        # Call RAG service with TinyLlama
-        answer, confidence, sources, processing_time = self._call_rag(user_message)
-        
-        # Send appropriate response based on confidence
-        self._send_response(dispatcher, answer, confidence, sources, processing_time)
-        
-        return []
-    
-    def _call_rag(self, query: str) -> tuple:
-        """
-        Call RAG service (TinyLlama-powered) and return structured response
-        
-        Returns:
-            (answer, confidence, sources, processing_time)
-        """
-        try:
-            # FIXED: Only send what the API accepts
-            payload = {
-                "query": query,
-                "top_k": 5  # Increased for better context
-            }
-            
-            logger.info(f"Calling RAG with query: {query[:50]}...")
-            
-            response = requests.post(
-                RAG_URL = "https://atkiya110-rag-server.hf.space/tinyllama_rag",
-                json=payload,
-                timeout=500
-            )
-            
-            if response.status_code == 200:
-                data = response.json()
-                
-                # FIXED: Use correct field names from FastAPI QueryResponse
-                answer = data.get("response", "")  # NOT "answer"
-                confidence = float(data.get("confidence", 0.0))
-                sources = data.get("sources", [])
-                processing_time = data.get("processing_time", 0.0)
-                
-                logger.info(
-                    f"RAG response received - Confidence: {confidence:.2f}, "
-                    f"Time: {processing_time:.2f}s, Sources: {len(sources)}"
-                )
-                
-                return answer, confidence, sources, processing_time
-            
-            else:
-                logger.error(f"RAG service error: {response.status_code} - {response.text}")
-                return (
-                    "I'm having trouble connecting to my knowledge base.",
-                    0.0,
-                    [],
-                    0.0
-                )
-                
-        except requests.Timeout:
-            logger.error("RAG service timeout")
-            return (
-                "The request is taking too long. Please try again.",
-                0.0,
-                [],
-                0.0
-            )
-        except requests.ConnectionError:
-            logger.error("RAG service connection error")
-            return (
-                "I can't connect to the answer service. Please try again later.",
-                0.0,
-                [],
-                0.0
-            )
-        except Exception as e:
-            logger.exception(f"Unexpected RAG error: {e}")
-            return (
-                "Something went wrong while processing your question.",
-                0.0,
-                [],
-                0.0
-            )
-    
-    def _send_response(
-        self,
-        dispatcher: CollectingDispatcher,
-        answer: str,
-        confidence: float,
-        sources: List[str],
-        processing_time: float
-    ):
-        """
-        Send response to user with appropriate formatting based on confidence
-        
-        Confidence levels:
-        - >= 0.7: High confidence - send answer with sources
-        - 0.5-0.7: Medium confidence - send answer with disclaimer
-        - < 0.5: Low confidence - suggest contacting admissions
-        """
-        
-        if not answer or confidence < 0.4:
-            # Very low confidence - direct to admissions
-            dispatcher.utter_message(
-                text=(
-                    "I don't have reliable information about this. "
-                    "For accurate details, please contact:\n"
-                    " admissions@ewubd.edu\n"
-                )
-            )
-        
-        elif confidence < 0.2:
-            # Low-medium confidence - answer with strong disclaimer
-            dispatcher.utter_message(
-                text=f" {answer}\n\n"
-                     "Note: I'm not entirely confident about this answer. "
-                     "Please verify with admissions@ewubd.edu"
-            )
-        
-        elif confidence < 0.3:
-            # Medium confidence - answer with mild disclaimer
-            dispatcher.utter_message(text=answer)
-            dispatcher.utter_message(
-                text=" For confirmation, you can contact admissions@ewubd.edu"
-            )
-        
-        else:
-            # High confidence - send clean answer
-            dispatcher.utter_message(text=answer)
-            
-            # Add sources for transparency (only show top 2)
-            if sources:
-                unique_sources = sorted(set(sources))[:2]
-                source_names = [s.replace('.json', '').replace('_', ' ').title() 
-                               for s in unique_sources]
-                
-                dispatcher.utter_message(
-                    text=f" Source: {', '.join(source_names)}"
-                )
-        
-        # Log performance (for monitoring)
-        logger.info(
-            f"Response sent - Confidence: {confidence:.2f}, "
-            f"Time: {processing_time:.2f}s"
-        )
-    
-    def _build_history(self, tracker: Tracker) -> str:
-        """
-        Extract last 3 conversation turns (for future use)
-        
-        Note: Current RAG API doesn't use history yet, but keeping
-        this for potential future enhancement
-        """
-        events = tracker.events
-        history = []
-        
-        for event in reversed(events[-12:]):  # Look at more events
-            if event.get("event") == "user":
-                text = event.get("text", "")
-                if text and text.strip():
-                    history.append(f"User: {text}")
-            elif event.get("event") == "bot":
-                text = event.get("text", "")
-                # Skip system messages
-                if text and not text.startswith(("", "", "")):
-                    history.append(f"Bot: {text}")
-            
-            # Stop once we have 3 full exchanges
-            if len(history) >= 6:
-                break
-        
-        return "\n".join(reversed(history[-6:]))
 
 
 # class ActionDefaultFallback(Action):

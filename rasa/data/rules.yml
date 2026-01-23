@@ -1124,6 +1124,10 @@ rules:
   - intent: admission_result
   - action: utter_default
 
+- rule: Respond to unrecognized input via RAG
+  steps:
+    - intent: nlu_fallback
+    - action: action_default_fallback
 # ========================================
 # FACILITIES
 # ========================================
