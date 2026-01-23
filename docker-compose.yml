@@ -1,18 +1,39 @@
-version: "3.8"
+version: "3.9"
 
 services:
   rasa:
     image: rasa/rasa:3.6.2
-    volumes:
-      - ./rasa:/app
     ports:
       - "5005:5005"
-    command: >
-      run --enable-api --cors "*" --debug
+    volumes:
+      - ./rasa:/app
+      - ./rasa/models:/app/models
+    command: run --enable-api --cors "*"
     depends_on:
-      - action_server
+      - rasa_actions
+    networks:
+      - probaho_network
 
-  action_server:
-    build: ./rasa/actions
+  rasa_actions:
+    build:
+      context: ./rasa/actions
+      dockerfile: Dockerfile
     ports:
       - "5055:5055"
+    networks:
+      - probaho_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - rasa
+    networks:
+      - probaho_network
+
+networks:
+  probaho_network:
+    driver: bridge

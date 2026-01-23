@@ -11,7 +11,8 @@
 # https://rasa.com/docs/rasa/custom-actions
 
 action_endpoint:
-  url: "http://host.docker.internal:5055/webhook"
+  url: "http://rasa_actions:5055/webhook"
+
 
 
 
