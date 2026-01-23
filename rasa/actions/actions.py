@@ -6783,6 +6783,3 @@ class ActionShowCredits(Action):
         
         # Only return grouped if we have meaningful groups (more than 1)
         return grouped if len(grouped) > 1 else {}
-
-
-#
