@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Probaho Chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<div id="container">
+
+  <!-- Sidebar / Left panel for decoration / info -->
+  <div id="left-panel">
+    <div id="linenumbers">
+      <script>
+        for (let i = 0; i < 100; i++) {
+          document.write(i + "<br>");
+        }
+      </script>
+    </div>
+  </div>
+
+  <!-- Main chat content -->
+  <div id="main-panel">
+    <div id="header">
+      <h1>PROBAHO Chat</h1>
+    </div>
+
+    <div id="chat-window">
+      <div id="messages"></div>
+    </div>
+
+    <div id="input-area">
+      <input type="text" id="user-input" placeholder="Type a message..." autofocus>
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
