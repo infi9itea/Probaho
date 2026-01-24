@@ -1,44 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Probaho Chat</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Probaho Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Text&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
+<header id="topbar">
+  <div class="tab active">file <span>chat.txt</span></div>
+  <div class="tab">style.css</div>
+  <div class="tab">config.json</div>
+  <div class="spacer"></div>
+  <div class="encoding">UTF-8</div>
+</header>
+
 <div id="container">
 
-  <!-- Sidebar / Left panel for decoration / info -->
-  <div id="left-panel">
-    <div id="linenumbers">
-      <script>
-        for (let i = 0; i < 100; i++) {
-          document.write(i + "<br>");
-        }
-      </script>
-    </div>
-  </div>
+  <!-- Left info panel -->
+  <aside id="side-panel">
+    <p>
+Welcome friend.
 
-  <!-- Main chat content -->
-  <div id="main-panel">
-    <div id="header">
-      <h1>PROBAHO Chat</h1>
-    </div>
+You have staggered into the chatbot.
 
+Ask me anything, or just let the void stare back.
+    </p>
+  </aside>
+
+  <!-- Main chat -->
+  <div id="main">
     <div id="chat-window">
       <div id="messages"></div>
     </div>
 
     <div id="input-area">
-      <input type="text" id="user-input" placeholder="Type a message..." autofocus>
-      <button id="send-btn">Send</button>
+      <div id="line-number">1</div>
+      <textarea id="user-input" rows="1" placeholder="Type here..."></textarea>
     </div>
   </div>
 
 </div>
+
+<footer id="statusbar">
+  <span id="status-left">Neva quit. Neva die.</span>
+  <span id="status-right">0 messages</span>
+</footer>
 
 <script src="app.js"></script>
 </body>

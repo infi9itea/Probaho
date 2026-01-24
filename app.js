@@ -1,39 +1,55 @@
-$(document).ready(function() {
+$(document).ready(function () {
+  let lineCounter = 1;
+  let messageCount = 0;
 
-    function addMessage(text, sender) {
-        const msgDiv = $('<div>').addClass('message ' + sender).text(text);
-        $('#messages').append(msgDiv);
-        $('#chat-window').scrollTop($('#chat-window')[0].scrollHeight);
+  function addMessage(text, sender) {
+    const lines = text.split('\n').length;
+
+    const msgDiv = $('<div>')
+      .addClass('message ' + sender)
+      .attr('data-line', lineCounter)
+      .append($('<span>').text(text));
+
+    $('#messages').append(msgDiv);
+    $('#chat-window').scrollTop($('#chat-window')[0].scrollHeight);
+
+    lineCounter += lines;
+    messageCount++;
+
+    $('#line-number').text(lineCounter);
+    $('#status-right').text(messageCount + ' messages');
+  }
+
+  async function sendMessage() {
+    const message = $('#user-input').val();
+    if (!message.trim()) return;
+
+    addMessage(message, 'user');
+    $('#user-input').val('');
+
+    try {
+      const response = await fetch('http://localhost:8000/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: 'test_user',
+          message: message
+        })
+      });
+
+      const data = await response.json();
+      data.forEach(msg => addMessage(msg.text, 'bot'));
+
+    } catch (err) {
+      addMessage('Error connecting to server.', 'bot');
+      console.error(err);
     }
+  }
 
-    async function sendMessage() {
-        const message = $('#user-input').val();
-        if (!message.trim()) return;
-
-        addMessage(message, 'user');
-        $('#user-input').val('');
-
-        try {
-            const response = await fetch('http://localhost:8000/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ session_id: 'test_user', message: message })
-            });
-            const data = await response.json();
-
-            data.forEach(msg => {
-                addMessage(msg.text, 'bot');
-            });
-
-        } catch (err) {
-            addMessage('Error connecting to server.', 'bot');
-            console.error(err);
-        }
+  $('#user-input').on('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
     }
-
-    $('#send-btn').click(sendMessage);
-    $('#user-input').keypress(function(e) {
-        if (e.which === 13) sendMessage();
-    });
-
+  });
 });
