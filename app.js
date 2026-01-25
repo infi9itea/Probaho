@@ -20,31 +20,33 @@ $(document).ready(function () {
     $('#status-right').text(messageCount + ' messages');
   }
 
-  async function sendMessage() {
-    const message = $('#user-input').val();
-    if (!message.trim()) return;
+  const RASA_URL = "https://promissory-alexander-measurelessly.ngrok-free.dev/webhooks/rest/webhook";
 
-    addMessage(message, 'user');
-    $('#user-input').val('');
+async function sendMessage() {
+  const message = $('#user-input').val();
+  if (!message.trim()) return;
 
-    try {
-      const response = await fetch('http://localhost:8000/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          session_id: 'test_user',
-          message: message
-        })
-      });
+  addMessage(message, 'user');
+  $('#user-input').val('');
 
-      const data = await response.json();
-      data.forEach(msg => addMessage(msg.text, 'bot'));
+  try {
+    const response = await fetch(RASA_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sender: 'user',
+        message: message
+      })
+    });
 
-    } catch (err) {
-      addMessage('Error connecting to server.', 'bot');
-      console.error(err);
-    }
+    const data = await response.json();
+    data.forEach(msg => addMessage(msg.text, 'bot'));
+
+  } catch (err) {
+    addMessage('Error connecting to server.', 'bot');
+    console.error(err);
   }
+}
 
   $('#user-input').on('keydown', function (e) {
     if (e.key === 'Enter' && !e.shiftKey) {
