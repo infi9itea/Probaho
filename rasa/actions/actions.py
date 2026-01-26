@@ -979,7 +979,7 @@ class ActionAdmissionDeadlineGeneral(Action):
         
         # Graduate Programs Section
         message += "\n** Graduate Programs:**\n"
-        for program in dat['graduate_admission']:
+        for program in data['graduate_admission']:
             prog_name = program['program']
             deadline = program['application_deadline']
             message += f"• {prog_name}: {deadline}\n"
@@ -2206,40 +2206,6 @@ class ActionTransportationFacilities(Action):
 # EVENTS ACTIONS
 # ========================================
 
-class ActionEventsWorkshops(Action):
-    def name(self) -> Text:
-        return "action_events_workshops"
-    
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        data = load_events()
-        if not data:
-            dispatcher.utter_message(text="Sorry, events information is unavailable.")
-            return []
-        
-        message = f"**{data['page_info']['title']}**\n\n"
-        for event in data['events_workshops'][:5]:
-            message += f" **{event['date']}**\n**{event['title']}**\n{event.get('description', '')}\n\n"
-        dispatcher.utter_message(text=message)
-        return []
-
-class ActionRecentEvents(Action):
-    def name(self) -> Text:
-        return "action_recent_events"
-    
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        data = load_events()
-        if not data:
-            return []
-        
-        message = "**Recent Events at EWU**\n\n"
-        for event in data['events_workshops'][:3]:
-            message += f" **{event['date']}**\n"
-            message += f"**{event['title']}**\n"
-            message += f"{event.get('description', '')}\n\n"
-        dispatcher.utter_message(text=message)
-        return []
 
 # ========================================
 # FACULTY ACTIONS
@@ -2719,7 +2685,7 @@ class ActionGradingSystem(Action):
         message += f"{grading['description']}\n\n"
         message += "**Grade Scale:**\n"
         for grade in grading['grade_scale']:
-            message += f"- **{grade['letter_grade']}**: {grade['numerical_score']} – {grade['grade_point']} GPA\n"
+            message += f"- **{grade['letter_grade']}**: {grade['numerical_score']} - {grade['grade_point']} GPA\n"
         
         message += "\n**Special Grades:**\n"
         for spec_grade in grading['special_grades']:
@@ -4063,7 +4029,7 @@ class ActionAdmissionDeadlineGeneral(Action):
         
         # Graduate Programs Section
         message += "\n** Graduate Programs:**\n"
-        for program in dat['graduate_admission']:
+        for program in data['graduate_admission']:
             prog_name = program['program']
             deadline = program['application_deadline']
             message += f"• {prog_name}: {deadline}\n"
@@ -5290,40 +5256,6 @@ class ActionTransportationFacilities(Action):
 # EVENTS ACTIONS
 # ========================================
 
-class ActionEventsWorkshops(Action):
-    def name(self) -> Text:
-        return "action_events_workshops"
-    
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        data = load_events()
-        if not data:
-            dispatcher.utter_message(text="Sorry, events information is unavailable.")
-            return []
-        
-        message = f"**{data['page_info']['title']}**\n\n"
-        for event in data['events_workshops'][:5]:
-            message += f" **{event['date']}**\n**{event['title']}**\n{event.get('description', '')}\n\n"
-        dispatcher.utter_message(text=message)
-        return []
-
-class ActionRecentEvents(Action):
-    def name(self) -> Text:
-        return "action_recent_events"
-    
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        data = load_events()
-        if not data:
-            return []
-        
-        message = "**Recent Events at EWU**\n\n"
-        for event in data['events_workshops'][:3]:
-            message += f" **{event['date']}**\n"
-            message += f"**{event['title']}**\n"
-            message += f"{event.get('description', '')}\n\n"
-        dispatcher.utter_message(text=message)
-        return []
 
 # ========================================
 # FACULTY ACTIONS
@@ -5803,7 +5735,7 @@ class ActionGradingSystem(Action):
         message += f"{grading['description']}\n\n"
         message += "**Grade Scale:**\n"
         for grade in grading['grade_scale']:
-            message += f"- **{grade['letter_grade']}**: {grade['numerical_score']} – {grade['grade_point']} GPA\n"
+            message += f"- **{grade['letter_grade']}**: {grade['numerical_score']} - {grade['grade_point']} GPA\n"
         
         message += "\n**Special Grades:**\n"
         for spec_grade in grading['special_grades']:
@@ -5853,98 +5785,6 @@ import asyncio
 
 
 logger = logging.getLogger(__name__)
-
-
-class ActionDefaultFallback(Action):
-    """RAG fallback with async support"""
-    
-    def name(self) -> Text:
-        return "action_default_fallback"
-    
-    def __init__(self):
-        self.rag_url = "https://atkiya110-rag-server.hf.space/tinyllama_rag"
-        self.timeout = 60
-    
-    async def run(  #  Make it async
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any]
-    ) -> List[Dict[Text, Any]]:
-        
-        user_message = tracker.latest_message.get('text', '').strip()
-        
-        if not user_message:
-            dispatcher.utter_message(text="I didn't catch that. Could you rephrase?")
-            return []
-        
-        logger.info(f"RAG Fallback: '{user_message}'")
-        
-        try:
-            #  Use async HTTP client
-            timeout = aiohttp.ClientTimeout(total=self.timeout)
-            
-            async with aiohttp.ClientSession(timeout=timeout) as session:
-                payload = {
-                    "query": user_message,
-                    "use_llm": True,
-                    "top_k": 5,
-                    "use_cache": True
-                }
-                
-                async with session.post(self.rag_url, json=payload) as response:
-                    if response.status == 200:
-                        result = await response.json()
-                        
-                        answer = result.get('response', 'Sorry, no answer found.')
-                        confidence = result.get('confidence', 0)
-                        
-                        logger.info(f"RAG success: confidence={confidence:.2f}")
-                        
-                        # Send response
-                        dispatcher.utter_message(text=answer)
-                        
-                        # Low confidence warning
-                        if confidence < 0.4:
-                            dispatcher.utter_message(
-                                text="Please visit https://www.ewubd.edu or contact admissions for more information."
-                            )
-                    else:
-                        logger.error(f"RAG returned status {response.status}")
-                        dispatcher.utter_message(
-                            text="Sorry. I'm having technical issues."
-                        )
-            
-            return []
-            
-        except asyncio.TimeoutError:
-            logger.error(f"RAG timeout after {self.timeout}s")
-            dispatcher.utter_message(
-                text="Search took too long. Try a simpler question."
-            )
-            return []
-        
-        except aiohttp.ClientConnectorError:
-            logger.error(f"Cannot connect to RAG at {self.rag_url}")
-            dispatcher.utter_message(
-                text="Connection issue. Please try again later"
-            )
-            return []
-        
-        except Exception as e:
-            logger.error(f"Error: {e}", exc_info=True)
-            dispatcher.utter_message(
-                text="Something went wrong. Please rephrase your question."
-            )
-            return []
-
-
-
-
-
-
-
-
 
 
 

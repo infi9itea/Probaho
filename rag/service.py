@@ -41,7 +41,7 @@ generator = transformers.pipeline(
 
 class QueryRequest(BaseModel):
     query: str
-    top_k: int = 5
+    top_k: int = 20
 
 app = FastAPI()
 

@@ -1292,7 +1292,7 @@ responses:
   - text: "No problem. Is there anything else I can help you with?"
   
   utter_iamabot:
-    - text: "I’m an automated assistant built with Rasa. I provide up-to-date guidance on East West University admissions, including program details, eligibility criteria, application steps, required documents, deadlines, and frequently asked questions."
+    - text: "I'm an automated assistant built with Rasa. I provide up-to-date guidance on East West University admissions, including program details, eligibility criteria, application steps, required documents, deadlines, and frequently asked questions."
 
 
   utter_location:
@@ -1430,7 +1430,7 @@ responses:
   - text: "Robotics Club introduces students to robotics, IoT, and AI through hands-on learning. They offer workshops including Kickstart to Robotics, Robo Soccer & Line Follower, Machine Learning in Robotics, and Metaverse & SparkAR Creators' Day. Visit: https://clubs.ewubd.edu/ewurc"
 
   utter_rotaract_club:
-  - text: "Rotaract Club, a Rotary-sponsored service club for youth aged 18–30, focuses on community service and leadership. They organize BREATH 5.0 (tree plantation), medical service programs, street food distribution, and volunteer collaborations. Visit: http://clubs.ewubd.edu/rcewu"
+  - text: "Rotaract Club, a Rotary-sponsored service club for youth aged 18-30, focuses on community service and leadership. They organize BREATH 5.0 (tree plantation), medical service programs, street food distribution, and volunteer collaborations. Visit: http://clubs.ewubd.edu/rcewu"
 
   utter_science_club:
   - text: "Science Club organizes science and math-related events to promote STEM awareness. They conduct Intra University Math Olympiad (IUMO), IQ Test Competitions, Science Fest Participation, and cultural programs on national themes. Visit: https://clubs.ewubd.edu/ewuscc"
@@ -1548,7 +1548,7 @@ responses:
   - text: "CCC offers Socio-Psyche Counseling Center services introduced in 2023. We provide professional psychological counseling to support your mental well-being, manage stress, and address personal, family, and social concerns."
 
   utter_counseling_hours:
-  - text: "The Socio-Psyche Counseling Center operates:\n• Days: Sunday to Thursday\n• Time: 10:00 AM – 4:00 PM\n• Location: Room No: 306"
+  - text: "The Socio-Psyche Counseling Center operates:\n• Days: Sunday to Thursday\n• Time: 10:00 AM - 4:00 PM\n• Location: Room No: 306"
 
   utter_counseling_location:
   - text: "The Socio-Psyche Counseling Center is located in Room No: 306 on campus."
@@ -9351,24 +9351,24 @@ responses:
 
 
   utter_hostel:
-    - text: "Hostel/Residence at EWU (Dhaka):\n\n• EWU does not operate on‑campus hostels or student dormitories at the Aftabnagar campus.\n• Most students arrange off‑campus housing (student messes, shared flats, private hostels) in nearby areas.\n• For guidance and up‑to‑date options, contact the Students’ Welfare/Admissions office or your department groups, and always verify safety, contracts, and payment terms before booking.\n• Check the university’s campus life notices for any changes to accommodation support."
+    - text: "Hostel/Residence at EWU (Dhaka):\n\n• EWU does not operate on-campus hostels or student dormitories at the Aftabnagar campus.\n• Most students arrange off-campus housing (student messes, shared flats, private hostels) in nearby areas.\n• For guidance and up-to-date options, contact the Students' Welfare/Admissions office or your department groups, and always verify safety, contracts, and payment terms before booking.\n• Check the university's campus life notices for any changes to accommodation support."
 
 
   utter_research:
-    - text: "EWUCRT’s Research Hub supports faculty and students with licensed tools (Turnitin, EndNote, NVivo, STATA, AMOS, SPSS), a seminar room, and a small research library for datasets, workshops, and training."
+    - text: "EWUCRT's Research Hub supports faculty and students with licensed tools (Turnitin, EndNote, NVivo, STATA, AMOS, SPSS), a seminar room, and a small research library for datasets, workshops, and training."
 
 
   utter_semester_system:
-    - text: "Semester System at EWU: The university runs a tri‑semester academic year—Spring, Summer, and Fall—under an open credit system. Typical windows are Spring (January–June), Summer (July–September), and Fall (September–December), with exact dates announced in the Academic Calendar. Note: B.Pharm may follow a different schedule; always verify current dates."
+    - text: "Semester System at EWU: The university runs a tri-semester academic year—Spring, Summer, and Fall—under an open credit system. Typical windows are Spring (January-June), Summer (July-September), and Fall (September-December), with exact dates announced in the Academic Calendar. Note: B.Pharm may follow a different schedule; always verify current dates."
 
   utter_internship:
     - text: "Internships at EWU: Opportunities are coordinated by academic departments, and processes and eligibility vary by program. Follow department notices and the Academic Calendar for timelines that affect internship planning. For guidance and placement leads, contact your department office and student services."
 
   utter_credit_system:
-    - text: "Credit System at EWU: Open credit hour system under a tri‑semester academic year (Spring, Summer, Fall). Check the Academic Calendar for current registration, add/drop, and exam timelines."
+    - text: "Credit System at EWU: Open credit hour system under a tri-semester academic year (Spring, Summer, Fall). Check the Academic Calendar for current registration, add/drop, and exam timelines."
 
   utter_clubs:
-    - text: "Student Clubs: 20+ active clubs under the Students’ Welfare Department across tech, business, arts, sports, and community service. Join via Club Fair or contact Students’ Welfare to get involved."
+    - text: "Student Clubs: 20+ active clubs under the Students' Welfare Department across tech, business, arts, sports, and community service. Join via Club Fair or contact Students' Welfare to get involved."
 
   utter_international_students:
     - text: "International Students: EWU welcomes international applicants based on equivalent academic credentials. Request offer/visa support letters through Admissions and follow embassy visa guidance."
@@ -9380,7 +9380,7 @@ responses:
     - text: "University Ranking: EWU appears in national and international rankings, which vary by year and methodology. Refer to the latest published rankings for current positions."
 
   utter_accreditation:
-    - text: "Accreditation: EWU is approved by the University Grants Commission (UGC) of Bangladesh; programs follow relevant regulatory/accreditation standards. Verify program‑specific accreditation on departmental pages."
+    - text: "Accreditation: EWU is approved by the University Grants Commission (UGC) of Bangladesh; programs follow relevant regulatory/accreditation standards. Verify program-specific accreditation on departmental pages."
 
 session_config:
   session_expiration_time_in_minutes: 60
