@@ -49,7 +49,7 @@ app = FastAPI()
 def rag_query(req: QueryRequest):
     start = time.time()
 
-    contexts = retriever.retrieve(req.query, top_k=req.top_k, return_k=5)
+    contexts = retriever.retrieve(req.query, top_k=req.top_k, return_k=20)
     if not contexts:
         return {
             "response": "I don't have that information in my database.",
