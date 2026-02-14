@@ -32,7 +32,10 @@ async function sendMessage() {
   try {
     const response = await fetch(RASA_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Ngrok-Skip-Browser-Warning': 'true'
+      },
       body: JSON.stringify({
         sender: 'user',
         message: message

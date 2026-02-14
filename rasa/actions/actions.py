@@ -2752,8 +2752,9 @@ class ActionPhi3RagAnswer(Action):
             }
             
             #logger.info(f"RAG Query: {query[:50]}...")
-            RAG_API_URL = os.environ.get("RAG_API_URL", "http://rag:8000/rag/query")
-            response = requests.post(RAG_API_URL, json=payload, timeout=500)
+            RAG_API_URL = os.environ.get("RAG_API_URL", "https://yieldingly-schizophytic-deanna.ngrok-free.dev/rag/query")
+            headers = {"Ngrok-Skip-Browser-Warning": "true"}
+            response = requests.post(RAG_API_URL, json=payload, headers=headers, timeout=500)
 
             if response.status_code == 200:
                 data = response.json()
