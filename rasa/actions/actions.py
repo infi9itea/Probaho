@@ -2752,7 +2752,7 @@ class ActionPhi3RagAnswer(Action):
             }
             
             #logger.info(f"RAG Query: {query[:50]}...")
-            RAG_API_URL = "https://yieldingly-schizophytic-deanna.ngrok-free.dev/rag/query"
+            RAG_API_URL = os.environ.get("RAG_API_URL", "http://rag:8000/rag/query")
             response = requests.post(RAG_API_URL, json=payload, timeout=500)
 
             if response.status_code == 200:
