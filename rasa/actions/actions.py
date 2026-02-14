@@ -2751,7 +2751,7 @@ class ActionPhi3RagAnswer(Action):
                 "top_k": 20  # Increased for better context
             }
             
-            logger.info(f"RAG Query: {query[:50]}...")
+            #logger.info(f"RAG Query: {query[:50]}...")
             RAG_API_URL = "https://yieldingly-schizophytic-deanna.ngrok-free.dev/rag/query"
             response = requests.post(RAG_API_URL, json=payload, timeout=500)
 
