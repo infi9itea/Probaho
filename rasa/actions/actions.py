@@ -2750,7 +2750,9 @@ class ActionPhi3RagAnswer(Action):
                 "top_k": 5  # Increased for better context
             }
             
-            logger.info(f"Calling RAG with query: {query[:50]}...")
+            logger.info(f"RAG Query: {query[:50]}...")
+            logger.info(f"RAG Response Raw: {data}")  # SEE ACTUAL RESPONSE
+            logger.info(f"Parsed - Answer: '{answer[:100]}...', Confidence: {confidence}")
             
             RAG_API_URL = "https://yieldingly-schizophytic-deanna.ngrok-free.dev/rag/query"
             response = requests.post(RAG_API_URL, json=payload, timeout=500)
@@ -2821,7 +2823,7 @@ class ActionPhi3RagAnswer(Action):
         - 0.4-0.7: Medium confidence - send answer with disclaimer
         - < 0.4: Low confidence - suggest contacting admissions
         """
-        if not answer or confidence < 0.4:
+        if not answer or confidence < 0.2:
             dispatcher.utter_message(
                 text=(
                     "I don't have reliable information about this. "

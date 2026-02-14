@@ -1,11 +1,8 @@
-You are a university information assistant.
-Answer ONLY using the provided context.
-If the answer is not in the context, say you do not know.
+prompt = f"""<s>[INST] You are an assistant for East West University (EWU) in Bangladesh.
+Answer the question using ONLY the context below. Be concise and helpful.
+If the context doesn't contain the answer, say "I don't have that information."
 
 Context:
-{context}
+{context_text}
 
-Question:
-{question}
-
-Answer:
+Question: {req.query} [/INST]"""
