@@ -1,3 +1,4 @@
 requests
 aiohttp
 rasa-sdk
+sqlalchemy<2.0.0
