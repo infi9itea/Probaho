@@ -2744,44 +2744,45 @@ class ActionPhi3RagAnswer(Action):
             (answer, confidence, sources, processing_time)
         """
         try:
-            # FIXED: Only send what the API accepts
             payload = {
                 "query": query,
-                "top_k": 5  # Increased for better context
+                "top_k": 5
             }
-            
+    
             logger.info(f"RAG Query: {query[:50]}...")
-            logger.info(f"RAG Response Raw: {data}")  # SEE ACTUAL RESPONSE
-            logger.info(f"Parsed - Answer: '{answer[:100]}...', Confidence: {confidence}")
-            
+    
             RAG_API_URL = "https://yieldingly-schizophytic-deanna.ngrok-free.dev/rag/query"
-            response = requests.post(RAG_API_URL, json=payload, timeout=500)
-
+            response = requests.post(RAG_API_URL, json=payload, timeout=120)
+    
+            logger.info(f"RAG status: {response.status_code}")
+            logger.info(f"RAG raw text: {response.text[:500]}")
+    
             if response.status_code == 200:
                 data = response.json()
-                
-                # FIXED: Use correct field names from FastAPI QueryResponse
-                answer = data.get("response", "")  # NOT "answer"
+    
+                answer = data.get("response", "")
                 confidence = float(data.get("confidence", 0.0))
                 sources = data.get("sources", [])
                 processing_time = data.get("processing_time", 0.0)
-                
+    
                 logger.info(
-                    f"RAG response received - Confidence: {confidence:.2f}, "
-                    f"Time: {processing_time:.2f}s, Sources: {len(sources)}"
+                    f"RAG parsed - Answer: '{answer[:100]}...', "
+                    f"Confidence: {confidence:.2f}, "
+                    f"Sources: {len(sources)}, "
+                    f"Time: {processing_time:.2f}s"
                 )
-                
+    
                 return answer, confidence, sources, processing_time
-            
+    
             else:
-                logger.error(f"RAG service error: {response.status_code} - {response.text}")
+                logger.error(f"RAG non-200 response: {response.text}")
                 return (
-                    "I'm having trouble connecting to my knowledge base.",
+                    "I'm having trouble connecting to my knowledge base right now.",
                     0.0,
                     [],
                     0.0
                 )
-                
+    
         except requests.Timeout:
             logger.error("RAG service timeout")
             return (
@@ -2806,6 +2807,7 @@ class ActionPhi3RagAnswer(Action):
                 [],
                 0.0
             )
+
     
     # Replace the _send_response confidence branching with this clearer logic:
 
