@@ -1,6 +1,7 @@
 import torch
 from langchain_community.vectorstores import FAISS
-from langchain_huggingface import HuggingFaceEmbeddings      # ← updated
+# ← revert this line
+from langchain_community.embeddings import HuggingFaceEmbeddings      # ← updated
 from sentence_transformers import CrossEncoder
 from typing import List, Dict, Any
 
