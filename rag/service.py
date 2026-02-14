@@ -1,5 +1,6 @@
 import os
 import time
+import math
 from fastapi import FastAPI
 from pydantic import BaseModel
 from retriever import Retriever
@@ -58,14 +59,15 @@ def rag_query(req: QueryRequest):
             "processing_time": round(time.time() - start, 3)
         }
 
-    selected = contexts[:3]
+    selected = contexts[:5]
     context_text = "\n\n".join([c["text"] for c in selected])
 
     prompt = (
-        "[INST] You are a university information assistant. "
-        "Use ONLY the context below to answer the question. "
-        "If the answer is not in the context, say \"I don't have that information.\" [/INST]\n\n"
-        f"Context:\n{context_text}\n\nQuestion: {req.query}"
+        "<s>[INST] You are an assistant for East West University (EWU) in Bangladesh.\n"
+        "Answer the question using ONLY the context below. Be concise and helpful.\n"
+        "If the context doesn't contain the answer, say \"I don't have that information.\"\n\n"
+        f"Context:\n{context_text}\n\n"
+        f"Question: {req.query} [/INST]"
     )
 
     try:
@@ -80,7 +82,8 @@ def rag_query(req: QueryRequest):
 
     scores = [c.get("score", 0.0) for c in selected]
     if scores:
-        confidence = max(0.0, min(1.0, float(max(scores))))
+        # Map reranker logit to [0, 1] range using sigmoid
+        confidence = 1 / (1 + math.exp(-max(scores)))
     else:
         confidence = 0.5
 

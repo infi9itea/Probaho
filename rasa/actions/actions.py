@@ -2748,18 +2748,17 @@ class ActionPhi3RagAnswer(Action):
             # FIXED: Only send what the API accepts
             payload = {
                 "query": query,
-                "top_k": 5  # Increased for better context
+                "top_k": 20  # Increased for better context
             }
             
             logger.info(f"RAG Query: {query[:50]}...")
-            logger.info(f"RAG Response Raw: {data}")  # SEE ACTUAL RESPONSE
-            logger.info(f"Parsed - Answer: '{answer[:100]}...', Confidence: {confidence}")
             
             RAG_API_URL = os.getenv("RAG_API_URL", "http://rag:8000/rag/query")
             response = requests.post(RAG_API_URL, json=payload, timeout=500)
 
             if response.status_code == 200:
                 data = response.json()
+                logger.info(f"RAG Response Raw: {data}")
                 
                 # FIXED: Use correct field names from FastAPI QueryResponse
                 answer = data.get("response", "")  # NOT "answer"
@@ -2767,6 +2766,7 @@ class ActionPhi3RagAnswer(Action):
                 sources = data.get("sources", [])
                 processing_time = data.get("processing_time", 0.0)
                 
+                logger.info(f"Parsed - Answer: '{answer[:100]}...', Confidence: {confidence}")
                 logger.info(
                     f"RAG response received - Confidence: {confidence:.2f}, "
                     f"Time: {processing_time:.2f}s, Sources: {len(sources)}"
