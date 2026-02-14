@@ -20,7 +20,7 @@ $(document).ready(function () {
     $('#status-right').text(messageCount + ' messages');
   }
 
-  const RASA_URL = "https://promissory-alexander-measurelessly.ngrok-free.dev/webhooks/rest/webhook";
+  const RASA_URL = "http://localhost:8000/chat";
 
 async function sendMessage() {
   const message = $('#user-input').val();
@@ -34,7 +34,7 @@ async function sendMessage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        sender: 'user',
+        session_id: 'user',
         message: message
       })
     });

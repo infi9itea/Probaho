@@ -1,3 +1,4 @@
+import os
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from typing import Any, Text, Dict, List
@@ -2754,7 +2755,7 @@ class ActionPhi3RagAnswer(Action):
             logger.info(f"RAG Response Raw: {data}")  # SEE ACTUAL RESPONSE
             logger.info(f"Parsed - Answer: '{answer[:100]}...', Confidence: {confidence}")
             
-            RAG_API_URL = "https://yieldingly-schizophytic-deanna.ngrok-free.dev/rag/query"
+            RAG_API_URL = os.getenv("RAG_API_URL", "http://rag:8000/rag/query")
             response = requests.post(RAG_API_URL, json=payload, timeout=500)
 
             if response.status_code == 200:
