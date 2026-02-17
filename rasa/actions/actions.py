@@ -258,8 +258,7 @@ class ActionGetTuitionGeneral(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            dispatcher.utter_message(text="Sorry, I couldn't retrieve tuition information at this time.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         message = "**East West University Tuition Fees (Per Credit)**\n\n"
         for program in data['undergraduate_programs']['tuition_fees_per_credit']:
@@ -293,7 +292,7 @@ class ActionGetTuitionCSE(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'CSE' in p['program']), None)
         if prog:
@@ -301,10 +300,9 @@ class ActionGetTuitionCSE(Action):
                       f" **Tuition Fee:** {prog['tuition_fees']:,} BDT\n"
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
-        else:
-            message = "CSE tuition information not available."
-        dispatcher.utter_message(text=message)
-        return []
+            dispatcher.utter_message(text=message)
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionBBA(Action):
     def name(self) -> Text:
@@ -314,7 +312,7 @@ class ActionGetTuitionBBA(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if p['program'] == 'BBA'), None)
         if prog:
@@ -322,10 +320,9 @@ class ActionGetTuitionBBA(Action):
                       f" **Tuition Fee:** {prog['tuition_fees']:,} BDT\n"
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
-        else:
-            message = "BBA tuition information not available."
-        dispatcher.utter_message(text=message)
-        return []
+            dispatcher.utter_message(text=message)
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionEconomics(Action):
     def name(self) -> Text:
@@ -335,7 +332,7 @@ class ActionGetTuitionEconomics(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'Economics' in p['program']), None)
         if prog:
@@ -344,7 +341,8 @@ class ActionGetTuitionEconomics(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionEnglish(Action):
     def name(self) -> Text:
@@ -354,7 +352,7 @@ class ActionGetTuitionEnglish(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'English' in p['program']), None)
         if prog:
@@ -363,7 +361,8 @@ class ActionGetTuitionEnglish(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionLaw(Action):
     def name(self) -> Text:
@@ -373,7 +372,7 @@ class ActionGetTuitionLaw(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'LL.B' in p['program']), None)
         if prog:
@@ -382,7 +381,8 @@ class ActionGetTuitionLaw(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionSociology(Action):
     def name(self) -> Text:
@@ -968,8 +968,7 @@ class ActionAdmissionDeadlineGeneral(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            dispatcher.utter_message(text="Sorry, admission information is currently unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         # Build header message
         message = f"**{data['page_info']['semester']} Admission Deadlines**\n\n"
@@ -1484,8 +1483,7 @@ class ActionAdmissionRequirementsGeneral(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_requirements()
         if not data:
-            dispatcher.utter_message(text="Sorry, admission requirements information is unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         ug = data['admission_requirements']['undergraduate']['general_programs_except_bpharm']
         message = "**Undergraduate Admission Requirements at EWU**\n\n"
@@ -1636,8 +1634,7 @@ class ActionAdmissionContact(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_process()
         if not data:
-            dispatcher.utter_message(text="Sorry, contact information is unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         admission = data.get('admission_process', {})
         contacts = admission.get('contacts', {})
@@ -2816,23 +2813,28 @@ class ActionPhi3RagAnswer(Action):
     ):
         """
         Confidence levels:
-        - >= 0.7: High confidence - send answer with sources
+        - >= 0.7: High confidence - send answer
         - 0.4-0.7: Medium confidence - send answer with disclaimer
-        - < 0.4: Low confidence - suggest contacting admissions
+        - < 0.4: Low confidence - send answer with strong disclaimer
         """
-        if not answer or confidence < 0.2:
+        if not answer:
             dispatcher.utter_message(
                 text=(
-                    "I don't have reliable information about this. "
+                    "I'm sorry, I couldn't find a reliable answer for that. "
                     "For accurate details, please contact:\n admissions@ewubd.edu\n"
                 )
             )
             return
     
-        if confidence < 0.7:
+        if confidence < 0.4:
+            # Low confidence
+            dispatcher.utter_message(
+                text=f"{answer}\n\nNote: This information is generated and might not be 100% accurate. Please verify with admissions@ewubd.edu"
+            )
+        elif confidence < 0.7:
             # Medium confidence
             dispatcher.utter_message(
-                text=f"{answer}\n\nNote: I'm not entirely confident about this answer. Please verify with admissions@ewubd.edu"
+                text=f"{answer}\n\nNote: Please verify this information with admissions@ewubd.edu"
             )
         else:
             # High confidence
@@ -2875,6 +2877,11 @@ class ActionPhi3RagAnswer(Action):
         
         return "\n".join(reversed(history[-6:]))
 
+
+def call_rag_fallback(dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    """Helper function to call RAG fallback from other actions"""
+    rag_action = ActionPhi3RagAnswer()
+    return rag_action.run(dispatcher, tracker, domain)
 
 class ActionDefaultFallback(Action):
     """Fallback to RAG for unrecognized intents"""  
@@ -3268,20 +3275,13 @@ class ActionShowCourses(Action):
         filename = DEPARTMENT_FILES.get(department)
         
         if not filename:
-            dispatcher.utter_message(
-                text=f"Sorry, I don't have information for '{department}'. "
-                     f"Try: CSE, EEE, BBA, Civil Engineering, English, Law, MBA, etc."
-            )
-            return [SlotSet("department", None)]
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         # Load course data
         data = load_json_file(filename)
         
         if not data:
-            dispatcher.utter_message(
-                text=f"Sorry, I couldn't load course data for {department}."
-            )
-            return [SlotSet("department", None)]
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         # Extract courses
         courses = self._extract_courses(data)
