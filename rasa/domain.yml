@@ -14,6 +14,7 @@ intents:
 - mood_unhappy
 - bot_challenge
 - fallback
+- nlu_fallback
 - admission_query
 - ask_question
 # ========================================
