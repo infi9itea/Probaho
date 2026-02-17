@@ -12,7 +12,7 @@
 
 action_endpoint:
   url: "http://rasa_actions:5055/webhook"
-  timeout: 10000
+  timeout: 60000
 
 
 
