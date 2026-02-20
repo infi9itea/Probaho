@@ -11,6 +11,206 @@ from rasa_sdk.events import UserUtteranceReverted, SlotSet
 
 logger = logging.getLogger(__name__)
 
+class ActionPhi3RagAnswer(Action):
+    """RAG-powered answer generation using TinyLlama"""
+    def name(self) -> Text:
+        # change the action name here
+        return "action_call_rag"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+
+        user_message = tracker.latest_message.get("text", "")
+
+        if not user_message.strip():
+            dispatcher.utter_message(text="I didn't catch that. Could you please rephrase?")
+            return []
+
+        # Build conversation history (for future use)
+        history = self._build_history(tracker)
+
+        # Call RAG service with TinyLlama
+        answer, confidence, sources, processing_time = self._call_rag(user_message)
+
+        # Send appropriate response based on confidence
+        self._send_response(dispatcher, answer, confidence, sources, processing_time)
+
+        return []
+
+    def _call_rag(self, query: str) -> tuple:
+        """
+        Call RAG service (TinyLlama-powered) and return structured response
+
+        Returns:
+            (answer, confidence, sources, processing_time)
+        """
+        try:
+            # FIXED: Only send what the API accepts
+            payload = {
+                "query": query,
+                "top_k": 20  # Increased for better context
+            }
+
+            #logger.info(f"RAG Query: {query[:50]}...")
+            RAG_API_URL = os.environ.get("RAG_API_URL", "https://yieldingly-schizophytic-deanna.ngrok-free.dev/rag/query")
+            headers = {"Ngrok-Skip-Browser-Warning": "true"}
+            response = requests.post(RAG_API_URL, json=payload, headers=headers, timeout=500)
+
+            if response.status_code == 200:
+                data = response.json()
+                logger.info(f"RAG Response Raw: {data}")
+
+                # FIXED: Use correct field names from FastAPI QueryResponse
+                answer = data.get("response", "")  # NOT "answer"
+                confidence = float(data.get("confidence", 0.0))
+                sources = data.get("sources", [])
+                processing_time = data.get("processing_time", 0.0)
+
+                logger.info(f"Parsed - Answer: '{answer[:100]}...', Confidence: {confidence}")
+                logger.info(
+                    f"RAG response received - Confidence: {confidence:.2f}, "
+                    f"Time: {processing_time:.2f}s, Sources: {len(sources)}"
+                )
+
+                return answer, confidence, sources, processing_time
+
+            else:
+                logger.error(f"RAG service error: {response.status_code} - {response.text}")
+                return (
+                    "I'm having trouble connecting to my knowledge base.",
+                    0.0,
+                    [],
+                    0.0
+                )
+
+        except requests.Timeout:
+            logger.error("RAG service timeout")
+            return (
+                "The request is taking too long. Please try again.",
+                0.0,
+                [],
+                0.0
+            )
+        except requests.ConnectionError:
+            logger.error("RAG service connection error")
+            return (
+                "I can't connect to the answer service. Please try again later.",
+                0.0,
+                [],
+                0.0
+            )
+        except Exception as e:
+            logger.exception(f"Unexpected RAG error: {e}")
+            return (
+                "Something went wrong while processing your question.",
+                0.0,
+                [],
+                0.0
+            )
+
+    # Replace the _send_response confidence branching with this clearer logic:
+
+    def _send_response(
+        self,
+        dispatcher: CollectingDispatcher,
+        answer: str,
+        confidence: float,
+        sources: List[str],
+        processing_time: float
+    ):
+        """
+        Confidence levels:
+        - >= 0.7: High confidence - send answer
+        - 0.4-0.7: Medium confidence - send answer with disclaimer
+        - < 0.4: Low confidence - send answer with strong disclaimer
+        """
+        if not answer:
+            dispatcher.utter_message(
+                text=(
+                    "I'm sorry, I couldn't find a reliable answer for that. "
+                    "For accurate details, please contact:\nadmissions@ewubd.edu\n"
+                )
+            )
+            return
+
+        if confidence < 0.4:
+            # Low confidence
+            dispatcher.utter_message(
+                text=f"{answer}\n\nNote: This information is generated and might not be 100% accurate. Please verify with admissions@ewubd.edu"
+            )
+        elif confidence < 0.7:
+            # Medium confidence
+            dispatcher.utter_message(
+                text=f"{answer}\n\nNote: Please verify this information with admissions@ewubd.edu"
+            )
+        else:
+            # High confidence
+            dispatcher.utter_message(text=answer)
+
+        # Add up to top-2 sources for transparency (if provided)
+        if sources:
+            unique_sources = sorted({s for s in sources if s})[:2]
+            if unique_sources:
+                source_names = [s.replace('.json', '').replace('_', ' ').title() for s in unique_sources]
+                dispatcher.utter_message(text=f"Source: {', '.join(source_names)}")
+
+        # Log performance (for monitoring)
+        logger.info(f"Response sent - Confidence: {confidence:.2f}, Time: {processing_time:.2f}s")
+
+    def _build_history(self, tracker: Tracker) -> str:
+        """
+        Extract last 3 conversation turns (for future use)
+
+        Note: Current RAG API doesn't use history yet, but keeping
+        this for potential future enhancement
+        """
+        events = tracker.events
+        history = []
+
+        for event in reversed(events[-12:]):  # Look at more events
+            if event.get("event") == "user":
+                text = event.get("text", "")
+                if text and text.strip():
+                    history.append(f"User: {text}")
+            elif event.get("event") == "bot":
+                text = event.get("text", "")
+                # Skip system messages
+                if text and not text.startswith(("", "", "")):
+                    history.append(f"Bot: {text}")
+
+            # Stop once we have 3 full exchanges
+            if len(history) >= 6:
+                break
+
+        return "\n".join(reversed(history[-6:]))
+
+def call_rag_fallback(dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    """Helper function to call RAG fallback from other actions"""
+    rag_action = ActionPhi3RagAnswer()
+    return rag_action.run(dispatcher, tracker, domain)
+
+class ActionDefaultFallback(Action):
+    """Fallback to RAG for unrecognized intents"""
+    def name(self) -> Text:
+        return "action_default_fallback"
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+        user_message = tracker.latest_message.get("text", "")
+        logger.info(f"Fallback triggered for: {user_message}")
+        # Try RAG for unrecognized intents
+        rag_action = ActionPhi3RagAnswer()
+        return rag_action.run(dispatcher, tracker, domain)
+
+
+
 
 
 
@@ -258,8 +458,7 @@ class ActionGetTuitionGeneral(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            dispatcher.utter_message(text="Sorry, I couldn't retrieve tuition information at this time.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         message = "**East West University Tuition Fees (Per Credit)**\n\n"
         for program in data['undergraduate_programs']['tuition_fees_per_credit']:
@@ -277,8 +476,7 @@ class ActionGetApplicationFee(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            dispatcher.utter_message(text="Sorry, I couldn't retrieve fee information at this time.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         app_fee = data['fee_categories']['application_fee']
         message = f"The application fee at East West University is **{app_fee}** (online processing fee, non-refundable)."
@@ -293,7 +491,7 @@ class ActionGetTuitionCSE(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'CSE' in p['program']), None)
         if prog:
@@ -301,10 +499,9 @@ class ActionGetTuitionCSE(Action):
                       f" **Tuition Fee:** {prog['tuition_fees']:,} BDT\n"
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
-        else:
-            message = "CSE tuition information not available."
-        dispatcher.utter_message(text=message)
-        return []
+            dispatcher.utter_message(text=message)
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionBBA(Action):
     def name(self) -> Text:
@@ -314,7 +511,7 @@ class ActionGetTuitionBBA(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if p['program'] == 'BBA'), None)
         if prog:
@@ -322,10 +519,9 @@ class ActionGetTuitionBBA(Action):
                       f" **Tuition Fee:** {prog['tuition_fees']:,} BDT\n"
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
-        else:
-            message = "BBA tuition information not available."
-        dispatcher.utter_message(text=message)
-        return []
+            dispatcher.utter_message(text=message)
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionEconomics(Action):
     def name(self) -> Text:
@@ -335,7 +531,7 @@ class ActionGetTuitionEconomics(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'Economics' in p['program']), None)
         if prog:
@@ -344,7 +540,8 @@ class ActionGetTuitionEconomics(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionEnglish(Action):
     def name(self) -> Text:
@@ -354,7 +551,7 @@ class ActionGetTuitionEnglish(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'English' in p['program']), None)
         if prog:
@@ -363,7 +560,8 @@ class ActionGetTuitionEnglish(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionLaw(Action):
     def name(self) -> Text:
@@ -373,7 +571,7 @@ class ActionGetTuitionLaw(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'LL.B' in p['program']), None)
         if prog:
@@ -382,7 +580,8 @@ class ActionGetTuitionLaw(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionSociology(Action):
     def name(self) -> Text:
@@ -392,7 +591,7 @@ class ActionGetTuitionSociology(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'Sociology' in p['program']), None)
         if prog:
@@ -401,7 +600,8 @@ class ActionGetTuitionSociology(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionInformationStudies(Action):
     def name(self) -> Text:
@@ -411,7 +611,7 @@ class ActionGetTuitionInformationStudies(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'Information Studies' in p['program']), None)
         if prog:
@@ -420,7 +620,8 @@ class ActionGetTuitionInformationStudies(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionICE(Action):
     def name(self) -> Text:
@@ -430,7 +631,7 @@ class ActionGetTuitionICE(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'ICE' in p['program'] or 'Communication' in p['program']), None)
         if prog:
@@ -439,7 +640,8 @@ class ActionGetTuitionICE(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionEEE(Action):
     def name(self) -> Text:
@@ -449,7 +651,7 @@ class ActionGetTuitionEEE(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'EEE' in p['program']), None)
         if prog:
@@ -458,7 +660,8 @@ class ActionGetTuitionEEE(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionPharmacy(Action):
     def name(self) -> Text:
@@ -468,7 +671,7 @@ class ActionGetTuitionPharmacy(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'Pharm' in p['program']), None)
         if prog:
@@ -477,7 +680,8 @@ class ActionGetTuitionPharmacy(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionGEB(Action):
     def name(self) -> Text:
@@ -487,7 +691,7 @@ class ActionGetTuitionGEB(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'GEB' in p['program'] or 'Genetic' in p['program']), None)
         if prog:
@@ -496,7 +700,8 @@ class ActionGetTuitionGEB(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionCivil(Action):
     def name(self) -> Text:
@@ -506,7 +711,7 @@ class ActionGetTuitionCivil(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'Civil' in p['program']), None)
         if prog:
@@ -515,7 +720,8 @@ class ActionGetTuitionCivil(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionPPHS(Action):
     def name(self) -> Text:
@@ -525,7 +731,7 @@ class ActionGetTuitionPPHS(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'PPHS' in p['program'] or 'Public Health' in p['program']), None)
         if prog:
@@ -534,7 +740,8 @@ class ActionGetTuitionPPHS(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionMath(Action):
     def name(self) -> Text:
@@ -544,7 +751,7 @@ class ActionGetTuitionMath(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'Mathematics' in p['program']), None)
         if prog:
@@ -553,7 +760,8 @@ class ActionGetTuitionMath(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionDataScience(Action):
     def name(self) -> Text:
@@ -563,7 +771,7 @@ class ActionGetTuitionDataScience(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'Data Science' in p['program']), None)
         if prog:
@@ -572,7 +780,8 @@ class ActionGetTuitionDataScience(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionSocialRelations(Action):
     def name(self) -> Text:
@@ -582,7 +791,7 @@ class ActionGetTuitionSocialRelations(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
                     if 'Social Relations' in p['program']), None)
         if prog:
@@ -591,7 +800,8 @@ class ActionGetTuitionSocialRelations(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
     
 # ========================================
 # MISSING TUITION FEES (GRADUATE) ACTIONS
@@ -605,7 +815,7 @@ class ActionMSDataScienceFee(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         prog = next((p for p in data['graduate_programs']['detailed_fee_structure']
                     if 'Data Science' in p['program'] and 'Analytics' in p['program']), None)
@@ -615,7 +825,8 @@ class ActionMSDataScienceFee(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 # ========================================
 # MISSING GRADUATE PROGRAM ACTIONS
 # ========================================
@@ -628,7 +839,7 @@ class ActionMAEnglishExtendedFee(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         prog = next((p for p in data['graduate_programs']['detailed_fee_structure']
                     if p['program'] == 'MA in English (Extended)'), None)
@@ -638,7 +849,8 @@ class ActionMAEnglishExtendedFee(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionMATESOL42Fee(Action):
     def name(self) -> Text:
@@ -648,7 +860,7 @@ class ActionMATESOL42Fee(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         prog = next((p for p in data['graduate_programs']['detailed_fee_structure']
                     if p['program'] == 'MA in TESOL' and p['credits'] == 42), None)
@@ -658,7 +870,8 @@ class ActionMATESOL42Fee(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionMATESOL48Fee(Action):
     def name(self) -> Text:
@@ -668,7 +881,7 @@ class ActionMATESOL48Fee(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         prog = next((p for p in data['graduate_programs']['detailed_fee_structure']
                     if p['program'] == 'MA in TESOL' and p['credits'] == 48), None)
@@ -678,7 +891,8 @@ class ActionMATESOL48Fee(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionMATESOL40Fee(Action):
     def name(self) -> Text:
@@ -688,7 +902,7 @@ class ActionMATESOL40Fee(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         prog = next((p for p in data['graduate_programs']['detailed_fee_structure']
                     if p['program'] == 'MA in TESOL' and p['credits'] == 40), None)
@@ -698,87 +912,8 @@ class ActionMATESOL40Fee(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
-
-class ActionMAEnglishExtendedFee(Action):
-    def name(self) -> Text:
-        return "action_ma_english_extended_fee"
-    
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        data = load_tuition_fees()
-        if not data:
             return []
-        
-        prog = next((p for p in data['graduate_programs']['detailed_fee_structure']
-                    if p['program'] == 'MA in English (Extended)'), None)
-        if prog:
-            message = (f"**MA in English (Extended - 45 Credits)**\n\n"
-                      f" **Tuition Fee:** {prog['tuition_fees']:,} BDT\n"
-                      f" **Total Credits:** {prog['credits']}\n"
-                      f" **Total Program Cost:** {prog['grand_total']:,} BDT")
-            dispatcher.utter_message(text=message)
-        return []
-
-class ActionMATESOL40Fee(Action):
-    def name(self) -> Text:
-        return "action_ma_tesol_40_fee"
-    
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        data = load_tuition_fees()
-        if not data:
-            return []
-        
-        prog = next((p for p in data['graduate_programs']['detailed_fee_structure']
-                    if p['program'] == 'MA in TESOL' and p['credits'] == 40), None)
-        if prog:
-            message = (f"**MA in TESOL (40 Credits)**\n\n"
-                      f" **Tuition Fee:** {prog['tuition_fees']:,} BDT\n"
-                      f" **Total Credits:** {prog['credits']}\n"
-                      f" **Total Program Cost:** {prog['grand_total']:,} BDT")
-            dispatcher.utter_message(text=message)
-        return []
-
-class ActionMATESOL42Fee(Action):
-    def name(self) -> Text:
-        return "action_ma_tesol_42_fee"
-    
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        data = load_tuition_fees()
-        if not data:
-            return []
-        
-        prog = next((p for p in data['graduate_programs']['detailed_fee_structure']
-                    if p['program'] == 'MA in TESOL' and p['credits'] == 42), None)
-        if prog:
-            message = (f"**MA in TESOL (42 Credits)**\n\n"
-                      f" **Tuition Fee:** {prog['tuition_fees']:,} BDT\n"
-                      f" **Total Credits:** {prog['credits']}\n"
-                      f" **Total Program Cost:** {prog['grand_total']:,} BDT")
-            dispatcher.utter_message(text=message)
-        return []
-
-class ActionMATESOL48Fee(Action):
-    def name(self) -> Text:
-        return "action_ma_tesol_48_fee"
-    
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        data = load_tuition_fees()
-        if not data:
-            return []
-        
-        prog = next((p for p in data['graduate_programs']['detailed_fee_structure']
-                    if p['program'] == 'MA in TESOL' and p['credits'] == 48), None)
-        if prog:
-            message = (f"**MA in TESOL (48 Credits)**\n\n"
-                      f" **Tuition Fee:** {prog['tuition_fees']:,} BDT\n"
-                      f" **Total Credits:** {prog['credits']}\n"
-                      f" **Total Program Cost:** {prog['grand_total']:,} BDT")
-            dispatcher.utter_message(text=message)
-        return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 # ========================================
 # DIPLOMA PROGRAMS ACTIONS
@@ -792,7 +927,7 @@ class ActionPPDMDiplomaFee(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         prog = next((p for p in data['diploma_programs']['detailed_fee_structure']
                     if 'PPDM' in p['program'] or 'Disaster Management' in p['program']), None)
@@ -802,7 +937,8 @@ class ActionPPDMDiplomaFee(Action):
                       f" **Total Credits:** {prog['credits']}\n"
                       f" **Total Program Cost:** {prog['grand_total']:,} BDT")
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 # ========================================
 # COMPREHENSIVE TUITION BREAKDOWN (ALL PROGRAMS)
@@ -816,7 +952,7 @@ class ActionCompleteTuitionStructure(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         message = "**Complete Tuition Fee Structure at EWU**\n\n"
         message += "**UNDERGRADUATE PROGRAMS** (15 programs)\n"
@@ -968,8 +1104,7 @@ class ActionAdmissionDeadlineGeneral(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            dispatcher.utter_message(text="Sorry, admission information is currently unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         # Build header message
         message = f"**{data['page_info']['semester']} Admission Deadlines**\n\n"
@@ -1003,12 +1138,13 @@ class ActionAdmissionDeadlineCSE(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'CSE' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Application Deadline:** {prog['application_deadline']}\n📝 **Test Date:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineBBA(Action):
     def name(self) -> Text:
@@ -1018,12 +1154,13 @@ class ActionAdmissionDeadlineBBA(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'BBA' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Application Deadline:** {prog['application_deadline']}\n📝 **Test Date:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineEconomics(Action):
     def name(self) -> Text:
@@ -1033,12 +1170,13 @@ class ActionAdmissionDeadlineEconomics(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Economics' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineEnglish(Action):
     def name(self) -> Text:
@@ -1048,12 +1186,13 @@ class ActionAdmissionDeadlineEnglish(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'English' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineLaw(Action):
     def name(self) -> Text:
@@ -1063,12 +1202,13 @@ class ActionAdmissionDeadlineLaw(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'LLB' in p['program'] or 'Law' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineSociology(Action):
     def name(self) -> Text:
@@ -1078,12 +1218,13 @@ class ActionAdmissionDeadlineSociology(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Sociology' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineInformationStudies(Action):
     def name(self) -> Text:
@@ -1093,12 +1234,13 @@ class ActionAdmissionDeadlineInformationStudies(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Information Studies' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlinePPHS(Action):
     def name(self) -> Text:
@@ -1108,12 +1250,13 @@ class ActionAdmissionDeadlinePPHS(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Public Health' in p['program'] or 'PPHS' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineICE(Action):
     def name(self) -> Text:
@@ -1123,12 +1266,13 @@ class ActionAdmissionDeadlineICE(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'ICE' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineEEE(Action):
     def name(self) -> Text:
@@ -1138,12 +1282,13 @@ class ActionAdmissionDeadlineEEE(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'EEE' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlinePharmacy(Action):
     def name(self) -> Text:
@@ -1153,12 +1298,13 @@ class ActionAdmissionDeadlinePharmacy(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Pharmacy' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineGEB(Action):
     def name(self) -> Text:
@@ -1168,12 +1314,13 @@ class ActionAdmissionDeadlineGEB(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Genetic' in p['program'] or 'Biotechnology' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineCivil(Action):
     def name(self) -> Text:
@@ -1183,12 +1330,13 @@ class ActionAdmissionDeadlineCivil(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Civil' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineMath(Action):
     def name(self) -> Text:
@@ -1198,12 +1346,13 @@ class ActionAdmissionDeadlineMath(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Mathematics' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineDataScience(Action):
     def name(self) -> Text:
@@ -1213,12 +1362,13 @@ class ActionAdmissionDeadlineDataScience(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Data Science' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 # ========================================
 # ADMISSION DEADLINES (GRADUATE)
@@ -1232,12 +1382,13 @@ class ActionAdmissionDeadlineMBA(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'MBA' in p['program'] and 'Executive' not in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineEMBA(Action):
     def name(self) -> Text:
@@ -1247,12 +1398,13 @@ class ActionAdmissionDeadlineEMBA(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'Executive MBA' in p['program'] or 'EMBA' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineMDS(Action):
     def name(self) -> Text:
@@ -1262,12 +1414,13 @@ class ActionAdmissionDeadlineMDS(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'MDS' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineMSSEconomics(Action):
     def name(self) -> Text:
@@ -1277,12 +1430,13 @@ class ActionAdmissionDeadlineMSSEconomics(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'MSS' in p['program'] and 'Economics' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineMAEnglish(Action):
     def name(self) -> Text:
@@ -1292,12 +1446,13 @@ class ActionAdmissionDeadlineMAEnglish(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'MA in English' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineMATESOL(Action):
     def name(self) -> Text:
@@ -1307,12 +1462,13 @@ class ActionAdmissionDeadlineMATESOL(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'TESOL' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineMPRHGD(Action):
     def name(self) -> Text:
@@ -1322,12 +1478,13 @@ class ActionAdmissionDeadlineMPRHGD(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'MPRHGD' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineLLM(Action):
     def name(self) -> Text:
@@ -1337,12 +1494,13 @@ class ActionAdmissionDeadlineLLM(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'LLM' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineMSCSE(Action):
     def name(self) -> Text:
@@ -1352,12 +1510,13 @@ class ActionAdmissionDeadlineMSCSE(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'MS in CSE' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineMSDataScience(Action):
     def name(self) -> Text:
@@ -1367,12 +1526,13 @@ class ActionAdmissionDeadlineMSDataScience(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'Data Science' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlineMPharm(Action):
     def name(self) -> Text:
@@ -1382,12 +1542,13 @@ class ActionAdmissionDeadlineMPharm(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'Master of Pharmacy' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionDeadlinePPDM(Action):
     def name(self) -> Text:
@@ -1397,12 +1558,13 @@ class ActionAdmissionDeadlinePPDM(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'PPDM' in p['program']), None)
         if prog:
             message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 # ========================================
 # ADMISSION TEST DATES
@@ -1429,14 +1591,15 @@ class ActionAdmissionTestDateCSE(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'CSE' in p['program']), None)
         if prog:
             message = f"**Computer Science & Engineering (CSE) Admission Test**\n\n"
             message += f" **Test:** {prog['admission_test']}\n"
             message += f" **Apply by:** {prog['application_deadline']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionTestDateBBA(Action):
     def name(self) -> Text:
@@ -1446,14 +1609,15 @@ class ActionAdmissionTestDateBBA(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'BBA' in p['program']), None)
         if prog:
             message = f"**BBA Admission Test**\n\n"
             message += f" **Test:** {prog['admission_test']}\n"
             message += f" **Apply by:** {prog['application_deadline']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionTestDateMBA(Action):
     def name(self) -> Text:
@@ -1463,14 +1627,15 @@ class ActionAdmissionTestDateMBA(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_calendar()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'MBA' in p['program'] and 'Executive' not in p['program']), None)
         if prog:
             message = f"**MBA Admission Test**\n\n"
             message += f" **Test:** {prog['admission_test']}\n"
             message += f" **Apply by:** {prog['application_deadline']}"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 # ========================================
 # ADMISSION REQUIREMENTS ACTIONS
@@ -1484,8 +1649,7 @@ class ActionAdmissionRequirementsGeneral(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_requirements()
         if not data:
-            dispatcher.utter_message(text="Sorry, admission requirements information is unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         ug = data['admission_requirements']['undergraduate']['general_programs_except_bpharm']
         message = "**Undergraduate Admission Requirements at EWU**\n\n"
@@ -1507,7 +1671,7 @@ class ActionAdmissionRequirementsCSE(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_requirements()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         ug = data['admission_requirements']['undergraduate']['general_programs_except_bpharm']
         cse_req = ug['subject_requirements']['cse']
@@ -1529,7 +1693,7 @@ class ActionAdmissionRequirementsPharmacy(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_requirements()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         pharm = data['admission_requirements']['undergraduate']['bpharm']
         message = "**B.Pharm Admission Requirements**\n\n"
@@ -1554,7 +1718,7 @@ class ActionAdmissionRequirementsMBA(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_requirements()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         mba = data['admission_requirements']['graduate']['mba_emba']
         message = "**MBA Admission Requirements**\n\n"
@@ -1580,8 +1744,7 @@ class ActionAdmissionApplicationSteps(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_process()
         if not data:
-            dispatcher.utter_message(text="Sorry, I couldn't retrieve the application steps.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         app_section = data.get('admission_process', {}).get('application', {})
         message = "** EWU Admission Application - 11 Steps**\n\n"
@@ -1636,8 +1799,7 @@ class ActionAdmissionContact(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_process()
         if not data:
-            dispatcher.utter_message(text="Sorry, contact information is unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         admission = data.get('admission_process', {})
         contacts = admission.get('contacts', {})
@@ -1679,8 +1841,7 @@ class ActionPostAdmissionGSuite(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_process()
         if not data:
-            dispatcher.utter_message(text="Sorry, G Suite information is unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         g_suite = data.get('admission_process', {}).get('post_admission', {}).get('g_suite_activation', {})
         
@@ -1706,14 +1867,12 @@ class ActionPostAdmissionDocumentUpload(Action):
         data = load_admission_requirements()
         
         if not data:
-            dispatcher.utter_message(text="Sorry, admission requirements file not found.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         required_docs = data.get('admission_requirements', {}).get('required_documents', [])
         
         if not required_docs:
-            dispatcher.utter_message(text="Sorry, document information is unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         message = "** Required Documents for Admission**\n\n"
         message += f"**University:** {data.get('university', 'East West University')}\n\n"
@@ -1742,8 +1901,7 @@ class ActionPostAdmissionAdvisingSlip(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_process()
         if not data:
-            dispatcher.utter_message(text="Sorry, advising slip information is unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         advising = data.get('admission_process', {}).get('post_admission', {}).get('advising_slip', {})
         
@@ -1769,8 +1927,7 @@ class ActionPostAdmissionTuitionPayment(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_process()
         if not data:
-            dispatcher.utter_message(text="Sorry, payment information is unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         tuition = data.get('admission_process', {}).get('post_admission', {}).get('tuition_payment', {})
         
@@ -1799,8 +1956,7 @@ class ActionAdmissionImportantNotes(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_process()
         if not data:
-            dispatcher.utter_message(text="Sorry, important notes are unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         notes = data.get('admission_process', {}).get('important_notes', [])
         
@@ -1821,8 +1977,7 @@ class ActionCompleteAdmissionProcess(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_admission_process()
         if not data:
-            dispatcher.utter_message(text="Sorry, admission information is unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         message = "** Complete EWU Admission Process**\n\n"
         
@@ -1883,8 +2038,7 @@ class ActionFacilitiesGeneral(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            dispatcher.utter_message(text="Sorry, facilities information is unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         campus = data['facilities']['campus_life']['available']
         message = "**East West University Campus Facilities**\n\n"
@@ -1903,7 +2057,7 @@ class ActionLabFacilities(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         eng_labs = data['facilities']['engineering_labs']
         message = "**Engineering Laboratories at EWU**\n\n"
@@ -1914,24 +2068,6 @@ class ActionLabFacilities(Action):
         message += f"\n*Total: {len(eng_labs['labs'])} specialized labs available*"
         dispatcher.utter_message(text=message)
         return []
-    
-class ActionFacilitiesGeneral(Action):
-    def name(self) -> Text:
-        return "action_facilities_general"
-    
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        message = ("**EWU Facilities**\n\n"
-                  "East West University provides comprehensive facilities including:\n"
-                  " Libraries, Computer Labs, Engineering Labs\n"
-                  " Cafeteria, Prayer Rooms, Common Areas\n"
-                  " Parking, Transportation, Sports Facilities\n"
-                  " Medical Facilities, Hostels\n"
-                  "Research Centers & More!\n\n"
-                  "Ask about any specific facility!")
-        dispatcher.utter_message(text=message)
-        return []
-
     
 # ========================================
 # MISSING FACILITY ACTIONS
@@ -1945,7 +2081,7 @@ class ActionCampusLife(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         campus_life = data.get('facilities', {}).get('campus_life', {})
         message = f"**Campus Life**\n\n{campus_life.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -1959,7 +2095,7 @@ class ActionCivilEngineeringLabs(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         labs = data.get('facilities', {}).get('civil_engineering_labs', {})
         message = f"**Civil Engineering Labs**\n\n{labs.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -1973,7 +2109,7 @@ class ActionEngineeringLabs(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         labs = data.get('facilities', {}).get('engineering_labs', {})
         message = f"**Engineering Labs**\n\n{labs.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -1987,7 +2123,7 @@ class ActionICSServices(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         ics = data.get('facilities', {}).get('ics_services', {})
         message = f"**ICS Services**\n\n{ics.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -2001,7 +2137,7 @@ class ActionPharmacyLabs(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         labs = data.get('facilities', {}).get('pharmacy_labs', {})
         message = f"**Pharmacy Labs**\n\n{labs.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -2015,7 +2151,7 @@ class ActionResearchCenter(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         center = data.get('facilities', {}).get('research_center', {})
         message = f"**Research Center**\n\n{center.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -2029,7 +2165,7 @@ class ActionComputerLab(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         lab = data.get('facilities', {}).get('computer_lab', {})
         message = f"**Computer Lab**\n\n{lab.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -2043,7 +2179,7 @@ class ActionWiFiInternet(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         wifi = data.get('facilities', {}).get('wifi_internet', {})
         message = f"**WiFi & Internet**\n\n{wifi.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -2057,7 +2193,7 @@ class ActionParkingFacilities(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         parking = data.get('facilities', {}).get('parking_facilities', {})
         message = f"**Parking Facilities**\n\n{parking.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -2071,7 +2207,7 @@ class ActionSportsFacilities(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         sports = data.get('facilities', {}).get('sports_facilities', {})
         message = f"**Sports Facilities**\n\n{sports.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -2085,7 +2221,7 @@ class ActionHostelFacilities(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         hostel = data.get('facilities', {}).get('hostel_facilities', {})
         message = f"**Hostel Facilities**\n\n{hostel.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -2099,7 +2235,7 @@ class ActionMedicalFacilities(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         medical = data.get('facilities', {}).get('medical_facilities', {})
         message = f"**Medical Facilities**\n\n{medical.get('description', 'Yes, medical facilities are available https://www.ewubd.edu/admin-office/ewu-medical-centre')}"
         dispatcher.utter_message(text=message)
@@ -2113,7 +2249,7 @@ class ActionPrayerRoom(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         prayer = data.get('facilities', {}).get('prayer_room', {})
         message = f"**Prayer Room**\n\n{prayer.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -2127,7 +2263,7 @@ class ActionCommonRoom(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         common = data.get('facilities', {}).get('common_room', {})
         message = f"**Common Room**\n\n{common.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -2141,7 +2277,7 @@ class ActionCareerCounseling(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         career = data.get('facilities', {}).get('career_counseling', {})
         message = f"**Career Counseling**\n\n{career.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -2158,22 +2294,9 @@ class ActionCafeteriaFacilities(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         cafeteria = data.get('facilities', {}).get('cafeteria', {})
         message = f"**Cafeteria Facilities**\n\n{cafeteria.get('description', 'N/A')}"
-        dispatcher.utter_message(text=message)
-        return []
-
-class ActionFacilitiesGeneral(Action):
-    def name(self) -> Text:
-        return "action_facilities_general"
-    
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        data = load_facilities()
-        if not data:
-            return []
-        message = "**EWU Facilities**\n\nEast West University provides world-class facilities for students including libraries, labs, sports centers, and more. Which facility would you like to know more about?"
         dispatcher.utter_message(text=message)
         return []
 
@@ -2185,7 +2308,7 @@ class ActionLibraryFacilities(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         library = data.get('facilities', {}).get('library', {})
         message = f"**Library Facilities**\n\n{library.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -2199,7 +2322,7 @@ class ActionTransportationFacilities(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_facilities()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         transport = data.get('facilities', {}).get('transportation', {})
         message = f"**Transportation Facilities**\n\n{transport.get('description', 'N/A')}"
         dispatcher.utter_message(text=message)
@@ -2223,8 +2346,7 @@ class ActionFacultyInfo(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            dispatcher.utter_message(text="Sorry, faculty information is unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         message = "**Faculty Information - East West University**\n\n"
         message += f"**Total Departments:** {len(data.get('departments', []))}\n\n"
@@ -2244,7 +2366,7 @@ class ActionFacultyCSE(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         cse_dept = next((d for d in data.get('departments', [])
                         if 'CSE' in d.get('department_name', '') or 'Computer Science' in d.get('department_name', '')), None)
@@ -2259,7 +2381,8 @@ class ActionFacultyCSE(Action):
             total = len(cse_dept['faculty_members'])
             message += f"*Total CSE Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultyBBA(Action):
     def name(self) -> Text:
@@ -2269,7 +2392,7 @@ class ActionFacultyBBA(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         bba_dept = next((d for d in data.get('departments', [])
                         if 'BBA' in d.get('department_name', '') or 'Business' in d.get('department_name', '')), None)
@@ -2284,7 +2407,8 @@ class ActionFacultyBBA(Action):
             total = len(bba_dept['faculty_members'])
             message += f"*Total BBA Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
     
 class ActionFacultyEEE(Action):
     def name(self) -> Text:
@@ -2294,7 +2418,7 @@ class ActionFacultyEEE(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         eee_dept = next((d for d in data.get('departments', [])
                         if 'EEE' in d.get('department_name', '') or 'Electrical' in d.get('department_name', '')), None)
@@ -2309,7 +2433,8 @@ class ActionFacultyEEE(Action):
             total = len(eee_dept['faculty_members'])
             message += f"*Total EEE Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultyICE(Action):
     def name(self) -> Text:
@@ -2319,7 +2444,7 @@ class ActionFacultyICE(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         ice_dept = next((d for d in data.get('departments', [])
                         if 'ICE' in d.get('department_name', '') or 'Communication' in d.get('department_name', '')), None)
@@ -2334,7 +2459,8 @@ class ActionFacultyICE(Action):
             total = len(ice_dept['faculty_members'])
             message += f"*Total ICE Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultyPharmacy(Action):
     def name(self) -> Text:
@@ -2344,7 +2470,7 @@ class ActionFacultyPharmacy(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         pharm_dept = next((d for d in data.get('departments', [])
                           if 'Pharmacy' in d.get('department_name', '')), None)
@@ -2359,7 +2485,8 @@ class ActionFacultyPharmacy(Action):
             total = len(pharm_dept['faculty_members'])
             message += f"*Total Pharmacy Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultyCivil(Action):
     def name(self) -> Text:
@@ -2369,7 +2496,7 @@ class ActionFacultyCivil(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         civil_dept = next((d for d in data.get('departments', [])
                           if 'Civil' in d.get('department_name', '')), None)
@@ -2384,7 +2511,8 @@ class ActionFacultyCivil(Action):
             total = len(civil_dept['faculty_members'])
             message += f"*Total Civil Engineering Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultyGEB(Action):
     def name(self) -> Text:
@@ -2394,7 +2522,7 @@ class ActionFacultyGEB(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         geb_dept = next((d for d in data.get('departments', [])
                         if 'GEB' in d.get('department_name', '') or 'Genetic Engineering' in d.get('department_name', '')), None)
@@ -2409,7 +2537,8 @@ class ActionFacultyGEB(Action):
             total = len(geb_dept['faculty_members'])
             message += f"*Total GEB Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultyEconomics(Action):
     def name(self) -> Text:
@@ -2419,7 +2548,7 @@ class ActionFacultyEconomics(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         econ_dept = next((d for d in data.get('departments', [])
                          if 'Economics' in d.get('department_name', '')), None)
@@ -2434,7 +2563,8 @@ class ActionFacultyEconomics(Action):
             total = len(econ_dept['faculty_members'])
             message += f"*Total Economics Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultyEnglish(Action):
     def name(self) -> Text:
@@ -2444,7 +2574,7 @@ class ActionFacultyEnglish(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         eng_dept = next((d for d in data.get('departments', [])
                         if 'English' in d.get('department_name', '')), None)
@@ -2459,7 +2589,8 @@ class ActionFacultyEnglish(Action):
             total = len(eng_dept['faculty_members'])
             message += f"*Total English Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultyLaw(Action):
     def name(self) -> Text:
@@ -2469,7 +2600,7 @@ class ActionFacultyLaw(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         law_dept = next((d for d in data.get('departments', [])
                         if 'Law' in d.get('department_name', '')), None)
@@ -2484,7 +2615,8 @@ class ActionFacultyLaw(Action):
             total = len(law_dept['faculty_members'])
             message += f"*Total Law Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultyMath(Action):
     def name(self) -> Text:
@@ -2494,7 +2626,7 @@ class ActionFacultyMath(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         math_dept = next((d for d in data.get('departments', [])
                          if 'Mathematics' in d.get('department_name', '')), None)
@@ -2509,7 +2641,8 @@ class ActionFacultyMath(Action):
             total = len(math_dept['faculty_members'])
             message += f"*Total Mathematics Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultySociology(Action):
     def name(self) -> Text:
@@ -2519,7 +2652,7 @@ class ActionFacultySociology(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         soc_dept = next((d for d in data.get('departments', [])
                         if 'Sociology' in d.get('department_name', '')), None)
@@ -2534,7 +2667,8 @@ class ActionFacultySociology(Action):
             total = len(soc_dept['faculty_members'])
             message += f"*Total Sociology Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultyInformationStudies(Action):
     def name(self) -> Text:
@@ -2544,7 +2678,7 @@ class ActionFacultyInformationStudies(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         is_dept = next((d for d in data.get('departments', [])
                        if 'Information Studies' in d.get('department_name', '')), None)
@@ -2559,7 +2693,8 @@ class ActionFacultyInformationStudies(Action):
             total = len(is_dept['faculty_members'])
             message += f"*Total Information Studies Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultyPPHS(Action):
     def name(self) -> Text:
@@ -2569,7 +2704,7 @@ class ActionFacultyPPHS(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         pphs_dept = next((d for d in data.get('departments', [])
                          if 'PPHS' in d.get('department_name', '') or 'Public Health' in d.get('department_name', '')), None)
@@ -2584,7 +2719,8 @@ class ActionFacultyPPHS(Action):
             total = len(pphs_dept['faculty_members'])
             message += f"*Total PPHS Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultyDataScience(Action):
     def name(self) -> Text:
@@ -2594,7 +2730,7 @@ class ActionFacultyDataScience(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         ds_dept = next((d for d in data.get('departments', [])
                        if 'Data Science' in d.get('department_name', '') or 'Analytics' in d.get('department_name', '')), None)
@@ -2609,7 +2745,8 @@ class ActionFacultyDataScience(Action):
             total = len(ds_dept['faculty_members'])
             message += f"*Total Data Science Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionFacultySocialRelations(Action):
     def name(self) -> Text:
@@ -2619,7 +2756,7 @@ class ActionFacultySocialRelations(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         sr_dept = next((d for d in data.get('departments', [])
                        if 'Social Relations' in d.get('department_name', '')), None)
@@ -2634,7 +2771,8 @@ class ActionFacultySocialRelations(Action):
             total = len(sr_dept['faculty_members'])
             message += f"*Total Social Relations Faculty: {total} members*"
             dispatcher.utter_message(text=message)
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 # ========================================
 # CHAIRPERSON INFORMATION ACTION
 # ========================================
@@ -2647,8 +2785,7 @@ class ActionChairpersonInfo(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_faculty()
         if not data:
-            dispatcher.utter_message(text="Sorry, chairperson information is currently unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         # Find all chairpersons (those with "Chairperson" in designation)
         chairpersons = [f for f in data.get('faculty', []) 
@@ -2664,9 +2801,11 @@ class ActionChairpersonInfo(Action):
                     message += f"  Profile: {chair['profile_url']}\n"
                 message += "\n"
             dispatcher.utter_message(text=message)
+            return []
         else:
             dispatcher.utter_message(text="Chairperson information not available.")
-        return []
+            return []
+        return call_rag_fallback(dispatcher, tracker, domain)
 
 
 # ========================================
@@ -2681,8 +2820,7 @@ class ActionGradingSystem(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_grading()
         if not data:
-            dispatcher.utter_message(text="Sorry, grading information is unavailable.")
-            return []
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         grading = data['grading_system']
         message = f"**{grading['title']}**\n\n"
@@ -2703,194 +2841,12 @@ class ActionGradingSystem(Action):
 
 
 
-class ActionPhi3RagAnswer(Action):
-    """RAG-powered answer generation using TinyLlama"""
-    def name(self) -> Text:
-        # change the action name here
-        return "action_call_rag"
-    
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
-        
-        user_message = tracker.latest_message.get("text", "")
-        
-        if not user_message.strip():
-            dispatcher.utter_message(text="I didn't catch that. Could you please rephrase?")
-            return []
-        
-        # Build conversation history (for future use)
-        history = self._build_history(tracker)
-        
-        # Call RAG service with TinyLlama
-        answer, confidence, sources, processing_time = self._call_rag(user_message)
-        
-        # Send appropriate response based on confidence
-        self._send_response(dispatcher, answer, confidence, sources, processing_time)
-        
-        return []
-    
-    def _call_rag(self, query: str) -> tuple:
-        """
-        Call RAG service (TinyLlama-powered) and return structured response
-        
-        Returns:
-            (answer, confidence, sources, processing_time)
-        """
-        try:
-            # FIXED: Only send what the API accepts
-            payload = {
-                "query": query,
-                "top_k": 20  # Increased for better context
-            }
-            
-            #logger.info(f"RAG Query: {query[:50]}...")
-            RAG_API_URL = os.environ.get("RAG_API_URL", "https://yieldingly-schizophytic-deanna.ngrok-free.dev/rag/query")
-            headers = {"Ngrok-Skip-Browser-Warning": "true"}
-            response = requests.post(RAG_API_URL, json=payload, headers=headers, timeout=500)
-
-            if response.status_code == 200:
-                data = response.json()
-                logger.info(f"RAG Response Raw: {data}")
-                
-                # FIXED: Use correct field names from FastAPI QueryResponse
-                answer = data.get("response", "")  # NOT "answer"
-                confidence = float(data.get("confidence", 0.0))
-                sources = data.get("sources", [])
-                processing_time = data.get("processing_time", 0.0)
-                
-                logger.info(f"Parsed - Answer: '{answer[:100]}...', Confidence: {confidence}")
-                logger.info(
-                    f"RAG response received - Confidence: {confidence:.2f}, "
-                    f"Time: {processing_time:.2f}s, Sources: {len(sources)}"
-                )
-                
-                return answer, confidence, sources, processing_time
-            
-            else:
-                logger.error(f"RAG service error: {response.status_code} - {response.text}")
-                return (
-                    "I'm having trouble connecting to my knowledge base.",
-                    0.0,
-                    [],
-                    0.0
-                )
-                
-        except requests.Timeout:
-            logger.error("RAG service timeout")
-            return (
-                "The request is taking too long. Please try again.",
-                0.0,
-                [],
-                0.0
-            )
-        except requests.ConnectionError:
-            logger.error("RAG service connection error")
-            return (
-                "I can't connect to the answer service. Please try again later.",
-                0.0,
-                [],
-                0.0
-            )
-        except Exception as e:
-            logger.exception(f"Unexpected RAG error: {e}")
-            return (
-                "Something went wrong while processing your question.",
-                0.0,
-                [],
-                0.0
-            )
-    
-    # Replace the _send_response confidence branching with this clearer logic:
-
-    def _send_response(
-        self,
-        dispatcher: CollectingDispatcher,
-        answer: str,
-        confidence: float,
-        sources: List[str],
-        processing_time: float
-    ):
-        """
-        Confidence levels:
-        - >= 0.7: High confidence - send answer with sources
-        - 0.4-0.7: Medium confidence - send answer with disclaimer
-        - < 0.4: Low confidence - suggest contacting admissions
-        """
-        if not answer or confidence < 0.2:
-            dispatcher.utter_message(
-                text=(
-                    "I don't have reliable information about this. "
-                    "For accurate details, please contact:\n admissions@ewubd.edu\n"
-                )
-            )
-            return
-    
-        if confidence < 0.7:
-            # Medium confidence
-            dispatcher.utter_message(
-                text=f"{answer}\n\nNote: I'm not entirely confident about this answer. Please verify with admissions@ewubd.edu"
-            )
-        else:
-            # High confidence
-            dispatcher.utter_message(text=answer)
-    
-        # Add up to top-2 sources for transparency (if provided)
-        if sources:
-            unique_sources = sorted({s for s in sources if s})[:2]
-            if unique_sources:
-                source_names = [s.replace('.json', '').replace('_', ' ').title() for s in unique_sources]
-                dispatcher.utter_message(text=f"Source: {', '.join(source_names)}")
-    
-        # Log performance (for monitoring)
-        logger.info(f"Response sent - Confidence: {confidence:.2f}, Time: {processing_time:.2f}s")
-    
-    def _build_history(self, tracker: Tracker) -> str:
-        """
-        Extract last 3 conversation turns (for future use)
-        
-        Note: Current RAG API doesn't use history yet, but keeping
-        this for potential future enhancement
-        """
-        events = tracker.events
-        history = []
-        
-        for event in reversed(events[-12:]):  # Look at more events
-            if event.get("event") == "user":
-                text = event.get("text", "")
-                if text and text.strip():
-                    history.append(f"User: {text}")
-            elif event.get("event") == "bot":
-                text = event.get("text", "")
-                # Skip system messages
-                if text and not text.startswith(("", "", "")):
-                    history.append(f"Bot: {text}")
-            
-            # Stop once we have 3 full exchanges
-            if len(history) >= 6:
-                break
-        
-        return "\n".join(reversed(history[-6:]))
 
 
-class ActionDefaultFallback(Action):
-    """Fallback to RAG for unrecognized intents"""  
-    def name(self) -> Text:
-        return "action_default_fallback"  
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:      
-        user_message = tracker.latest_message.get("text", "")      
-        logger.info(f"Fallback triggered for: {user_message}")      
-        # Try RAG for unrecognized intents
-        rag_action = ActionPhi3RagAnswer()
-        return rag_action.run(dispatcher, tracker, domain)
+
+
+
+
 
 
 
@@ -3051,22 +3007,6 @@ def normalize_department_name(dept_name: str) -> str:
 
 
 
-# class ActionDefaultFallback(Action):
-#     """Fallback to RAG for unrecognized intents"""
-    
-#     def name(self) -> Text:
-#         return "action_default_fallback"
-    
-#     def run(
-#         self,
-#         dispatcher: CollectingDispatcher,
-#         tracker: Tracker,
-#         domain: Dict[Text, Any],
-#     ) -> List[Dict[Text, Any]]:
-        
-#         user_message = tracker.latest_message.get("text", "")
-        
-#         logger.info(f"Fallback triggered for: {user_message}")
         
 #         # Try RAG for unrecognized intents
 #         rag_action = ActionPhi3RagAnswer()
@@ -3263,25 +3203,17 @@ class ActionShowCourses(Action):
             )
             return []
         
-        
         # Find matching file
         filename = DEPARTMENT_FILES.get(department)
         
         if not filename:
-            dispatcher.utter_message(
-                text=f"Sorry, I don't have information for '{department}'. "
-                     f"Try: CSE, EEE, BBA, Civil Engineering, English, Law, MBA, etc."
-            )
-            return [SlotSet("department", None)]
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         # Load course data
         data = load_json_file(filename)
         
         if not data:
-            dispatcher.utter_message(
-                text=f"Sorry, I couldn't load course data for {department}."
-            )
-            return [SlotSet("department", None)]
+            return call_rag_fallback(dispatcher, tracker, domain)
         
         # Extract courses
         courses = self._extract_courses(data)
@@ -3317,7 +3249,7 @@ class ActionShowCourses(Action):
     def _format_courses_response(self, department: str, courses: List[dict], data: dict) -> str:
         """Format courses into readable response"""
         
-        # Get department info (handles both structures)
+        # Get department info
         dept_info = data.get('department_info', {})
         
         # Get program/department name
@@ -3344,35 +3276,26 @@ class ActionShowCourses(Action):
         if course_summaries:
             response += "**Credit Distribution:**\n"
             for category, credits in course_summaries.items():
-                # Format category name (e.g., core_credits -> Core Credits)
                 category_name = category.replace('_', ' ').title()
                 response += f"• {category_name}: {credits}\n"
             response += "\n"
         
-        # Group courses by category if available
+        # Group courses by category
         grouped = self._group_courses_by_category(courses)
         
         if grouped:
-            # Show courses grouped by category
-            for category, cat_courses in list(grouped.items())[:5]:  # Show first 5 categories
+            for category, cat_courses in list(grouped.items())[:5]:
                 response += f"**{category}:**\n"
-                for course in cat_courses[:8]:  # Show first 8 courses per category
+                for course in cat_courses[:8]:
                     code = course.get('code', course.get('course_code', 'N/A'))
                     name = course.get('name', course.get('title', 'N/A'))
                     credits = course.get('credits', course.get('credit', 'N/A'))
                     response += f"• {code} - {name} ({credits} cr)\n"
                 
-                # Show count if more courses exist
                 if len(cat_courses) > 8:
                     response += f"  ... and {len(cat_courses) - 8} more\n"
                 response += "\n"
-            
-            # Total courses shown
-            total_shown = sum(min(8, len(cat_courses)) for cat_courses in list(grouped.values())[:5])
-            if len(courses) > total_shown:
-                response += f"_Total: {len(courses)} courses_\n\n"
         else:
-            # Show flat list if no categories
             response += "**Course List:**\n"
             for course in courses[:15]:
                 code = course.get('code', course.get('course_code', 'N/A'))
@@ -3383,16 +3306,12 @@ class ActionShowCourses(Action):
             if len(courses) > 15:
                 response += f"\n... and {len(courses) - 15} more courses\n\n"
         
-        response += f"Please visit https://www.ewubd.edu or contact admissions for more information."
-        
+        response += f"Please visit https://www.ewubd.edu for more information."
         return response
     
     def _group_courses_by_category(self, courses: List[dict]) -> Dict[str, List[dict]]:
-        """Group courses by category"""
         grouped = {}
-        
         for course in courses:
-            # Try multiple fields for grouping
             category = (
                 course.get('category') or 
                 course.get('semester') or 
@@ -3400,320 +3319,90 @@ class ActionShowCourses(Action):
                 course.get('level') or
                 'Other Courses'
             )
-            
-            if category not in grouped:
-                grouped[category] = []
+            if category not in grouped: grouped[category] = []
             grouped[category].append(course)
-        
-        # Only return grouped if we have meaningful groups (more than 1)
         return grouped if len(grouped) > 1 else {}
-
-
-# ============================================================================
-# ACTION: Show Course Details (by course code)
-# ============================================================================
 
 class ActionShowCourseDetails(Action):
     """Show details of a specific course by code"""
-    
     def name(self) -> Text:
         return "action_show_course_details"
     
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any]
-    ) -> List[Dict[Text, Any]]:
-        
-        # Get course code
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         course_code = tracker.get_slot("course_code")
-        
         if not course_code:
             entities = tracker.latest_message.get('entities', [])
             for entity in entities:
                 if entity['entity'] == 'course_code':
-                    course_code = entity['value']
-                    break
-        
+                    course_code = entity['value']; break
         if not course_code:
-            dispatcher.utter_message(
-                text="Please provide a course code. For example: CSE101, EEE201, BBA301"
-            )
+            dispatcher.utter_message(text="Please provide a course code. For example: CSE101")
             return []
         
-        # Normalize course code (remove spaces, hyphens, make uppercase)
         course_code = course_code.upper().replace(' ', '').replace('-', '')
-        
-        # Search all department files
         course_info = self._find_course(course_code)
         
         if not course_info:
-            dispatcher.utter_message(
-                text=f"Sorry, I couldn't find information for course code: {course_code}"
-            )
-            return [SlotSet("course_code", None)]
+            return call_rag_fallback(dispatcher, tracker, domain)
         
-        # Format response
         response = self._format_course_details(course_code, course_info)
         dispatcher.utter_message(text=response)
-        
         return [SlotSet("course_code", course_code)]
     
     def _find_course(self, course_code: str) -> dict:
-        """Search for course across all department files"""
-        
-        # Use set to avoid duplicate files
         for filename in set(DEPARTMENT_FILES.values()):
             data = load_json_file(filename)
-            if not data:
-                continue
-            
-            # Get courses list
-            courses = []
-            if 'courses' in data:
-                courses = data['courses']
-            elif isinstance(data, list):
-                courses = data
-            
-            # Search for matching course
+            if not data: continue
+            courses = data.get('courses', data if isinstance(data, list) else [])
             for course in courses:
-                # Normalize course code from JSON
                 code = course.get('code', course.get('course_code', '')).upper().replace(' ', '').replace('-', '')
-                if code == course_code:
-                    return course
-        
+                if code == course_code: return course
         return None
     
     def _format_course_details(self, course_code: str, course: dict) -> str:
-        """Format course details"""
-        
-        # Extract course information (handle multiple field names)
         code = course.get('code', course.get('course_code', course_code))
         name = course.get('name', course.get('title', 'N/A'))
         credits = course.get('credits', course.get('credit', 'N/A'))
-        prerequisites = course.get('prerequisites', course.get('prerequisite', 'None'))
+        prereq = course.get('prerequisites', course.get('prerequisite', 'None'))
         category = course.get('category', 'N/A')
-        description = course.get('description', 'No description available')
+        desc = course.get('description', 'No description available')
         
-        response = f"**Course Details**\n\n"
-        response += f"**Code:** {code}\n"
-        response += f"**Name:** {name}\n"
-        response += f"**Credits:** {credits}\n"
-        response += f"**Prerequisites:** {prerequisites}\n"
-        response += f"**Category:** {category}\n\n"
-        
-        # Only show description if available
-        if description and description != 'No description available':
-            response += f"**Description:**\n{description}\n\n"
-        
-        response += f"Please visit https://www.ewubd.edu or contact admissions for more information."
-        
-        return response
-
-
-# ============================================================================
-# ACTION: Show Total Credits
-# ============================================================================
+        res = f"**Course Details**\n\n**Code:** {code}\n**Name:** {name}\n**Credits:** {credits}\n**Prerequisites:** {prereq}\n**Category:** {category}\n\n"
+        if desc and desc != 'No description available': res += f"**Description:**\n{desc}\n\n"
+        res += "Please visit https://www.ewubd.edu for more information."
+        return res
 
 class ActionShowCredits(Action):
     """Show total credits for a program"""
-    
     def name(self) -> Text:
         return "action_show_credits"
     
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any]
-    ) -> List[Dict[Text, Any]]:
-        
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         department = normalize_department_name(tracker.get_slot("department"))
-        
         if not department:
             entities = tracker.latest_message.get('entities', [])
             for entity in entities:
                 if entity['entity'] == 'department':
-                    department = entity['value']
-                    break
-        
+                    department = entity['value']; break
         if not department:
-            dispatcher.utter_message(text="Which program? (e.g., CSE, BBA, MBA, Civil Engineering)")
+            dispatcher.utter_message(text="Which program? (e.g., CSE, BBA)")
             return []
         
-     
         filename = DEPARTMENT_FILES.get(department)
-        
-        if not filename:
-            dispatcher.utter_message(text=f"Sorry, I don't have info for {department}")
-            return []
-        
+        if not filename: return call_rag_fallback(dispatcher, tracker, domain)
         data = load_json_file(filename)
+        if not data: return call_rag_fallback(dispatcher, tracker, domain)
         
-        if not data:
-            dispatcher.utter_message(text=f"Couldn't load data for {department}")
-            return []
-        
-        # Get department info (handles both JSON structures)
         dept_info = data.get('department_info', {})
+        program_name = dept_info.get('program_name') or dept_info.get('department_name') or data.get('program_name') or department.upper()
+        total_credits = dept_info.get('total_credits') or dept_info.get('minimum_credits_required') or data.get('total_credits') or 'N/A'
         
-        # Get program/department name
-        program_name = (
-            dept_info.get('program_name') or 
-            dept_info.get('department_name') or 
-            data.get('program_name') or
-            department.upper()
-        )
-        
-        # Get total credits
-        total_credits = (
-            dept_info.get('total_credits') or 
-            dept_info.get('minimum_credits_required') or
-            data.get('total_credits') or
-            'N/A'
-        )
-        
-        response = f"**{program_name} Credit Requirements**\n\n"
-        response += f"**Total Credits:** {total_credits}\n\n"
-        
-        # Get breakdown from course_summaries or credit_breakdown
+        res = f"**{program_name} Credit Requirements**\n\n**Total Credits:** {total_credits}\n\n"
         breakdown = data.get('course_summaries', data.get('credit_breakdown', {}))
-        
         if breakdown:
-            response += "**Credit Breakdown:**\n"
-            for category, credits in breakdown.items():
-                # Format category name nicely
-                category_name = category.replace('_', ' ').title()
-                response += f"• {category_name}: {credits}\n"
-        
-        response += f"\n Please visit https://www.ewubd.edu or contact admissions for more information."
-        
-        dispatcher.utter_message(text=response)
-        
+            res += "**Credit Breakdown:**\n"
+            for cat, creds in breakdown.items():
+                res += f"• {cat.replace('_', ' ').title()}: {creds}\n"
+        res += "\nPlease visit https://www.ewubd.edu for more information."
+        dispatcher.utter_message(text=res)
         return [SlotSet("department", department)]
-        
-        # Extract courses
-        courses = self._extract_courses(data)
-        
-        if not courses:
-            dispatcher.utter_message(
-                text=f"No courses found for {department}."
-            )
-            return [SlotSet("department", None)]
-        
-        # Format and send response
-        response = self._format_courses_response(department, courses, data)
-        dispatcher.utter_message(text=response)
-        
-        return [SlotSet("department", department)]
-    
-    def _extract_courses(self, data: dict) -> List[dict]:
-        """Extract course list from JSON data"""
-        courses = []
-        
-        # Try different JSON structures
-        if 'courses' in data:
-            courses = data['courses']
-        elif 'course_list' in data:
-            courses = data['course_list']
-        elif 'curriculum' in data:
-            courses = data['curriculum']
-        elif isinstance(data, list):
-            courses = data
-        
-        return courses
-    
-    def _format_courses_response(self, department: str, courses: List[dict], data: dict) -> str:
-        """Format courses into readable response"""
-        
-        # Get department info (handles both structures)
-        dept_info = data.get('department_info', {})
-        
-        # Get program/department name
-        program_name = (
-            dept_info.get('program_name') or 
-            dept_info.get('department_name') or 
-            data.get('program_name') or
-            department.upper()
-        )
-        
-        # Get total credits
-        total_credits = (
-            dept_info.get('total_credits') or 
-            dept_info.get('minimum_credits_required') or
-            data.get('total_credits') or
-            'N/A'
-        )
-        
-        response = f"📚 **{program_name} Courses**\n\n"
-        response += f"**Total Credits:** {total_credits}\n\n"
-        
-        # Show course summaries if available
-        course_summaries = data.get('course_summaries', {})
-        if course_summaries:
-            response += "**Credit Distribution:**\n"
-            for category, credits in course_summaries.items():
-                # Format category name (e.g., core_credits -> Core Credits)
-                category_name = category.replace('_', ' ').title()
-                response += f"• {category_name}: {credits}\n"
-            response += "\n"
-        
-        # Group courses by category if available
-        grouped = self._group_courses_by_category(courses)
-        
-        if grouped:
-            # Show courses grouped by category
-            for category, cat_courses in list(grouped.items())[:5]:  # Show first 5 categories
-                response += f"**{category}:**\n"
-                for course in cat_courses[:8]:  # Show first 8 courses per category
-                    code = course.get('code', course.get('course_code', 'N/A'))
-                    name = course.get('name', course.get('title', 'N/A'))
-                    credits = course.get('credits', course.get('credit', 'N/A'))
-                    response += f"• {code} - {name} ({credits} cr)\n"
-                
-                # Show count if more courses exist
-                if len(cat_courses) > 8:
-                    response += f"  ... and {len(cat_courses) - 8} more\n"
-                response += "\n"
-            
-            # Total courses shown
-            total_shown = sum(min(8, len(cat_courses)) for cat_courses in list(grouped.values())[:5])
-            if len(courses) > total_shown:
-                response += f"_Total: {len(courses)} courses_\n\n"
-        else:
-            # Show flat list if no categories
-            response += "**Course List:**\n"
-            for course in courses[:15]:
-                code = course.get('code', course.get('course_code', 'N/A'))
-                name = course.get('name', course.get('title', 'N/A'))
-                credits = course.get('credits', course.get('credit', 'N/A'))
-                response += f"• {code} - {name} ({credits} cr)\n"
-            
-            if len(courses) > 15:
-                response += f"\n... and {len(courses) - 15} more courses\n\n"
-        
-        response += f" Please visit https://www.ewubd.edu or contact admissions for more information."
-        
-        return response
-    
-    def _group_courses_by_category(self, courses: List[dict]) -> Dict[str, List[dict]]:
-        """Group courses by category"""
-        grouped = {}
-        
-        for course in courses:
-            # Try multiple fields for grouping
-            category = (
-                course.get('category') or 
-                course.get('semester') or 
-                course.get('year') or 
-                course.get('level') or
-                'Other Courses'
-            )
-            
-            if category not in grouped:
-                grouped[category] = []
-            grouped[category].append(course)
-        
-        # Only return grouped if we have meaningful groups (more than 1)
-        return grouped if len(grouped) > 1 else {}
