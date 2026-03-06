@@ -31,11 +31,16 @@ model = transformers.AutoModelForCausalLM.from_pretrained(
     device_map="auto"
 )
 
+print(f"CUDA Available: {torch.cuda.is_available()}")
+if torch.cuda.is_available():
+    print(f"Current device: {torch.cuda.current_device()}")
+    print(f"Device name: {torch.cuda.get_device_name(0)}")
+
 generator = transformers.pipeline(
     "text-generation",
     model=model,
     tokenizer=tokenizer,
-    max_new_tokens=512,
+    max_new_tokens=256,
     return_full_text=False,
     do_sample=False
 )
@@ -50,7 +55,7 @@ app = FastAPI()
 def rag_query(req: QueryRequest):
     start = time.time()
 
-    contexts = retriever.retrieve(req.query, top_k=req.top_k, return_k=20)
+    contexts = retriever.retrieve(req.query, top_k=req.top_k, return_k=10)
     if not contexts:
         return {
             "response": "I don't have that information in my database.",
