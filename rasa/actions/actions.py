@@ -24,7 +24,8 @@ def is_bangla(text: str) -> bool:
     # We use a set for faster lookup
     banglish_keywords = {
         'koto', 'kothay', 'ki', 'lagbe', 'borti', 'somporke', 'jante', 'chai',
-        'kemon', 'achen', 'obostha', 'biday', 'pore', 'kobe', 'thikana', 'khoroch'
+        'kemon', 'achen', 'obostha', 'biday', 'pore', 'kobe', 'thikana', 'khoroch',
+        'bolun', 'bolte', 'parbo', 'hobe', 'jonno', 'dekhao', 'dekhaw', 'ache', 'khujchi'
     }
 
     # Basic tokenization and check
@@ -252,7 +253,7 @@ class ActionDefaultFallback(Action):
 # HELPER FUNCTIONS TO LOAD ALL DATA
 # ========================================
 
-BASE_URL = "https://raw.githubusercontent.com/Atkiya/RasaChatbot/main/"
+BASE_URL = "https://raw.githubusercontent.com/infi9itea/ewu_data/main/"
 
 def load_json_file(filename):
     try:
@@ -283,7 +284,7 @@ def load_events_workshops():
     return load_json_file("dynamic_events_workshops.json")
 
 def load_faculty():
-    return load_json_file("dynamic_faculty.json")
+    return load_json_file("dynamic_faculty_qa.json")
 
 def load_grading():
     return load_json_file("dynamic_grading.json")
@@ -492,22 +493,25 @@ class ActionGetTuitionGeneral(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         user_msg = tracker.latest_message.get("text", "")
         data = load_tuition_fees()
-        if not data:
+        if not data or not isinstance(data, dict):
             return call_rag_fallback(dispatcher, tracker, domain)
         
-        if is_bangla(user_msg):
-            message = "**ইস্ট ওয়েস্ট ইউনিভার্সিটি টিউশন ফি (প্রতি ক্রেডিট)**\n\n"
-            for program in data['undergraduate_programs']['tuition_fees_per_credit']:
-                message += f"- {program['program']}: {program['fee_per_credit']:,} টাকা/ক্রেডিট\n"
-            message += f"\n*কার্যকরী: {data['page_info']['applicable_from']}*"
-        else:
-            message = "**East West University Tuition Fees (Per Credit)**\n\n"
-            for program in data['undergraduate_programs']['tuition_fees_per_credit']:
-                message += f"- {program['program']}: {program['fee_per_credit']:,} BDT/credit\n"
-            message += f"\n*Applicable from: {data['page_info']['applicable_from']}*"
+        try:
+            if is_bangla(user_msg):
+                message = "**ইস্ট ওয়েস্ট ইউনিভার্সিটি টিউশন ফি (প্রতি ক্রেডিট)**\n\n"
+                for program in data['undergraduate_programs']['tuition_fees_per_credit']:
+                    message += f"- {program['program']}: {program['fee_per_credit']:,} টাকা/ক্রেডিট\n"
+                message += f"\n*কার্যকরী: {data['page_info']['applicable_from']}*"
+            else:
+                message = "**East West University Tuition Fees (Per Credit)**\n\n"
+                for program in data['undergraduate_programs']['tuition_fees_per_credit']:
+                    message += f"- {program['program']}: {program['fee_per_credit']:,} BDT/credit\n"
+                message += f"\n*Applicable from: {data['page_info']['applicable_from']}*"
 
-        dispatcher.utter_message(text=message)
-        return []
+            dispatcher.utter_message(text=message)
+            return []
+        except (KeyError, TypeError):
+            return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetApplicationFee(Action):
     def name(self) -> Text:
@@ -516,13 +520,16 @@ class ActionGetApplicationFee(Action):
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
-        if not data:
+        if not data or not isinstance(data, dict):
             return call_rag_fallback(dispatcher, tracker, domain)
         
-        app_fee = data['fee_categories']['application_fee']
-        message = f"The application fee at East West University is **{app_fee}** (online processing fee, non-refundable)."
-        dispatcher.utter_message(text=message)
-        return []
+        try:
+            app_fee = data['fee_categories']['application_fee']
+            message = f"The application fee at East West University is **{app_fee}** (online processing fee, non-refundable)."
+            dispatcher.utter_message(text=message)
+            return []
+        except (KeyError, TypeError):
+            return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionCSE(Action):
     def name(self) -> Text:
@@ -531,17 +538,20 @@ class ActionGetTuitionCSE(Action):
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = load_tuition_fees()
-        if not data:
+        if not data or not isinstance(data, dict):
             return call_rag_fallback(dispatcher, tracker, domain)
-        prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
-                    if 'CSE' in p['program']), None)
-        if prog:
-            message = (f"**B.Sc. in Computer Science & Engineering (CSE)**\n\n"
-                      f" **Tuition Fee:** {prog['tuition_fees']:,} BDT\n"
-                      f" **Total Credits:** {prog['credits']}\n"
-                      f" **Total Program Cost:** {prog['grand_total']:,} BDT")
-            dispatcher.utter_message(text=message)
-            return []
+        try:
+            prog = next((p for p in data['undergraduate_programs']['detailed_fee_structure']
+                        if 'CSE' in p['program']), None)
+            if prog:
+                message = (f"**B.Sc. in Computer Science & Engineering (CSE)**\n\n"
+                        f" **Tuition Fee:** {prog['tuition_fees']:,} BDT\n"
+                        f" **Total Credits:** {prog['credits']}\n"
+                        f" **Total Program Cost:** {prog['grand_total']:,} BDT")
+                dispatcher.utter_message(text=message)
+                return []
+        except (KeyError, TypeError):
+            pass
         return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionGetTuitionBBA(Action):
@@ -1145,49 +1155,52 @@ class ActionAdmissionDeadlineGeneral(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         user_msg = tracker.latest_message.get("text", "")
         data = load_admission_calendar()
-        if not data:
+        if not data or not isinstance(data, dict):
             return call_rag_fallback(dispatcher, tracker, domain)
         
-        if is_bangla(user_msg):
-            # Build header message
-            message = f"**{data['page_info']['semester']} ভর্তির সময়সীমা**\n\n"
+        try:
+            if is_bangla(user_msg):
+                # Build header message
+                message = f"**{data['page_info']['semester']} ভর্তির সময়সীমা**\n\n"
 
-            # Undergraduate Programs Section
-            message += "** স্নাতক প্রোগ্রাম:**\n"
-            for program in data['undergraduate_admission']:
-                prog_name = program['program']
-                deadline = program['application_deadline']
-                message += f"• {prog_name}: {deadline}\n"
+                # Undergraduate Programs Section
+                message += "** স্নাতক প্রোগ্রাম:**\n"
+                for program in data['undergraduate_admission']:
+                    prog_name = program['program']
+                    deadline = program['application_deadline']
+                    message += f"• {prog_name}: {deadline}\n"
 
-            # Graduate Programs Section
-            message += "\n** স্নাতকোত্তর প্রোগ্রাম:**\n"
-            for program in data['graduate_admission']:
-                prog_name = program['program']
-                deadline = program['application_deadline']
-                message += f"• {prog_name}: {deadline}\n"
-        else:
-            # Build header message
-            message = f"**{data['page_info']['semester']} Admission Deadlines**\n\n"
+                # Graduate Programs Section
+                message += "\n** স্নাতকোত্তর প্রোগ্রাম:**\n"
+                for program in data['graduate_admission']:
+                    prog_name = program['program']
+                    deadline = program['application_deadline']
+                    message += f"• {prog_name}: {deadline}\n"
+            else:
+                # Build header message
+                message = f"**{data['page_info']['semester']} Admission Deadlines**\n\n"
 
-            # Undergraduate Programs Section
-            message += "** Undergraduate Programs:**\n"
-            for program in data['undergraduate_admission']:
-                prog_name = program['program']
-                deadline = program['application_deadline']
-                message += f"• {prog_name}: {deadline}\n"
+                # Undergraduate Programs Section
+                message += "** Undergraduate Programs:**\n"
+                for program in data['undergraduate_admission']:
+                    prog_name = program['program']
+                    deadline = program['application_deadline']
+                    message += f"• {prog_name}: {deadline}\n"
 
-            # Graduate Programs Section
-            message += "\n** Graduate Programs:**\n"
-            for program in data['graduate_admission']:
-                prog_name = program['program']
-                deadline = program['application_deadline']
-                message += f"• {prog_name}: {deadline}\n"
-        
-        # Footer note
-        message += f"\n*{data['page_info']['disclaimer']}*"
-        
-        dispatcher.utter_message(text=message)
-        return []
+                # Graduate Programs Section
+                message += "\n** Graduate Programs:**\n"
+                for program in data['graduate_admission']:
+                    prog_name = program['program']
+                    deadline = program['application_deadline']
+                    message += f"• {prog_name}: {deadline}\n"
+
+            # Footer note
+            message += f"\n*{data['page_info']['disclaimer']}*"
+
+            dispatcher.utter_message(text=message)
+            return []
+        except (KeyError, TypeError):
+            return call_rag_fallback(dispatcher, tracker, domain)
 
 
 class ActionAdmissionDeadlineCSE(Action):
@@ -1716,30 +1729,33 @@ class ActionAdmissionRequirementsGeneral(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         user_msg = tracker.latest_message.get("text", "")
         data = load_admission_requirements()
-        if not data:
+        if not data or not isinstance(data, dict):
             return call_rag_fallback(dispatcher, tracker, domain)
         
-        ug = data['admission_requirements']['undergraduate']['general_programs_except_bpharm']
-        if is_bangla(user_msg):
-            message = "**ইস্ট ওয়েস্ট ইউনিভার্সিটিতে স্নাতক ভর্তির প্রয়োজনীয়তা**\n\n"
-            message += f" **এসএসসি ও এইচএসসি:** {ug['ssc_hsc']}\n"
-            message += f" **ডিপ্লোমা:** {ug['diploma']}\n"
-            message += f" **ও/এ লেভেল:** {ug['o_a_levels']['requirement']}\n\n"
-            message += "**ভর্তি পরীক্ষার নম্বর বণ্টন:**\n"
-            message += f"- ভর্তি পরীক্ষা: {ug['admission_test']['weightage']['admission_test']}\n"
-            message += f"- এসএসসি/ও লেভেল: {ug['admission_test']['weightage']['ssc_o_level']}\n"
-            message += f"- এইচএসসি/এ লেভেল: {ug['admission_test']['weightage']['hsc_a_level']}"
-        else:
-            message = "**Undergraduate Admission Requirements at EWU**\n\n"
-            message += f" **SSC & HSC:** {ug['ssc_hsc']}\n"
-            message += f" **Diploma:** {ug['diploma']}\n"
-            message += f" **O/A Levels:** {ug['o_a_levels']['requirement']}\n\n"
-            message += "**Admission Test Weightage:**\n"
-            message += f"- Admission Test: {ug['admission_test']['weightage']['admission_test']}\n"
-            message += f"- SSC/O Level: {ug['admission_test']['weightage']['ssc_o_level']}\n"
-            message += f"- HSC/A Level: {ug['admission_test']['weightage']['hsc_a_level']}"
-        dispatcher.utter_message(text=message)
-        return []
+        try:
+            ug = data['admission_requirements']['undergraduate']['general_programs_except_bpharm']
+            if is_bangla(user_msg):
+                message = "**ইস্ট ওয়েস্ট ইউনিভার্সিটিতে স্নাতক ভর্তির প্রয়োজনীয়তা**\n\n"
+                message += f" **এসএসসি ও এইচএসসি:** {ug['ssc_hsc']}\n"
+                message += f" **ডিপ্লোমা:** {ug['diploma']}\n"
+                message += f" **ও/এ লেভেল:** {ug['o_a_levels']['requirement']}\n\n"
+                message += "**ভর্তি পরীক্ষার নম্বর বণ্টন:**\n"
+                message += f"- ভর্তি পরীক্ষা: {ug['admission_test']['weightage']['admission_test']}\n"
+                message += f"- এসএসসি/ও লেভেল: {ug['admission_test']['weightage']['ssc_o_level']}\n"
+                message += f"- এইচএসসি/এ লেভেল: {ug['admission_test']['weightage']['hsc_a_level']}"
+            else:
+                message = "**Undergraduate Admission Requirements at EWU**\n\n"
+                message += f" **SSC & HSC:** {ug['ssc_hsc']}\n"
+                message += f" **Diploma:** {ug['diploma']}\n"
+                message += f" **O/A Levels:** {ug['o_a_levels']['requirement']}\n\n"
+                message += "**Admission Test Weightage:**\n"
+                message += f"- Admission Test: {ug['admission_test']['weightage']['admission_test']}\n"
+                message += f"- SSC/O Level: {ug['admission_test']['weightage']['ssc_o_level']}\n"
+                message += f"- HSC/A Level: {ug['admission_test']['weightage']['hsc_a_level']}"
+            dispatcher.utter_message(text=message)
+            return []
+        except (KeyError, TypeError):
+            return call_rag_fallback(dispatcher, tracker, domain)
 
 class ActionAdmissionRequirementsCSE(Action):
     def name(self) -> Text:
@@ -3300,7 +3316,7 @@ class ActionShowCourses(Action):
         # Load course data
         data = load_json_file(filename)
         
-        if not data:
+        if not data or not isinstance(data, dict):
             return call_rag_fallback(dispatcher, tracker, domain)
         
         # Extract courses
@@ -3454,7 +3470,7 @@ class ActionShowCourseDetails(Action):
         user_msg = tracker.latest_message.get("text", "")
         use_bangla = is_bangla(user_msg)
 
-        if not course_info:
+        if not course_info or not isinstance(course_info, dict):
             return call_rag_fallback(dispatcher, tracker, domain)
         
         response = self._format_course_details(course_code, course_info, use_bangla=use_bangla)
@@ -3464,9 +3480,10 @@ class ActionShowCourseDetails(Action):
     def _find_course(self, course_code: str) -> dict:
         for filename in set(DEPARTMENT_FILES.values()):
             data = load_json_file(filename)
-            if not data: continue
-            courses = data.get('courses', data if isinstance(data, list) else [])
+            if not data or not isinstance(data, dict): continue
+            courses = data.get('courses', [])
             for course in courses:
+                if not isinstance(course, dict): continue
                 code = course.get('code', course.get('course_code', '')).upper().replace(' ', '').replace('-', '')
                 if code == course_code: return course
         return None
