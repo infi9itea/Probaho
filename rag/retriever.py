@@ -10,7 +10,8 @@ class Retriever:
     def __init__(self, vectorstore_path: str):
         self.embeddings = HuggingFaceEmbeddings(
             model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-            encode_kwargs={"normalize_embeddings": True}
+            encode_kwargs={"normalize_embeddings": True},
+            model_kwargs={"device": "cpu"}
         )
 
         self.vectorstore = FAISS.load_local(
@@ -19,9 +20,10 @@ class Retriever:
             allow_dangerous_deserialization=True
         )
 
+        # Move reranker to CPU to save VRAM for the main LLM
         self.reranker = CrossEncoder(
             "BAAI/bge-reranker-v2-m3",
-            device="cuda" if torch.cuda.is_available() else "cpu"
+            device="cpu"
         )
 
     def retrieve(self, query: str, top_k: int = 25, return_k: int = 3) -> List[Dict[str, Any]]:
