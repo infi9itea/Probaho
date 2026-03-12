@@ -12,13 +12,26 @@ from rasa_sdk.events import UserUtteranceReverted, SlotSet
 logger = logging.getLogger(__name__)
 
 def is_bangla(text: str) -> bool:
-    """Detect if the text contains Bangla characters"""
+    """Detect if the text contains Bangla characters or common Banglish keywords"""
     if not text:
         return False
-    # Bangla Unicode range: \u0980-\u09FF
+    # 1. Check for Bangla script (Unicode range: \u0980-\u09FF)
     for char in text:
         if '\u0980' <= char <= '\u09FF':
             return True
+
+    # 2. Check for common Banglish keywords (Roman-script Bengali)
+    # We use a set for faster lookup
+    banglish_keywords = {
+        'koto', 'kothay', 'ki', 'lagbe', 'borti', 'somporke', 'jante', 'chai',
+        'kemon', 'achen', 'obostha', 'biday', 'pore', 'kobe', 'thikana', 'khoroch'
+    }
+
+    # Basic tokenization and check
+    words = text.lower().split()
+    if any(word in banglish_keywords for word in words):
+        return True
+
     return False
 
 class ActionPhi3RagAnswer(Action):

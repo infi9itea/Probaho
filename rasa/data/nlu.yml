@@ -12,6 +12,10 @@ nlu:
       - ভর্তি সম্পর্কে জানতে চাই
       - ভর্তি হতে কি কি লাগে?
       - এডমিশন প্রসেস কি?
+      - borti hote ki ki lagbe
+      - borti somporke jante chai
+      - admission process ki
+      - admission nite ki kora lagbe
 
   - intent: ask_question
     examples: |
@@ -58,6 +62,9 @@ nlu:
       - আদাব
       - আসসালামু আলাইকুম
       - কেমন আছেন?
+      - kemon achen
+      - assalamu alaikum
+      - ki obostha
       
   - intent: goodbye
     examples: |
@@ -87,6 +94,9 @@ nlu:
       - খোদা হাফেজ
       - পরে কথা হবে
       - টাটা
+      - biday
+      - pore kotha hobe
+      - khoda hafez
       
   - intent: affirm
     examples: |
@@ -237,6 +247,9 @@ nlu:
       - ইস্ট ওয়েস্ট ইউনিভার্সিটি কোথায় অবস্থিত?
       - ক্যাম্পাসের ঠিকানা কি?
       - আফতাবনগর ক্যাম্পাস কোথায়?
+      - varsity kothay
+      - ewu kothay obosthito
+      - campus er thikana ki
       
       
   - intent: facebook
@@ -266,6 +279,9 @@ nlu:
       - কি কি বিভাগ আছে?
       - ডিপার্টমেন্ট গুলোর তালিকা দেখাও
       - এই বিশ্ববিদ্যালয়ে কি কি সাবজেক্ট আছে?
+      - ki ki department ache
+      - subject er list dekhaw
+      - department er talika chai
 
   # ========================================
   # ABOUT EWU (NEW)
@@ -420,6 +436,9 @@ nlu:
       - খরচ কত হবে?
       - সেমিস্টার ফি কত?
       - পড়ার খরচ কেমন?
+      - tuition fee koto
+      - porar khoroch kemon
+      - semester fee koto
       
   - intent: application_fee
     examples: |
@@ -729,6 +748,9 @@ nlu:
       - ভর্তির শেষ সময় কবে?
       - আবেদনের শেষ তারিখ কত?
       - ডেডলাইন কবে?
+      - bortir sesh somoy kobe
+      - application deadline kobe
+      - last date kobe
       
   # Undergraduate Deadlines (Enhanced)
   - intent: admission_deadline_cse

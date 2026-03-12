@@ -20,7 +20,7 @@ class Retriever:
         )
 
         self.reranker = CrossEncoder(
-            "cross-encoder/ms-marco-MiniLM-L-12-v2",
+            "BAAI/bge-reranker-v2-m3",
             device="cuda" if torch.cuda.is_available() else "cpu"
         )
 
