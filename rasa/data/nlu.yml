@@ -9,6 +9,9 @@ nlu:
       - I have an admission question
       - Can you help with admission?
       - Tell me about the admission process
+      - ভর্তি সম্পর্কে জানতে চাই
+      - ভর্তি হতে কি কি লাগে?
+      - এডমিশন প্রসেস কি?
 
   - intent: ask_question
     examples: |
@@ -16,6 +19,10 @@ nlu:
       - Can I ask something?
       - What is the tuition fee?
       - How do I apply?
+      - আমার একটি প্রশ্ন আছে
+      - কিছু জিজ্ঞেস করতে পারি?
+      - টিউশন ফি কত?
+      - কিভাবে আবেদন করব?
       
   - intent: greet
     examples: |
@@ -45,6 +52,12 @@ nlu:
       - nice to meet you
       - salaam
       - assalamualaikum
+      - হ্যালো
+      - হাই
+      - নমস্কার
+      - আদাব
+      - আসসালামু আলাইকুম
+      - কেমন আছেন?
       
   - intent: goodbye
     examples: |
@@ -70,6 +83,10 @@ nlu:
       - until next time
       - peace
       - farewell
+      - বিদায়
+      - খোদা হাফেজ
+      - পরে কথা হবে
+      - টাটা
       
   - intent: affirm
     examples: |
@@ -96,6 +113,10 @@ nlu:
       - perfectly
       - I agree
       - thumbs up
+      - হ্যাঁ
+      - জি
+      - ঠিক আছে
+      - অবশ্যই
       
   - intent: deny
     examples: |
@@ -118,6 +139,10 @@ nlu:
       - nada
       - zilch
       - thumbs down
+      - না
+      - কক্ষনো না
+      - ঠিক না
+      - ভুল
       
   - intent: mood_great
     examples: |
@@ -208,6 +233,10 @@ nlu:
       - what is the campus location
       - Aftabnagar campus
       - Jahurul Islam City
+      - বিশ্ববিদ্যালয়টি কোথায়?
+      - ইস্ট ওয়েস্ট ইউনিভার্সিটি কোথায় অবস্থিত?
+      - ক্যাম্পাসের ঠিকানা কি?
+      - আফতাবনগর ক্যাম্পাস কোথায়?
       
       
   - intent: facebook
@@ -234,6 +263,9 @@ nlu:
       - show me departments
       - CSE, EEE, BBA departments
       - what faculties are available
+      - কি কি বিভাগ আছে?
+      - ডিপার্টমেন্ট গুলোর তালিকা দেখাও
+      - এই বিশ্ববিদ্যালয়ে কি কি সাবজেক্ট আছে?
 
   # ========================================
   # ABOUT EWU (NEW)
@@ -384,6 +416,10 @@ nlu:
       - fee structure
       - cost per semester
       - total cost
+      - টিউশন ফি কত?
+      - খরচ কত হবে?
+      - সেমিস্টার ফি কত?
+      - পড়ার খরচ কেমন?
       
   - intent: application_fee
     examples: |
@@ -690,6 +726,9 @@ nlu:
       - when applications close
       - deadline approaching
       - when does deadline end
+      - ভর্তির শেষ সময় কবে?
+      - আবেদনের শেষ তারিখ কত?
+      - ডেডলাইন কবে?
       
   # Undergraduate Deadlines (Enhanced)
   - intent: admission_deadline_cse
@@ -1250,6 +1289,9 @@ nlu:
       - what amenities
       - campus amenities
       - student facilities
+      - কি কি সুযোগ সুবিধা আছে?
+      - বিশ্ববিদ্যালয়ে কি কি সুবিধা পাওয়া যায়?
+      - ক্যাম্পাসের সুযোগ সুবিধা সম্পর্কে বলো
       
   - intent: library_facilities
     examples: |
