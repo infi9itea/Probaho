@@ -1,4 +1,5 @@
 import os
+os.environ["PYTORCH_ALLOC_CONF"] = "expandable_segments:True"
 import time
 import math
 from fastapi import FastAPI
@@ -35,7 +36,7 @@ generator = transformers.pipeline(
     "text-generation",
     model=model,
     tokenizer=tokenizer,
-    max_new_tokens=512,
+    max_new_tokens=256,
     return_full_text=False,
     do_sample=False
 )
