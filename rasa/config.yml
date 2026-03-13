@@ -1,6 +1,6 @@
 recipe: default.v1
 assistant_id: ewu_chatbot
-language: multi
+language: en
 
 pipeline:
   - name: WhitespaceTokenizer

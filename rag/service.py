@@ -1,5 +1,4 @@
 import os
-os.environ["PYTORCH_ALLOC_CONF"] = "expandable_segments:True"
 import time
 import math
 from fastapi import FastAPI
@@ -36,7 +35,7 @@ generator = transformers.pipeline(
     "text-generation",
     model=model,
     tokenizer=tokenizer,
-    max_new_tokens=256,
+    max_new_tokens=512,
     return_full_text=False,
     do_sample=False
 )
@@ -66,8 +65,7 @@ def rag_query(req: QueryRequest):
     prompt = (
         "<s>[INST] You are an assistant for East West University (EWU) in Bangladesh.\n"
         "Answer the question using ONLY the context below. Be concise and helpful.\n"
-        "If the context doesn't contain the answer, say \"I don't have that information.\"\n"
-        "Respond in Bangla if the question is in Bangla or Banglish. Otherwise, respond in English.\n\n"
+        "If the context doesn't contain the answer, say \"I don't have that information.\"\n\n"
         f"Context:\n{context_text}\n\n"
         f"Question: {req.query} [/INST]"
     )
