@@ -1,6 +1,8 @@
 import requests
+import os
 
-RASA_URL = "http://rasa:5005/webhooks/rest/webhook"  # use 'rasa' service name from docker-compose
+# For Kaggle -> Local PC communication, this should be the ngrok URL of your local Rasa instance.
+RASA_URL = os.getenv("RASA_URL", "http://localhost:5005/webhooks/rest/webhook")
 
 def send_to_rasa(sender_id: str, message: str):
     payload = {
