@@ -11,27 +11,6 @@ from rasa_sdk.events import UserUtteranceReverted, SlotSet
 
 logger = logging.getLogger(__name__)
 
-def is_bangla(text: str) -> bool:
-    """Detect if text contains Bangla script or common Banglish keywords"""
-    if not text:
-        return False
-    # Check for Bangla Unicode range
-    for char in text:
-        if '\u0980' <= char <= '\u09FF':
-            return True
-    # Expanded Banglish words - removed ambiguous English words (admission, deadline, fee)
-    banglish_words = {
-        'ami', 'tumi', 'koto', 'borti', 'hote', 'chai', 'kivabe', 'jonno', 'khoroch',
-        'ache', 'nai', 'salam', 'kemon', 'apni', 'ki', 'thikana',
-        'kobe', 'kar', 'sathe', 'jogajog', 'korte', 'parbo', 'bolun', 'bolte', 'paren',
-        'kothay', 'kakhon', 'khola', 'pabo', 'dekha', 'janan'
-    }
-    import re
-    words = set(re.findall(r'\w+', text.lower()))
-    if words.intersection(banglish_words):
-        return True
-    return False
-
 class ActionPhi3RagAnswer(Action):
     """RAG-powered answer generation using TinyLlama"""
     def name(self) -> Text:
@@ -57,11 +36,8 @@ class ActionPhi3RagAnswer(Action):
         # Call RAG service with TinyLlama
         answer, confidence, sources, processing_time = self._call_rag(user_message)
 
-        # Detect language for appropriate disclaimer
-        is_bn = is_bangla(user_message)
-
         # Send appropriate response based on confidence
-        self._send_response(dispatcher, answer, confidence, sources, processing_time, is_bn=is_bn)
+        self._send_response(dispatcher, answer, confidence, sources, processing_time)
 
         return []
 
@@ -144,8 +120,7 @@ class ActionPhi3RagAnswer(Action):
         answer: str,
         confidence: float,
         sources: List[str],
-        processing_time: float,
-        is_bn: bool = False
+        processing_time: float
     ):
         """
         Confidence levels:
@@ -154,37 +129,34 @@ class ActionPhi3RagAnswer(Action):
         - < 0.4: Low confidence - send answer with strong disclaimer
         """
         if not answer:
-            if is_bn:
-                err_msg = "দুঃখিত, আমি এই বিষয়ে সঠিক তথ্য খুঁজে পাইনি। সঠিক তথ্যের জন্য যোগাযোগ করুন: admissions@ewubd.edu"
-            else:
-                err_msg = "I'm sorry, I couldn't find a reliable answer for that. For accurate details, please contact: admissions@ewubd.edu"
-            dispatcher.utter_message(text=err_msg)
+            dispatcher.utter_message(
+                text=(
+                    "I'm sorry, I couldn't find a reliable answer for that. "
+                    "For accurate details, please contact:\nadmissions@ewubd.edu\n"
+                )
+            )
             return
 
-        if is_bn:
-            if confidence < 0.4:
-                note = "\n\nদ্রষ্টব্য: এই তথ্যটি কৃত্রিম বুদ্ধিমত্তা দ্বারা তৈরি এবং ১০০% সঠিক নাও হতে পারে। অনুগ্রহ করে admissions@ewubd.edu এর সাথে যাচাই করুন।"
-            elif confidence < 0.7:
-                note = "\n\nদ্রষ্টব্য: অনুগ্রহ করে এই তথ্যটি admissions@ewubd.edu এর সাথে যাচাই করুন।"
-            else:
-                note = ""
+        if confidence < 0.4:
+            # Low confidence
+            dispatcher.utter_message(
+                text=f"{answer}\n\nNote: This information is generated and might not be 100% accurate. Please verify with admissions@ewubd.edu"
+            )
+        elif confidence < 0.7:
+            # Medium confidence
+            dispatcher.utter_message(
+                text=f"{answer}\n\nNote: Please verify this information with admissions@ewubd.edu"
+            )
         else:
-            if confidence < 0.4:
-                note = "\n\nNote: This information is generated and might not be 100% accurate. Please verify with admissions@ewubd.edu"
-            elif confidence < 0.7:
-                note = "\n\nNote: Please verify this information with admissions@ewubd.edu"
-            else:
-                note = ""
-
-        dispatcher.utter_message(text=f"{answer}{note}")
+            # High confidence
+            dispatcher.utter_message(text=answer)
 
         # Add up to top-2 sources for transparency (if provided)
         if sources:
             unique_sources = sorted({s for s in sources if s})[:2]
             if unique_sources:
                 source_names = [s.replace('.json', '').replace('_', ' ').title() for s in unique_sources]
-                src_label = "সূত্র" if is_bn else "Source"
-                dispatcher.utter_message(text=f"{src_label}: {', '.join(source_names)}")
+                dispatcher.utter_message(text=f"Source: {', '.join(source_names)}")
 
         # Log performance (for monitoring)
         logger.info(f"Response sent - Confidence: {confidence:.2f}, Time: {processing_time:.2f}s")
@@ -488,18 +460,11 @@ class ActionGetTuitionGeneral(Action):
         if not data:
             return call_rag_fallback(dispatcher, tracker, domain)
         
-        user_msg = tracker.latest_message.get("text", "")
-        if is_bangla(user_msg):
-            message = "**ইস্ট ওয়েস্ট ইউনিভার্সিটি টিউশন ফি (প্রতি ক্রেডিট)**\n\n"
-            for program in data['undergraduate_programs']['tuition_fees_per_credit']:
-                message += f"- {program['program']}: {program['fee_per_credit']:,} টাকা/ক্রেডিট\n"
-            message += f"\n*কার্যকরী তারিখ: {data['page_info']['applicable_from']}*"
-        else:
-            message = "**East West University Tuition Fees (Per Credit)**\n\n"
-            for program in data['undergraduate_programs']['tuition_fees_per_credit']:
-                message += f"- {program['program']}: {program['fee_per_credit']:,} BDT/credit\n"
-            message += f"\n*Applicable from: {data['page_info']['applicable_from']}*"
-
+        message = "**East West University Tuition Fees (Per Credit)**\n\n"
+        for program in data['undergraduate_programs']['tuition_fees_per_credit']:
+            message += f"- {program['program']}: {program['fee_per_credit']:,} BDT/credit\n"
+        
+        message += f"\n*Applicable from: {data['page_info']['applicable_from']}*"
         dispatcher.utter_message(text=message)
         return []
 
@@ -1141,36 +1106,25 @@ class ActionAdmissionDeadlineGeneral(Action):
         if not data:
             return call_rag_fallback(dispatcher, tracker, domain)
         
-        user_msg = tracker.latest_message.get("text", "")
-        if is_bangla(user_msg):
-            message = f"**{data['page_info']['semester']} ভর্তির সময়সীমা**\n\n"
-            message += "** আন্ডারগ্রাজুয়েট প্রোগ্রাম:**\n"
-            for program in data['undergraduate_admission']:
-                message += f"• {program['program']}: {program['application_deadline']}\n"
-            message += "\n** গ্র্যাজুয়েট প্রোগ্রাম:**\n"
-            for program in data['graduate_admission']:
-                message += f"• {program['program']}: {program['application_deadline']}\n"
-            message += f"\n*{data['page_info']['disclaimer']}*"
-        else:
-            # Build header message
-            message = f"**{data['page_info']['semester']} Admission Deadlines**\n\n"
-
-            # Undergraduate Programs Section
-            message += "** Undergraduate Programs:**\n"
-            for program in data['undergraduate_admission']:
-                prog_name = program['program']
-                deadline = program['application_deadline']
-                message += f"• {prog_name}: {deadline}\n"
-
-            # Graduate Programs Section
-            message += "\n** Graduate Programs:**\n"
-            for program in data['graduate_admission']:
-                prog_name = program['program']
-                deadline = program['application_deadline']
-                message += f"• {prog_name}: {deadline}\n"
-
-            # Footer note
-            message += f"\n*{data['page_info']['disclaimer']}*"
+        # Build header message
+        message = f"**{data['page_info']['semester']} Admission Deadlines**\n\n"
+        
+        # Undergraduate Programs Section
+        message += "** Undergraduate Programs:**\n"
+        for program in data['undergraduate_admission']:
+            prog_name = program['program']
+            deadline = program['application_deadline']
+            message += f"• {prog_name}: {deadline}\n"
+        
+        # Graduate Programs Section
+        message += "\n** Graduate Programs:**\n"
+        for program in data['graduate_admission']:
+            prog_name = program['program']
+            deadline = program['application_deadline']
+            message += f"• {prog_name}: {deadline}\n"
+        
+        # Footer note
+        message += f"\n*{data['page_info']['disclaimer']}*"
         
         dispatcher.utter_message(text=message)
         return []
@@ -1698,26 +1652,14 @@ class ActionAdmissionRequirementsGeneral(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         
         ug = data['admission_requirements']['undergraduate']['general_programs_except_bpharm']
-        user_msg = tracker.latest_message.get("text", "")
-        if is_bangla(user_msg):
-            message = "**ইস্ট ওয়েস্ট ইউনিভার্সিটির আন্ডারগ্রাজুয়েট ভর্তির প্রয়োজনীয়তা**\n\n"
-            message += f" **এসএসসি ও এইচএসসি:** {ug['ssc_hsc']}\n"
-            message += f" **ডিপ্লোমা:** {ug['diploma']}\n"
-            message += f" **ও/এ লেভেল:** {ug['o_a_levels']['requirement']}\n\n"
-            message += "**ভর্তি পরীক্ষার নম্বর বন্টন:**\n"
-            message += f"- ভর্তি পরীক্ষা: {ug['admission_test']['weightage']['admission_test']}\n"
-            message += f"- এসএসসি/ও লেভেল: {ug['admission_test']['weightage']['ssc_o_level']}\n"
-            message += f"- এইচএসসি/এ লেভেল: {ug['admission_test']['weightage']['hsc_a_level']}"
-        else:
-            message = "**Undergraduate Admission Requirements at EWU**\n\n"
-            message += f" **SSC & HSC:** {ug['ssc_hsc']}\n"
-            message += f" **Diploma:** {ug['diploma']}\n"
-            message += f" **O/A Levels:** {ug['o_a_levels']['requirement']}\n\n"
-            message += "**Admission Test Weightage:**\n"
-            message += f"- Admission Test: {ug['admission_test']['weightage']['admission_test']}\n"
-            message += f"- SSC/O Level: {ug['admission_test']['weightage']['ssc_o_level']}\n"
-            message += f"- HSC/A Level: {ug['admission_test']['weightage']['hsc_a_level']}"
-
+        message = "**Undergraduate Admission Requirements at EWU**\n\n"
+        message += f" **SSC & HSC:** {ug['ssc_hsc']}\n"
+        message += f" **Diploma:** {ug['diploma']}\n"
+        message += f" **O/A Levels:** {ug['o_a_levels']['requirement']}\n\n"
+        message += "**Admission Test Weightage:**\n"
+        message += f"- Admission Test: {ug['admission_test']['weightage']['admission_test']}\n"
+        message += f"- SSC/O Level: {ug['admission_test']['weightage']['ssc_o_level']}\n"
+        message += f"- HSC/A Level: {ug['admission_test']['weightage']['hsc_a_level']}"
         dispatcher.utter_message(text=message)
         return []
 
@@ -2099,18 +2041,10 @@ class ActionFacilitiesGeneral(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         
         campus = data['facilities']['campus_life']['available']
-        user_msg = tracker.latest_message.get("text", "")
-        if is_bangla(user_msg):
-            message = "**ইস্ট ওয়েস্ট ইউনিভার্সিটি ক্যাম্পাস সুযোগ-সুবিধা**\n\n"
-            for facility in campus[:7]:
-                message += f" **{facility['name']}**\n{facility['description']}\n\n"
-            message += "*লাইব্রেরি, ল্যাব, ক্যাফেটেরিয়া, ওয়াইফাই ইত্যাদি সম্পর্কে বিস্তারিত জানতে জিজ্ঞাসা করুন।*"
-        else:
-            message = "**East West University Campus Facilities**\n\n"
-            for facility in campus[:7]:
-                message += f" **{facility['name']}**\n{facility['description']}\n\n"
-            message += "*Ask about specific facilities like library, labs, cafeteria, wifi, etc.*"
-
+        message = "**East West University Campus Facilities**\n\n"
+        for facility in campus[:7]:
+            message += f" **{facility['name']}**\n{facility['description']}\n\n"
+        message += "*Ask about specific facilities like library, labs, cafeteria, wifi, etc.*"
         dispatcher.utter_message(text=message)
         return []
 
@@ -2414,24 +2348,13 @@ class ActionFacultyInfo(Action):
         if not data:
             return call_rag_fallback(dispatcher, tracker, domain)
         
-        user_msg = tracker.latest_message.get("text", "")
-        if is_bangla(user_msg):
-            message = "**ফ্যাকাল্টি তথ্য - ইস্ট ওয়েস্ট ইউনিভার্সিটি**\n\n"
-            message += f"**মোট বিভাগ:** {len(data.get('departments', []))}\n\n"
-            message += "**উপলব্ধ বিভাগসমূহ:**\n"
-            for dept in list(data.get('departments', []))[:8]:
-                name = dept.get('department_name', 'Unknown')
-                message += f" {name}\n"
-            message += "\n*নির্দিষ্ট বিভাগের শিক্ষক সম্পর্কে জানতে জিজ্ঞাসা করুন (যেমন: CSE ফ্যাকাল্টি)*"
-        else:
-            message = "**Faculty Information - East West University**\n\n"
-            message += f"**Total Departments:** {len(data.get('departments', []))}\n\n"
-            message += "**Available Departments:**\n"
-            for dept in list(data.get('departments', []))[:8]:
-                name = dept.get('department_name', 'Unknown')
-                message += f" {name}\n"
-            message += "\n*As about specific department faculty (e.g., CSE faculty, BBA faculty)*"
-
+        message = "**Faculty Information - East West University**\n\n"
+        message += f"**Total Departments:** {len(data.get('departments', []))}\n\n"
+        message += "**Available Departments:**\n"
+        for dept in list(data.get('departments', []))[:8]:
+            name = dept.get('department_name', 'Unknown')
+            message += f" {name}\n"
+        message += "\n*As about specific department faculty (e.g., CSE faculty, BBA faculty)*"
         dispatcher.utter_message(text=message)
         return []
 

@@ -9,18 +9,6 @@ nlu:
       - I have an admission question
       - Can you help with admission?
       - Tell me about the admission process
-      - আমি ভর্তি হতে চাই
-      - ভর্তি বিষয়ক তথ্য দিন
-      - ভর্তি প্রক্রিয়া কি?
-      - আমি কিভাবে ভর্তি হতে পারি?
-      - ভর্তি হওয়ার নিয়ম কি?
-      - ভর্তি সংক্রান্ত তথ্য জানাবেন কি?
-      - ami borti hote chai
-      - admission process ki?
-      - admission er jonno ki korte hobe?
-      - kivabe borti hote parbo?
-      - admission er niyom ki?
-      - admission nite chai
 
   - intent: ask_question
     examples: |
@@ -57,14 +45,6 @@ nlu:
       - nice to meet you
       - salaam
       - assalamualaikum
-      - এই যে
-      - হ্যালো
-      - নমস্কার
-      - আদাব
-      - আসসালামু আলাইকুম
-      - oi
-      - salam
-      - kemon achen?
       
   - intent: goodbye
     examples: |
@@ -228,16 +208,6 @@ nlu:
       - what is the campus location
       - Aftabnagar campus
       - Jahurul Islam City
-      - বিশ্ববিদ্যালয়টি কোথায়?
-      - ইস্ট ওয়েস্ট ইউনিভার্সিটি কোথায়?
-      - ক্যাম্পাস এর ঠিকানা কি?
-      - আফতাবনগর ক্যাম্পাসটি কোথায়?
-      - বিশ্ববিদ্যালয়ের ম্যাপ দিন
-      - university kothay?
-      - location kothay?
-      - EWU kothay?
-      - thikana kothay?
-      - campus kothay?
       
       
   - intent: facebook
@@ -264,12 +234,6 @@ nlu:
       - show me departments
       - CSE, EEE, BBA departments
       - what faculties are available
-      - কি কি বিভাগ আছে?
-      - সিএসই বিভাগ কি আছে?
-      - সব ডিপার্টমেন্ট এর নাম বলুন
-      - kiki bibhag ache?
-      - sob department er nam bolun
-      - ewu te ki ki subject ache?
 
   # ========================================
   # ABOUT EWU (NEW)
@@ -420,17 +384,6 @@ nlu:
       - fee structure
       - cost per semester
       - total cost
-      - টিউশন ফি কত?
-      - খরচ কত হবে?
-      - সেমিস্টার ফি কত?
-      - সিএসই পড়তে কত টাকা লাগে?
-      - পড়াশোনার খরচ কত?
-      - টিউশন ফি এর তালিকা দিন
-      - tuition fee koto?
-      - khoroch koto?
-      - koto taka lagbe?
-      - porashonar khoroch koto?
-      - cse porte koto taka lagbe?
       
   - intent: application_fee
     examples: |
@@ -737,11 +690,6 @@ nlu:
       - when applications close
       - deadline approaching
       - when does deadline end
-      - ভর্তির শেষ তারিখ কবে?
-      - আবেদনের শেষ সময় কখন?
-      - কবে পর্যন্ত আবেদন করা যাবে?
-      - admission er sesh tarikh kobe?
-      - abedon korar sesh somoy kobe?
       
   # Undergraduate Deadlines (Enhanced)
   - intent: admission_deadline_cse

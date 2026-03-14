@@ -25,8 +25,6 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
 
-  # NOTE: The 'backend' and 'rag' services are intended to run on Kaggle/Colab to leverage T4 GPUs.
-  # If you choose to run 'backend' locally, ensure you have an NVIDIA GPU and enough VRAM.
   backend:
     build:
       context: ./backend
@@ -36,12 +34,5 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: 1
-    #           capabilities: [gpu]
     depends_on:
       - rasa

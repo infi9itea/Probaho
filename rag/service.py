@@ -20,8 +20,7 @@ model_id = "mistralai/Mistral-7B-Instruct-v0.3"
 bnb_config = transformers.BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.bfloat16,
-    bnb_4bit_use_double_quant=True
+    bnb_4bit_compute_dtype=torch.bfloat16
 )
 
 tokenizer = transformers.AutoTokenizer.from_pretrained(model_id, token=HF_TOKEN)
@@ -66,7 +65,6 @@ def rag_query(req: QueryRequest):
     prompt = (
         "<s>[INST] You are an assistant for East West University (EWU) in Bangladesh.\n"
         "Answer the question using ONLY the context below. Be concise and helpful.\n"
-        "Respond in the same language as the question (e.g., if the question is in Bangla, respond in Bangla).\n"
         "If the context doesn't contain the answer, say \"I don't have that information.\"\n\n"
         f"Context:\n{context_text}\n\n"
         f"Question: {req.query} [/INST]"

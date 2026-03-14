@@ -20,7 +20,7 @@ $(document).ready(function () {
     $('#status-right').text(messageCount + ' messages');
   }
 
-  const BACKEND_URL = "https://promissory-alexander-measurelessly.ngrok-free.dev/chat";
+  const RASA_URL = "https://promissory-alexander-measurelessly.ngrok-free.dev/webhooks/rest/webhook";
 
 async function sendMessage() {
   const message = $('#user-input').val();
@@ -30,13 +30,14 @@ async function sendMessage() {
   $('#user-input').val('');
 
   try {
-    const response = await fetch(BACKEND_URL, {
+    const response = await fetch(RASA_URL, {
       method: 'POST',
       headers: { 
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Ngrok-Skip-Browser-Warning': 'true'
       },
       body: JSON.stringify({
-        session_id: 'user',
+        sender: 'user',
         message: message
       })
     });
