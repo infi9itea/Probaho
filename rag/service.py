@@ -1,4 +1,8 @@
 import os
+
+# Set environment variable for memory management before other imports
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+
 import time
 import math
 from fastapi import FastAPI
@@ -17,8 +21,12 @@ retriever = Retriever(VECTORSTORE_PATH)
 
 model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
 
+# Memory optimization: Switch from 8-bit to 4-bit quantization
 bnb_config = transformers.BitsAndBytesConfig(
-    load_in_8bit=True
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_compute_dtype=torch.float16
 )
 
 tokenizer = transformers.AutoTokenizer.from_pretrained(model_id, token=HF_TOKEN)
@@ -40,7 +48,7 @@ generator = transformers.pipeline(
 
 class QueryRequest(BaseModel):
     query: str
-    top_k: int = 20
+    top_k: int = 15  # Optimized top_k
 
 app = FastAPI()
 
@@ -48,7 +56,8 @@ app = FastAPI()
 def rag_query(req: QueryRequest):
     start = time.time()
 
-    contexts = retriever.retrieve(req.query, top_k=req.top_k, return_k=20)
+    # Optimized context count: Retrieve 15
+    contexts = retriever.retrieve(req.query, top_k=req.top_k, return_k=15)
     if not contexts:
         return {
             "response": "I don't have that information in my database.",
@@ -57,7 +66,8 @@ def rag_query(req: QueryRequest):
             "processing_time": round(time.time() - start, 3)
         }
 
-    selected = contexts[:10]
+    # Memory optimization: Use only top 5 contexts for the LLM prompt
+    selected = contexts[:5]
     context_text = "\n\n".join([c["text"] for c in selected])
 
     prompt = (
