@@ -15,7 +15,7 @@ login(HF_TOKEN)
 VECTORSTORE_PATH = "vectorstore"
 retriever = Retriever(VECTORSTORE_PATH)
 
-model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
+model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
 
 bnb_config = transformers.BitsAndBytesConfig(
     load_in_8bit=True
