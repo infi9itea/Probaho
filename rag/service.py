@@ -1,4 +1,5 @@
 import os
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 import time
 import math
 from fastapi import FastAPI
@@ -18,7 +19,8 @@ retriever = Retriever(VECTORSTORE_PATH)
 model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
 
 bnb_config = transformers.BitsAndBytesConfig(
-    load_in_8bit=True
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.float16
 )
 
 tokenizer = transformers.AutoTokenizer.from_pretrained(model_id, token=HF_TOKEN)
@@ -48,7 +50,8 @@ app = FastAPI()
 def rag_query(req: QueryRequest):
     start = time.time()
 
-    contexts = retriever.retrieve(req.query, top_k=req.top_k, return_k=20)
+    # Reduced top_k and return_k to save memory and time
+    contexts = retriever.retrieve(req.query, top_k=15, return_k=15)
     if not contexts:
         return {
             "response": "I don't have that information in my database.",
@@ -57,7 +60,8 @@ def rag_query(req: QueryRequest):
             "processing_time": round(time.time() - start, 3)
         }
 
-    selected = contexts[:10]
+    # Use only top 5 contexts to reduce prompt length and VRAM usage
+    selected = contexts[:5]
     context_text = "\n\n".join([c["text"] for c in selected])
 
     prompt = (
@@ -66,6 +70,7 @@ def rag_query(req: QueryRequest):
         "Use the provided context to answer the user's question. "
         "Maintain the language of the user's query: if they ask in Bangla, respond in Bangla; "
         "if in Banglish, respond in Banglish (or clear Bangla); if in English, respond in English. "
+        "You MUST respond in the EXACT same language as the user's question. "
         "If you don't know the answer based on the context, say you don't have that information. "
         "Be concise but thorough.<|eot_id|>"
         "<|start_header_id|>user<|end_header_id|>\n\n"
