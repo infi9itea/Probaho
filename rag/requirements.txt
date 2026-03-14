@@ -7,3 +7,5 @@ langchain
 langchain-community
 faiss-cpu
 sentence-transformers
+accelerate
+sentencepiece
