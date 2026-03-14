@@ -65,7 +65,8 @@ def rag_query(req: QueryRequest):
     prompt = (
         "<s>[INST] You are an assistant for East West University (EWU) in Bangladesh.\n"
         "Answer the question using ONLY the context below. Be concise and helpful.\n"
-        "If the context doesn't contain the answer, say \"I don't have that information.\"\n\n"
+        "IMPORTANT: If the question is in Bangla or Banglish (Roman-script Bengali), respond in Bangla script. Otherwise, respond in English.\n"
+        "If the context doesn't contain the answer, say \"I don't have that information.\" in the appropriate language.\n\n"
         f"Context:\n{context_text}\n\n"
         f"Question: {req.query} [/INST]"
     )
