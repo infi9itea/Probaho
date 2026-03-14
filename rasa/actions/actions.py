@@ -19,8 +19,13 @@ def is_bangla(text: str) -> bool:
     for char in text:
         if '\u0980' <= char <= '\u09FF':
             return True
-    # Common Banglish words
-    banglish_words = {'ami', 'tumi', 'koto', 'borti', 'hote', 'chai', 'kivabe', 'jonno', 'khoroch', 'ache', 'nai', 'salam', 'kemon'}
+    # Expanded Banglish words - removed ambiguous English words (admission, deadline, fee)
+    banglish_words = {
+        'ami', 'tumi', 'koto', 'borti', 'hote', 'chai', 'kivabe', 'jonno', 'khoroch',
+        'ache', 'nai', 'salam', 'kemon', 'apni', 'ki', 'thikana',
+        'kobe', 'kar', 'sathe', 'jogajog', 'korte', 'parbo', 'bolun', 'bolte', 'paren',
+        'kothay', 'kakhon', 'khola', 'pabo', 'dekha', 'janan'
+    }
     import re
     words = set(re.findall(r'\w+', text.lower()))
     if words.intersection(banglish_words):

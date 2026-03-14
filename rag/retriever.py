@@ -9,7 +9,7 @@ from typing import List, Dict, Any
 class Retriever:
     def __init__(self, vectorstore_path: str):
         self.embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-mpnet-base-v2",
+            model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
             encode_kwargs={"normalize_embeddings": True}
         )
 
@@ -20,7 +20,7 @@ class Retriever:
         )
 
         self.reranker = CrossEncoder(
-            "cross-encoder/ms-marco-MiniLM-L-12-v2",
+            "BAAI/bge-reranker-v2-m3",
             device="cuda" if torch.cuda.is_available() else "cpu"
         )
 
