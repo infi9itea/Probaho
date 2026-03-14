@@ -20,7 +20,7 @@ $(document).ready(function () {
     $('#status-right').text(messageCount + ' messages');
   }
 
-  const BACKEND_URL = "http://localhost:8000/chat";
+  const BACKEND_URL = "https://promissory-alexander-measurelessly.ngrok-free.dev/chat";
 
 async function sendMessage() {
   const message = $('#user-input').val();
