@@ -34,5 +34,12 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     depends_on:
       - rasa
