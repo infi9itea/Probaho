@@ -1,6 +1,6 @@
 import requests
 
-RASA_URL = "http://rasa:5005/webhooks/rest/webhook"  # use 'rasa' service name from docker-compose
+RASA_URL = "http://localhost:5005/webhooks/rest/webhook"
 
 def send_to_rasa(sender_id: str, message: str):
     payload = {
