@@ -37,42 +37,40 @@ def is_bangla(text: str) -> bool:
     for char in text:
         if '\u0980' <= char <= '\u09FF':
             return True
-    # Common Banglish words
-    banglish_words = {'ami', 'tumi', 'koto', 'borti', 'hote', 'chai', 'kivabe', 'jonno', 'khoroch', 'ache', 'nai', 'salam', 'kemon'}
+    # Expanded Banglish words - removed ambiguous English words (admission, deadline, fee)
+    banglish_words = {
+        'ami', 'tumi', 'koto', 'borti', 'hote', 'chai', 'kivabe', 'jonno', 'khoroch',
+        'ache', 'nai', 'salam', 'kemon', 'apni', 'ki', 'thikana',
+        'kobe', 'kar', 'sathe', 'jogajog', 'korte', 'parbo', 'bolun', 'bolte', 'paren',
+        'kothay', 'kakhon', 'khola', 'pabo', 'dekha', 'janan'
+    }
     words = set(re.findall(r'\w+', text.lower()))
     if words.intersection(banglish_words):
         return True
     return False
 
-def translate_to_en(text: str):
-    """Translates input text to English, detecting Bangla/Banglish specifically."""
+def detect_language(text: str) -> str:
+    """Identify the language of the text (bn, en, etc.)"""
     if not text or not text.strip():
-        return text, 'en'
+        return 'en'
 
-    # Prioritize Bangla/Banglish detection
     if is_bangla(text):
-        target_lang = 'bn'
-    else:
-        try:
-            target_lang = detect(text)
-        except Exception:
-            target_lang = 'en'
-
-    if target_lang == 'en':
-        return text, 'en'
+        return 'bn'
 
     try:
-        # Use auto-detection for the actual translation to be safe
-        translated = GoogleTranslator(source='auto', target='en').translate(text)
-        logger.info(f"Translated input from {target_lang} to EN: {translated}")
-        return translated, target_lang
-    except Exception as e:
-        logger.error(f"Translation to EN failed: {e}")
-        return text, 'en'
+        return detect(text)
+    except Exception:
+        return 'en'
 
-def translate_from_en(text: str, target_lang: str):
-    """Translates English text back to the target language."""
+def translate_if_needed(text: str, target_lang: str):
+    """Translates text ONLY if it's English and the target is different."""
     if not text or not text.strip() or target_lang == 'en':
+        return text
+
+    # Detect language of the bot's response
+    # If it's already in a non-English language (like Bangla), don't translate it again
+    bot_lang = detect_language(text)
+    if bot_lang != 'en':
         return text
 
     try:
@@ -85,16 +83,16 @@ def translate_from_en(text: str, target_lang: str):
 
 @app.post("/chat")
 async def chat(request: ChatRequest):
-    # 1. Detect language and translate to English if necessary
-    message_en, original_lang = translate_to_en(request.message)
+    # 1. Detect language of the query
+    original_lang = detect_language(request.message)
 
-    # 2. Send the English message to Rasa
-    responses = send_to_rasa(request.session_id, message_en)
+    # 2. Send the ORIGINAL message to Rasa (let Rasa/Action/RAG handle language natively)
+    responses = send_to_rasa(request.session_id, request.message)
 
-    # 3. If the original message was not English, translate Rasa's responses back
+    # 3. If the original message was not English, translate Rasa's English responses back
     if original_lang != 'en' and isinstance(responses, list):
         for resp in responses:
             if 'text' in resp:
-                resp['text'] = translate_from_en(resp['text'], original_lang)
+                resp['text'] = translate_if_needed(resp['text'], original_lang)
 
     return responses
