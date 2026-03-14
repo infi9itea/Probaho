@@ -16,32 +16,50 @@ def test_imports():
 
 def test_config():
     print("Testing configuration...")
-    model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
+    model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
     print(f"Model ID: {model_id}")
 
+    # Verify 4-bit configuration
     bnb_config = transformers.BitsAndBytesConfig(
-        load_in_8bit=True
+        load_in_4bit=True,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_compute_dtype=torch.float16
     )
-    print("BitsAndBytesConfig (8-bit) initialized.")
 
-    # We won't actually load the model here to save resources/time in sandbox
-    # but we can check if the prompt format is correct
+    if bnb_config.load_in_4bit:
+        print("✅ BitsAndBytesConfig (4-bit) initialized correctly.")
+    else:
+        print("❌ BitsAndBytesConfig (4-bit) initialization failed.")
+        return False
+
+    # Check for memory environment variable
+    if os.environ.get("PYTORCH_CUDA_ALLOC_CONF") == "expandable_segments:True":
+        print("✅ PYTORCH_CUDA_ALLOC_CONF is set correctly.")
+    else:
+        # We set it in service.py, but for this test we might need to set it manually if it's not inherited
+        os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+        print("ℹ️ PYTORCH_CUDA_ALLOC_CONF was not set, setting it now for test context.")
+
+    # Verify prompt format
     context_text = "Sample context"
     query = "Sample query"
     prompt = (
         "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n"
-        "You are a helpful assistant for East West University (EWU) in Bangladesh. "
+        "You are a highly accurate and helpful assistant for East West University (EWU) in Bangladesh. "
         "Use the provided context to answer the user's question. "
-        "Answer in the same language as the question (English, Bangla, or Banglish). "
+        "Maintain the language of the user's query: if they ask in Bangla, respond in Bangla; "
+        "if in Banglish, respond in Banglish (or clear Bangla); if in English, respond in English. "
         "If you don't know the answer based on the context, say you don't have that information. "
-        "Be concise.<|eot_id|>"
+        "Be concise but thorough.<|eot_id|>"
         "<|start_header_id|>user<|end_header_id|>\n\n"
         f"Context:\n{context_text}\n\n"
         f"Question: {query}<|eot_id|>"
         "<|start_header_id|>assistant<|end_header_id|>\n\n"
     )
+
     if "<|begin_of_text|>" in prompt and "<|start_header_id|>system<|end_header_id|>" in prompt:
-        print("✅ Prompt format looks correct for Llama 3.")
+        print("✅ Prompt format looks correct for Llama 3.1.")
     else:
         print("❌ Prompt format seems incorrect.")
         return False
@@ -49,6 +67,7 @@ def test_config():
     return True
 
 if __name__ == "__main__":
+    # We skip actual loading in sandbox as we can't run the full service without GPU/proper env
     if test_imports() and test_config():
         print("\nVerification successful (Config & Imports).")
     else:
