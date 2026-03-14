@@ -9,7 +9,7 @@ from typing import List, Dict, Any
 class Retriever:
     def __init__(self, vectorstore_path: str):
         self.embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+            model_name="sentence-transformers/all-mpnet-base-v2",
             encode_kwargs={"normalize_embeddings": True}
         )
 
@@ -20,11 +20,11 @@ class Retriever:
         )
 
         self.reranker = CrossEncoder(
-            "BAAI/bge-reranker-v2-m3",
+            "cross-encoder/ms-marco-MiniLM-L-12-v2",
             device="cuda" if torch.cuda.is_available() else "cpu"
         )
 
-    def retrieve(self, query: str, top_k: int = 30, return_k: int = 6) -> List[Dict[str, Any]]:
+    def retrieve(self, query: str, top_k: int = 25, return_k: int = 3) -> List[Dict[str, Any]]:
         """
         Returns a list of dicts: [{"text": ..., "source": ..., "score": ...}, ...]
         """
