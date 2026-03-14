@@ -28,17 +28,22 @@ async function sendMessage() {
 
   addMessage(message, 'user');
   $('#user-input').val('');
+  const langPref = $('#lang-pref').val();
 
   try {
-    const response = await fetch(RASA_URL, {
+    // Point to backend instead of direct Rasa for session handling & metadata bridge
+    const BACKEND_URL = "http://localhost:8000/chat";
+    const response = await fetch(BACKEND_URL, {
       method: 'POST',
       headers: { 
-        'Content-Type': 'application/json',
-        'Ngrok-Skip-Browser-Warning': 'true'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        sender: 'user',
-        message: message
+        session_id: 'user',
+        message: message,
+        metadata: {
+          language: langPref
+        }
       })
     });
 

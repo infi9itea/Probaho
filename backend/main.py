@@ -17,8 +17,9 @@ app.add_middleware(
 class ChatRequest(BaseModel):
     session_id: str
     message: str
+    metadata: dict = {}
 
 @app.post("/chat")
 async def chat(request: ChatRequest):
-    response = send_to_rasa(request.session_id, request.message)
+    response = send_to_rasa(request.session_id, request.message, request.metadata)
     return response

@@ -43,6 +43,7 @@ generator = transformers.pipeline(
 class QueryRequest(BaseModel):
     query: str
     top_k: int = 20
+    language: str = "auto"
 
 app = FastAPI()
 
@@ -64,13 +65,17 @@ def rag_query(req: QueryRequest):
     selected = contexts[:5]
     context_text = "\n\n".join([c["text"] for c in selected])
 
+    lang_instruction = "Maintain the language of the user's query: if they ask in Bangla, respond in Bangla; if in Banglish, respond in Banglish (or clear Bangla); if in English, respond in English. You MUST respond in the EXACT same language as the user's question."
+    if req.language == "en":
+        lang_instruction = "You MUST respond ONLY in English, regardless of the language of the context or question."
+    elif req.language == "bn":
+        lang_instruction = "You MUST respond ONLY in Bangla, regardless of the language of the context or question."
+
     prompt = (
         "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n"
         "You are a highly accurate and helpful assistant for East West University (EWU) in Bangladesh. "
         "Use the provided context to answer the user's question. "
-        "Maintain the language of the user's query: if they ask in Bangla, respond in Bangla; "
-        "if in Banglish, respond in Banglish (or clear Bangla); if in English, respond in English. "
-        "You MUST respond in the EXACT same language as the user's question. "
+        f"{lang_instruction} "
         "If you don't know the answer based on the context, say you don't have that information. "
         "Be concise but thorough.<|eot_id|>"
         "<|start_header_id|>user<|end_header_id|>\n\n"

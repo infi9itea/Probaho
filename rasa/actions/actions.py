@@ -18,13 +18,26 @@ def is_bangla(text: str) -> bool:
     # Bangla script range
     if any("\u0980" <= char <= "\u09FF" for char in text):
         return True
-    # Banglish keywords
-    banglish_keywords = ["koto", "borti", "kothay", "kakhon", "ki", "bolen", "janan", "hobe", "parbo", "ashbo", "dekhte", "chai"]
+    # Banglish keywords (removed 'ki' to reduce false positives)
+    banglish_keywords = ["koto", "borti", "kothay", "kakhon", "bolen", "janan", "hobe", "parbo", "ashbo", "dekhte", "chai"]
     words = text.lower().split()
     return any(word in banglish_keywords for word in words)
 
+def get_language(tracker: Tracker) -> str:
+    """Determine preferred language from metadata or auto-detection"""
+    # Check metadata first
+    metadata = tracker.latest_message.get("metadata", {})
+    lang_pref = metadata.get("language", "auto")
+
+    if lang_pref in ["en", "bn"]:
+        return lang_pref
+
+    # Fallback to auto-detection
+    user_msg = tracker.latest_message.get("text", "")
+    return "bn" if is_bangla(user_msg) else "en"
+
 class ActionPhi3RagAnswer(Action):
-    """RAG-powered answer generation using TinyLlama"""
+    """RAG-powered answer generation using Meta-Llama-3.1-8B"""
     def name(self) -> Text:
         # change the action name here
         return "action_call_rag"
@@ -45,17 +58,20 @@ class ActionPhi3RagAnswer(Action):
         # Build conversation history (for future use)
         history = self._build_history(tracker)
 
+        # Get language preference
+        language = get_language(tracker)
+
         # Call RAG service with Meta-Llama
-        answer, confidence, sources, processing_time = self._call_rag(user_message)
+        answer, confidence, sources, processing_time = self._call_rag(user_message, language)
 
         # Send appropriate response based on confidence
-        self._send_response(dispatcher, answer, confidence, sources, processing_time, user_message)
+        self._send_response(dispatcher, answer, confidence, sources, processing_time, user_message, language)
 
         return []
 
-    def _call_rag(self, query: str) -> tuple:
+    def _call_rag(self, query: str, language: str = "auto") -> tuple:
         """
-        Call RAG service (TinyLlama-powered) and return structured response
+        Call RAG service (Meta-Llama-powered) and return structured response
 
         Returns:
             (answer, confidence, sources, processing_time)
@@ -64,7 +80,8 @@ class ActionPhi3RagAnswer(Action):
             # FIXED: Only send what the API accepts
             payload = {
                 "query": query,
-                "top_k": 20  # Increased for better context
+                "top_k": 20,  # Increased for better context
+                "language": language
             }
 
             #logger.info(f"RAG Query: {query[:50]}...")
@@ -133,7 +150,8 @@ class ActionPhi3RagAnswer(Action):
         confidence: float,
         sources: List[str],
         processing_time: float,
-        user_message: str = ""
+        user_message: str = "",
+        language: str = "auto"
     ):
         """
         Confidence levels with localization:
@@ -141,7 +159,7 @@ class ActionPhi3RagAnswer(Action):
         - 0.4-0.7: Medium confidence - send answer with disclaimer
         - < 0.4: Low confidence - send answer with strong disclaimer
         """
-        is_bn = is_bangla(user_message)
+        is_bn = language == "bn"
 
         if not answer:
             error_msg = (
@@ -482,8 +500,7 @@ class ActionGetTuitionGeneral(Action):
         if not data:
             return call_rag_fallback(dispatcher, tracker, domain)
         
-        user_msg = tracker.latest_message.get("text", "")
-        is_bn = is_bangla(user_msg)
+        is_bn = get_language(tracker) == "bn"
 
         if is_bn:
             message = "**ইস্ট ওয়েস্ট ইউনিভার্সিটি টিউশন ফি (প্রতি ক্রেডিট)**\n\n"
@@ -1137,8 +1154,7 @@ class ActionAdmissionDeadlineGeneral(Action):
         if not data:
             return call_rag_fallback(dispatcher, tracker, domain)
         
-        user_msg = tracker.latest_message.get("text", "")
-        is_bn = is_bangla(user_msg)
+        is_bn = get_language(tracker) == "bn"
         
         if is_bn:
             message = f"**{data['page_info']['semester']} ভর্তির শেষ সময়সীমা**\n\n"
@@ -1684,8 +1700,7 @@ class ActionAdmissionRequirementsGeneral(Action):
         if not data:
             return call_rag_fallback(dispatcher, tracker, domain)
         
-        user_msg = tracker.latest_message.get("text", "")
-        is_bn = is_bangla(user_msg)
+        is_bn = get_language(tracker) == "bn"
 
         ug = data['admission_requirements']['undergraduate']['general_programs_except_bpharm']
         if is_bn:
@@ -2394,8 +2409,7 @@ class ActionFacultyInfo(Action):
         if not data:
             return call_rag_fallback(dispatcher, tracker, domain)
         
-        user_msg = tracker.latest_message.get("text", "")
-        is_bn = is_bangla(user_msg)
+        is_bn = get_language(tracker) == "bn"
 
         if is_bn:
             message = "**ফ্যাকাল্টি তথ্য - ইস্ট ওয়েস্ট ইউনিভার্সিটি**\n\n"
@@ -3282,8 +3296,7 @@ class ActionShowCourses(Action):
             return [SlotSet("department", None)]
         
         # Format and send response
-        user_msg = tracker.latest_message.get("text", "")
-        is_bn = is_bangla(user_msg)
+        is_bn = get_language(tracker) == "bn"
         response = self._format_courses_response(department, courses, data, is_bn)
         dispatcher.utter_message(text=response)
         
