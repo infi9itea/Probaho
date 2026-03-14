@@ -24,7 +24,7 @@ class Retriever:
             device="cuda" if torch.cuda.is_available() else "cpu"
         )
 
-    def retrieve(self, query: str, top_k: int = 25, return_k: int = 3) -> List[Dict[str, Any]]:
+    def retrieve(self, query: str, top_k: int = 30, return_k: int = 6) -> List[Dict[str, Any]]:
         """
         Returns a list of dicts: [{"text": ..., "source": ..., "score": ...}, ...]
         """
