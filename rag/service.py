@@ -19,7 +19,7 @@ login(HF_TOKEN)
 VECTORSTORE_PATH = "vectorstore"
 retriever = Retriever(VECTORSTORE_PATH)
 
-model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+model_id = "mistralai/Ministral-8B-Instruct-2410"
 
 # Memory optimization: Switch from 8-bit to 4-bit quantization
 bnb_config = transformers.BitsAndBytesConfig(
@@ -70,21 +70,13 @@ def rag_query(req: QueryRequest):
     selected = contexts[:5]
     context_text = "\n\n".join([c["text"] for c in selected])
 
-    prompt = (
-        "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n"
-        "You are a highly accurate and helpful assistant for East West University (EWU) in Bangladesh. "
-        "Use the provided context to answer the user's question. "
-        "Maintain the language of the user's query: if they ask in Bangla, respond in Bangla; "
-        "if in Banglish, respond in Banglish (or clear Bangla); if in English, respond in English. "
-        "If you don't know the answer based on the context, say you don't have that information. "
-        "Be concise but thorough.<|eot_id|>"
-        "<|start_header_id|>user<|end_header_id|>\n\n"
-        f"Context:\n{context_text}\n\n"
-        f"Question: {req.query}<|eot_id|>"
-        "<|start_header_id|>assistant<|end_header_id|>\n\n"
-    )
+    messages = [
+        {"role": "system", "content": "You are a highly accurate and helpful assistant for East West University (EWU) in Bangladesh. Use the provided context to answer the user's question. Maintain the language of the user's query: if they ask in Bangla, respond in Bangla; if in Banglish, respond in Banglish (or clear Bangla); if in English, respond in English. If you don't know the answer based on the context, say you don't have that information. Be concise but thorough."},
+        {"role": "user", "content": f"Context:\n{context_text}\n\nQuestion: {req.query}"}
+    ]
 
     try:
+        prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
         generated = generator(prompt)[0]["generated_text"].strip()
     except Exception as e:
         return {
