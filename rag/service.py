@@ -15,10 +15,12 @@ login(HF_TOKEN)
 VECTORSTORE_PATH = "vectorstore"
 retriever = Retriever(VECTORSTORE_PATH)
 
-model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+model_id = "mistralai/Mistral-7B-Instruct-v0.3"
 
 bnb_config = transformers.BitsAndBytesConfig(
-    load_in_8bit=True
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.bfloat16
 )
 
 tokenizer = transformers.AutoTokenizer.from_pretrained(model_id, token=HF_TOKEN)
@@ -57,21 +59,15 @@ def rag_query(req: QueryRequest):
             "processing_time": round(time.time() - start, 3)
         }
 
-    selected = contexts[:10]
+    selected = contexts[:5]
     context_text = "\n\n".join([c["text"] for c in selected])
 
     prompt = (
-        "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n"
-        "You are a highly accurate and helpful assistant for East West University (EWU) in Bangladesh. "
-        "Use the provided context to answer the user's question. "
-        "Maintain the language of the user's query: if they ask in Bangla, respond in Bangla; "
-        "if in Banglish, respond in Banglish (or clear Bangla); if in English, respond in English. "
-        "If you don't know the answer based on the context, say you don't have that information. "
-        "Be concise but thorough.<|eot_id|>"
-        "<|start_header_id|>user<|end_header_id|>\n\n"
+        "<s>[INST] You are an assistant for East West University (EWU) in Bangladesh.\n"
+        "Answer the question using ONLY the context below. Be concise and helpful.\n"
+        "If the context doesn't contain the answer, say \"I don't have that information.\"\n\n"
         f"Context:\n{context_text}\n\n"
-        f"Question: {req.query}<|eot_id|>"
-        "<|start_header_id|>assistant<|end_header_id|>\n\n"
+        f"Question: {req.query} [/INST]"
     )
 
     try:
