@@ -7,3 +7,6 @@ langchain
 langchain-community
 faiss-cpu
 sentence-transformers
+accelerate
+beautifulsoup4
+requests

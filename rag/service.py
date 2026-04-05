@@ -1,4 +1,7 @@
 import os
+# Must be set before any torch/cuda operations
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+
 import time
 import math
 from fastapi import FastAPI
@@ -6,20 +9,23 @@ from pydantic import BaseModel
 from retriever import Retriever
 import transformers
 import torch
-import bitsandbytes as bnb
 from huggingface_hub import login
 
 HF_TOKEN = os.getenv("HF_TOKEN")
+if not HF_TOKEN:
+    raise ValueError("HF_TOKEN environment variable is not set. Required for Ministral model access.")
 login(HF_TOKEN)
 
 VECTORSTORE_PATH = "vectorstore"
 retriever = Retriever(VECTORSTORE_PATH)
 
-model_id = "mistralai/Mistral-7B-Instruct-v0.3"
+# Upgraded to Ministral 8B Instruct
+model_id = "mistralai/Ministral-8B-Instruct-2410"
 
 bnb_config = transformers.BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_quant_type="nf4",
+    bnb_4bit_use_double_quant=True,
     bnb_4bit_compute_dtype=torch.bfloat16
 )
 
@@ -28,21 +34,25 @@ model = transformers.AutoModelForCausalLM.from_pretrained(
     model_id,
     token=HF_TOKEN,
     quantization_config=bnb_config,
-    device_map="auto"
+    device_map="auto",
+    trust_remote_code=True
 )
 
 generator = transformers.pipeline(
     "text-generation",
     model=model,
     tokenizer=tokenizer,
-    max_new_tokens=512,
+    max_new_tokens=768,
+    temperature=0.3,
+    top_p=0.9,
+    repetition_penalty=1.05,
     return_full_text=False,
-    do_sample=False
+    do_sample=True
 )
 
 class QueryRequest(BaseModel):
     query: str
-    top_k: int = 20
+    top_k: int = 25
 
 app = FastAPI()
 
@@ -50,25 +60,33 @@ app = FastAPI()
 def rag_query(req: QueryRequest):
     start = time.time()
 
-    contexts = retriever.retrieve(req.query, top_k=req.top_k, return_k=20)
+    # retrieval parameters for v2: k_retrieve=25, k_rerank=8
+    contexts = retriever.retrieve(req.query, top_k=req.top_k, return_k=8)
     if not contexts:
         return {
-            "response": "I don't have that information in my database.",
+            "response": "I don't have enough information to answer that. / আমার কাছে এই তথ্যটি নেই।",
             "confidence": 0.0,
             "sources": [],
             "processing_time": round(time.time() - start, 3)
         }
 
-    selected = contexts[:5]
-    context_text = "\n\n".join([c["text"] for c in selected])
+    context_text = "\n\n".join([c["text"] for c in contexts])
 
-    prompt = (
-        "<s>[INST] You are an assistant for East West University (EWU) in Bangladesh.\n"
-        "Answer the question using ONLY the context below. Be concise and helpful.\n"
-        "If the context doesn't contain the answer, say \"I don't have that information.\"\n\n"
-        f"Context:\n{context_text}\n\n"
-        f"Question: {req.query} [/INST]"
-    )
+    prompt = f"""<|system|>
+You are a helpful and knowledgeable assistant for East West University (EWU).
+Use only the provided context to answer questions.
+
+CRITICAL INSTRUCTION FOR LANGUAGE:
+If the user asks the question in English, answer in English.
+If the user asks in Bangla (বাংলা), answer completely in standard Bangla.
+If the user asks in Banglish (Romanized Bengali, e.g., "admission deadline kobe?"), answer in friendly Banglish.
+If unsure, say: "I don't have enough information to answer that." / "আমার কাছে এই তথ্যটি নেই।"
+Keep answers accurate and concise.
+<|user|>
+CONTEXT: {context_text}
+QUESTION: {req.query}
+<|assistant|>
+"""
 
     try:
         generated = generator(prompt)[0]["generated_text"].strip()
@@ -76,11 +94,11 @@ def rag_query(req: QueryRequest):
         return {
             "response": f"Error generating response: {str(e)}",
             "confidence": 0.0,
-            "sources": [c.get("source", "") for c in selected],
+            "sources": [c.get("source", "") for c in contexts],
             "processing_time": round(time.time() - start, 3)
         }
 
-    scores = [c.get("score", 0.0) for c in selected]
+    scores = [c.get("score", 0.0) for c in contexts]
     if scores:
         # Map reranker logit to [0, 1] range using sigmoid
         confidence = 1 / (1 + math.exp(-max(scores)))
@@ -90,6 +108,6 @@ def rag_query(req: QueryRequest):
     return {
         "response": generated,
         "confidence": round(confidence, 3),
-        "sources": [c.get("source", "") for c in selected],
+        "sources": [c.get("source", "") for c in contexts],
         "processing_time": round(time.time() - start, 3)
     }
