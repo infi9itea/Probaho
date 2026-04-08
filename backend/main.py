@@ -5,10 +5,9 @@ from rasa_client import send_to_rasa
 
 app = FastAPI()
 
-# Allow frontend to access API
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Or your frontend URL
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
