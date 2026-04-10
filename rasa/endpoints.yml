@@ -1,3 +1,4 @@
 action_endpoint:
-  url: ${ACTION_SERVER_URL:-http://localhost:5055/webhook}
+  url: "http://rasa_actions:5055/webhook"
   timeout: 60000
+

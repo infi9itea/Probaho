@@ -7,9 +7,10 @@ import os
 
 app = FastAPI()
 
+# Allow frontend to access API
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=["*"],  # Or your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

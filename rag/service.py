@@ -1,4 +1,5 @@
 import os
+# Must be set before any torch/cuda operations
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
 import time
@@ -18,6 +19,7 @@ login(HF_TOKEN)
 VECTORSTORE_PATH = "vectorstore"
 retriever = Retriever(VECTORSTORE_PATH)
 
+# Upgraded to Ministral 8B Instruct
 model_id = "mistralai/Ministral-8B-Instruct-2410"
 
 bnb_config = transformers.BitsAndBytesConfig(
@@ -58,6 +60,7 @@ app = FastAPI()
 def rag_query(req: QueryRequest):
     start = time.time()
 
+    # retrieval parameters for v2: k_retrieve=25, k_rerank=8
     contexts = retriever.retrieve(req.query, top_k=req.top_k, return_k=8)
     if not contexts:
         return {
@@ -97,6 +100,7 @@ QUESTION: {req.query}
 
     scores = [c.get("score", 0.0) for c in contexts]
     if scores:
+        # Map reranker logit to [0, 1] range using sigmoid
         confidence = 1 / (1 + math.exp(-max(scores)))
     else:
         confidence = 0.5
