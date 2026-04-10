@@ -2,7 +2,15 @@ $(document).ready(function () {
   let lineCounter = 1;
   let messageCount = 0;
 
+  // Generate or retrieve session_id
+  let session_id = localStorage.getItem('session_id');
+  if (!session_id) {
+    session_id = 'session_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('session_id', session_id);
+  }
+
   function addMessage(text, sender) {
+    if (!text) return;
     const lines = text.split('\n').length;
 
     const msgDiv = $('<div>')
@@ -20,36 +28,41 @@ $(document).ready(function () {
     $('#status-right').text(messageCount + ' messages');
   }
 
-  const RASA_URL = "https://yieldingly-schizophytic-deanna.ngrok-free.dev/webhooks/rest/webhook";
+  const CHAT_URL = "/chat";
 
-async function sendMessage() {
-  const message = $('#user-input').val();
-  if (!message.trim()) return;
+  async function sendMessage() {
+    const message = $('#user-input').val();
+    if (!message.trim()) return;
 
-  addMessage(message, 'user');
-  $('#user-input').val('');
+    addMessage(message, 'user');
+    $('#user-input').val('');
 
-  try {
-    const response = await fetch(RASA_URL, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Ngrok-Skip-Browser-Warning': 'true'
-      },
-      body: JSON.stringify({
-        sender: 'user',
-        message: message
-      })
-    });
+    try {
+      const response = await fetch(CHAT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          session_id: session_id,
+          message: message
+        })
+      });
 
-    const data = await response.json();
-    data.forEach(msg => addMessage(msg.text, 'bot'));
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        data.forEach(msg => {
+          if (msg.text) addMessage(msg.text, 'bot');
+        });
+      } else if (data.error) {
+        addMessage('Error: ' + data.error, 'bot');
+      }
 
-  } catch (err) {
-    addMessage('Error connecting to server.', 'bot');
-    console.error(err);
+    } catch (err) {
+      addMessage('Error connecting to server.', 'bot');
+      console.error(err);
+    }
   }
-}
 
   $('#user-input').on('keydown', function (e) {
     if (e.key === 'Enter' && !e.shiftKey) {
