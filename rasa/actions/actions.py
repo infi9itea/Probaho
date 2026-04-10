@@ -11,8 +11,8 @@ from rasa_sdk.events import UserUtteranceReverted, SlotSet
 
 logger = logging.getLogger(__name__)
 
-class ActionUniversityRagAnswer(Action):
-    """RAG-powered answer generation using the system"""
+class ActionPhi3RagAnswer(Action):
+    """RAG-powered answer generation using TinyLlama"""
     def name(self) -> Text:
         # change the action name here
         return "action_call_rag"
@@ -33,7 +33,7 @@ class ActionUniversityRagAnswer(Action):
         # Build conversation history (for future use)
         history = self._build_history(tracker)
 
-        # Call RAG service with the system
+        # Call RAG service with TinyLlama
         answer, confidence, sources, processing_time = self._call_rag(user_message)
 
         # Send appropriate response based on confidence
@@ -43,7 +43,7 @@ class ActionUniversityRagAnswer(Action):
 
     def _call_rag(self, query: str) -> tuple:
         """
-        Call RAG service (the system-powered) and return structured response
+        Call RAG service (TinyLlama-powered) and return structured response
 
         Returns:
             (answer, confidence, sources, processing_time)
@@ -190,7 +190,7 @@ class ActionUniversityRagAnswer(Action):
 
 def call_rag_fallback(dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
     """Helper function to call RAG fallback from other actions"""
-    rag_action = ActionUniversityRagAnswer()
+    rag_action = ActionPhi3RagAnswer()
     return rag_action.run(dispatcher, tracker, domain)
 
 class ActionDefaultFallback(Action):
@@ -206,7 +206,7 @@ class ActionDefaultFallback(Action):
         user_message = tracker.latest_message.get("text", "")
         logger.info(f"Fallback triggered for: {user_message}")
         # Try RAG for unrecognized intents
-        rag_action = ActionUniversityRagAnswer()
+        rag_action = ActionPhi3RagAnswer()
         return rag_action.run(dispatcher, tracker, domain)
 
 
@@ -1141,7 +1141,7 @@ class ActionAdmissionDeadlineCSE(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'CSE' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Application Deadline:** {prog['application_deadline']}\n**Test Date:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Application Deadline:** {prog['application_deadline']}\n📝 **Test Date:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1157,7 +1157,7 @@ class ActionAdmissionDeadlineBBA(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'BBA' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Application Deadline:** {prog['application_deadline']}\n**Test Date:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Application Deadline:** {prog['application_deadline']}\n📝 **Test Date:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1173,7 +1173,7 @@ class ActionAdmissionDeadlineEconomics(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Economics' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1189,7 +1189,7 @@ class ActionAdmissionDeadlineEnglish(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'English' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1205,7 +1205,7 @@ class ActionAdmissionDeadlineLaw(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'LLB' in p['program'] or 'Law' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1221,7 +1221,7 @@ class ActionAdmissionDeadlineSociology(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Sociology' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1237,7 +1237,7 @@ class ActionAdmissionDeadlineInformationStudies(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Information Studies' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1253,7 +1253,7 @@ class ActionAdmissionDeadlinePPHS(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Public Health' in p['program'] or 'PPHS' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1269,7 +1269,7 @@ class ActionAdmissionDeadlineICE(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'ICE' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1285,7 +1285,7 @@ class ActionAdmissionDeadlineEEE(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'EEE' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1301,7 +1301,7 @@ class ActionAdmissionDeadlinePharmacy(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Pharmacy' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1317,7 +1317,7 @@ class ActionAdmissionDeadlineGEB(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Genetic' in p['program'] or 'Biotechnology' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1333,7 +1333,7 @@ class ActionAdmissionDeadlineCivil(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Civil' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1349,7 +1349,7 @@ class ActionAdmissionDeadlineMath(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Mathematics' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1365,7 +1365,7 @@ class ActionAdmissionDeadlineDataScience(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['undergraduate_admission'] if 'Data Science' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1385,7 +1385,7 @@ class ActionAdmissionDeadlineMBA(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'MBA' in p['program'] and 'Executive' not in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1401,7 +1401,7 @@ class ActionAdmissionDeadlineEMBA(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'Executive MBA' in p['program'] or 'EMBA' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1417,7 +1417,7 @@ class ActionAdmissionDeadlineMDS(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'MDS' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1433,7 +1433,7 @@ class ActionAdmissionDeadlineMSSEconomics(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'MSS' in p['program'] and 'Economics' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1449,7 +1449,7 @@ class ActionAdmissionDeadlineMAEnglish(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'MA in English' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1465,7 +1465,7 @@ class ActionAdmissionDeadlineMATESOL(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'TESOL' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1481,7 +1481,7 @@ class ActionAdmissionDeadlineMPRHGD(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'MPRHGD' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1497,7 +1497,7 @@ class ActionAdmissionDeadlineLLM(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'LLM' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1513,7 +1513,7 @@ class ActionAdmissionDeadlineMSCSE(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'MS in CSE' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1529,7 +1529,7 @@ class ActionAdmissionDeadlineMSDataScience(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'Data Science' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1545,7 +1545,7 @@ class ActionAdmissionDeadlineMPharm(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'Master of Pharmacy' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1561,7 +1561,7 @@ class ActionAdmissionDeadlinePPDM(Action):
             return call_rag_fallback(dispatcher, tracker, domain)
         prog = next((p for p in data['graduate_admission'] if 'PPDM' in p['program']), None)
         if prog:
-            message = f"**{prog['program']}**\n\n**Deadline:** {prog['application_deadline']}\n**Test:** {prog['admission_test']}"
+            message = f"**{prog['program']}**\n\n📅 **Deadline:** {prog['application_deadline']}\n📝 **Test:** {prog['admission_test']}"
             dispatcher.utter_message(text=message)
             return []
         return call_rag_fallback(dispatcher, tracker, domain)
@@ -1697,7 +1697,7 @@ class ActionAdmissionRequirementsPharmacy(Action):
         
         pharm = data['admission_requirements']['undergraduate']['bpharm']
         message = "**B.Pharm Admission Requirements**\n\n"
-        message += f"**Citizenship:** {pharm['citizenship']}\n"
+        message += f"🇧🇩 **Citizenship:** {pharm['citizenship']}\n"
         message += f" **GPA:** {pharm['ssc_hsc']['aggregate']}\n"
         message += f" **Each Exam:** {pharm['ssc_hsc']['minimum_each']}\n\n"
         message += "**Subject Requirements (Minimum GPA):**\n"
@@ -1724,7 +1724,7 @@ class ActionAdmissionRequirementsMBA(Action):
         message = "**MBA Admission Requirements**\n\n"
         message += f" **Degree:** {mba['degree']}\n"
         message += f" *SSC & HSC:** {mba['ssc_hsc_gpa']}\n"
-        message += f"**Work Experience:** {mba['mba']['work_experience']}\n\n"
+        message += f"💼 **Work Experience:** {mba['mba']['work_experience']}\n\n"
         message += "**Test Exemptions:**\n"
         message += f"- EWU Graduates: {mba['test_exemptions']['ewu_graduates']}\n"
         message += f"- Other Universities: {mba['test_exemptions']['other_universities']}"
@@ -1935,7 +1935,7 @@ class ActionPostAdmissionTuitionPayment(Action):
         
         message += "**Requirements:**\n"
         for req in tuition.get('requirements', []):
-            message += f"{req}\n"
+            message += f"✓ {req}\n"
         
         message += "**\n**Payment Methods:**\n"
         for method in tuition.get('payment_methods', []):
@@ -3009,7 +3009,7 @@ def normalize_department_name(dept_name: str) -> str:
 
         
 #         # Try RAG for unrecognized intents
-#         rag_action = ActionUniversityRagAnswer()
+#         rag_action = ActionPhi3RagAnswer()
 #         return rag_action.run(dispatcher, tracker, domain)
 
 
@@ -3268,7 +3268,7 @@ class ActionShowCourses(Action):
             'N/A'
         )
         
-        response = f"**{program_name} Courses**\n\n"
+        response = f"📚 **{program_name} Courses**\n\n"
         response += f"**Total Credits:** {total_credits}\n\n"
         
         # Show course summaries if available

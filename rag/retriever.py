@@ -57,10 +57,8 @@ class Retriever:
         static_others = [d for d in retrieved_docs if "ewubd.edu" not in d.metadata.get("source", "")]
 
         if dynamic_priority:
-            # If we have official site hits, we prioritize them for reranking
             reranked = self.reranker.rerank(query, dynamic_priority, top_k=return_k)
         else:
-            # Otherwise rerank from other sources (JSON files)
             reranked = self.reranker.rerank(query, static_others, top_k=return_k)
 
         return reranked
