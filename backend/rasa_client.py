@@ -1,6 +1,7 @@
 import requests
+import os
 
-RASA_URL = "http://rasa:5005/webhooks/rest/webhook" 
+RASA_URL = os.getenv("RASA_URL", "http://rasa:5005/webhooks/rest/webhook")
 
 def send_to_rasa(sender_id: str, message: str):
     payload = {
