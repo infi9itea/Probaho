@@ -20,7 +20,7 @@ $(document).ready(function () {
     $('#status-right').text(messageCount + ' messages');
   }
 
-  const RASA_URL = "https://yieldingly-schizophytic-deanna.ngrok-free.dev/webhooks/rest/webhook";
+  const RASA_URL = "https://ftftr-ewu-chatbot-rasa.hf.space/webhooks/rest/webhook";
 
 async function sendMessage() {
   const message = $('#user-input').val();
