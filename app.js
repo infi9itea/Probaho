@@ -20,7 +20,8 @@ $(document).ready(function () {
     $('#status-right').text(messageCount + ' messages');
   }
 
-  const RASA_URL = "https://ftftr-ewu-chatbot-rasa.hf.space/webhooks/rest/webhook";
+// 1. Update the URL to the Rasa REST webhook
+const RASA_URL = "https://ftftr-ewu-chatbot-rasa.hf.space/webhooks/rest/webhook";
 
 async function sendMessage() {
   const message = $('#user-input').val();
@@ -32,18 +33,20 @@ async function sendMessage() {
   try {
     const response = await fetch(RASA_URL, {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Ngrok-Skip-Browser-Warning': 'true'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        sender: 'user',
+        sender: "user_123", // Rasa uses 'sender', not 'sender_id'
         message: message
       })
     });
 
-    const data = await response.json();
-    data.forEach(msg => addMessage(msg.text, 'bot'));
+    const data = await response.json(); // Rasa returns an array directly: [{text: "..."}]
+
+    data.forEach(msg => {
+      if (msg.text) {
+        addMessage(msg.text, 'bot');
+      }
+    });
 
   } catch (err) {
     addMessage('Error connecting to server.', 'bot');
